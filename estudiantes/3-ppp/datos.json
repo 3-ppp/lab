@@ -1,0 +1,5 @@
+[
+  { "id": 1, "titulo": "Café de especialidad", "detalle": "Palermo, Buenos Aires" },
+  { "id": 2, "titulo": "Panadería de barrio", "detalle": "Nueva Córdoba, Córdoba" },
+  { "id": 3, "titulo": "Librería de usados", "detalle": "Centro, Rosario" }
+]

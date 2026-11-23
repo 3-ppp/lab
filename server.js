@@ -142,7 +142,8 @@ const SEC = {
 const APP_CSP = "default-src 'self'; img-src 'self' data:; frame-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
 
 function json(res, code, body) {
-  res.writeHead(code, { ...SEC, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-cache" });
+  // Lectura abierta (datos públicos): también la pueden consumir las páginas de los proyectos, que corren en sandbox
+  res.writeHead(code, { ...SEC, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-cache", "Access-Control-Allow-Origin": "*" });
   res.end(JSON.stringify(body));
 }
 const notFound = (res) => json(res, 404, { error: "No existe" });
@@ -172,6 +173,9 @@ async function serveProject(req, res, url) {
       "Content-Type": type,
       "Content-Security-Policy": "sandbox allow-scripts allow-forms allow-popups allow-modals",
       "Cache-Control": "no-cache",
+      // Un proyecto corre en un sandbox sin origen propio: para que pueda leer su datos.json (o los de otros) hay que habilitar
+      // la lectura entre orígenes. Es contenido público, de solo lectura y sin cookies, así que no expone nada.
+      "Access-Control-Allow-Origin": "*",
     });
     res.end(req.method === "HEAD" ? undefined : body);
   } catch { notFound(res); }

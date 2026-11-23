@@ -1,4 +1,4 @@
 {
-  "titulo": "Ejemplo del docente",
-  "descripcion": "Un proyecto mínimo para ver cómo aparece en el mapa. El tuyo va a ser mucho mejor."
+  "titulo": "Lugares que me gustan (ejemplo con datos.json)",
+  "descripcion": "Una página que lee sus datos de un archivo datos.json, con buscador y alta en memoria."
 }

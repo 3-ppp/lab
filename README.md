@@ -42,9 +42,18 @@ git push && gh pr create --fill
 |---|---|
 | `index.html` | **Obligatorio.** La página principal de tu proyecto. |
 | `proyecto.json` | Título y una descripción corta. En el mapa tu proyecto se muestra con tu usuario de GitHub. |
+| `datos.json` | Los datos de tu proyecto (opcional, pero recomendado): una lista de registros que tu página lee con `fetch("datos.json")`. |
 | otros `.css`, `.js`, imágenes | Lo que necesite tu proyecto. |
 
 Tipos de archivo permitidos: `html`, `css`, `js`, `json`, `svg`, `png`, `jpg`, `gif`, `webp`, `ico`, `txt`, `md`, `woff`, `woff2`. Cada archivo, hasta 2 MB.
+
+## Datos en un archivo JSON
+
+Si tu proyecto maneja datos, pedile a tu agente que los guarde en `datos.json` (en vez de escribirlos dentro del código) y que la página los lea desde ahí. Ese archivo funciona como la **base de datos** de tu proyecto: una lista de registros, cada uno con sus campos.
+
+- Tu página puede **mostrar, buscar, filtrar y calcular** con esos datos.
+- Si agrega, edita o borra registros, el cambio vive **solo en memoria** mientras la página está abierta. Para guardarlo de verdad, se edita `datos.json` y se sube el cambio.
+- Para probarlo en tu compu no abras `index.html` con doble clic: pedile a tu agente que levante un servidor local, o mirá el resultado directamente en el lab.
 
 ## Reglas
 

@@ -1,0 +1,5 @@
+[
+  { "id": 1, "titulo": "Primer elemento", "detalle": "Cada elemento es un registro; cada dato suyo, un campo." },
+  { "id": 2, "titulo": "Segundo elemento", "detalle": "Cambiá estos datos por los de tu proyecto." },
+  { "id": 3, "titulo": "Tercer elemento", "detalle": "Podés agregar los que quieras." }
+]
