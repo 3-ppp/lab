@@ -1,0 +1,10 @@
+{
+  "name": "lab-curso",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "El mapa de proyectos del curso: cada persona tiene una carpeta en estudiantes/ y el mapa late cuando algo cambia.",
+  "scripts": { "start": "node server.js", "dev": "POLL_MS=2000 node server.js" },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}

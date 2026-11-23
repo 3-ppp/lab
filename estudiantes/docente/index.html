@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ejemplo del docente</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: grid; place-items: center; min-height: 100vh; margin: 0; background: #e6e8ec; }
+    main { text-align: center; padding: 1rem; }
+    button { font: inherit; padding: .6rem 1.2rem; background: #1c3fc9; color: #fff; border: 0; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Hola, lab</h1>
+    <p id="n">Tocaste el botón 0 veces.</p>
+    <button id="b">Tocame</button>
+  </main>
+  <script>
+    let n = 0;
+    document.getElementById("b").onclick = () => { n++; document.getElementById("n").textContent = "Tocaste el botón " + n + (n === 1 ? " vez." : " veces."); };
+  </script>
+</body>
+</html>

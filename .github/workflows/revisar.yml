@@ -1,0 +1,55 @@
+# Revisa los pull requests de estudiantes y, si solo tocan su carpeta, los incorpora.
+# IMPORTANTE: usa pull_request_target (corre con el workflow de main, no con el del pull request) y
+# NO descarga ni ejecuta el código del pull request: solo lee la lista de archivos por la API.
+name: Revisar proyecto
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: revisar-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar archivos
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          AUTOR: ${{ github.event.pull_request.user.login }}
+          DUENO: ${{ github.repository_owner }}
+        run: |
+          set -u
+          if [ "${AUTOR,,}" = "${DUENO,,}" ]; then echo "PR del docente: se revisa a mano."; exit 0; fi
+          carpeta="estudiantes/${AUTOR,,}/"
+          ext='html|css|js|json|svg|png|jpg|gif|webp|ico|txt|md|woff|woff2'
+          mapfile -t archivos < <(gh api --paginate "repos/$REPO/pulls/$PR/files" --jq '.[] | .filename, (.previous_filename // empty)')
+          errores=()
+          [ "${#archivos[@]}" -eq 0 ] && errores+=("El pull request no cambia ningún archivo.")
+          [ "${#archivos[@]}" -gt 60 ] && errores+=("Son demasiados archivos (${#archivos[@]}): el máximo es 60.")
+          for f in "${archivos[@]}"; do
+            if [[ "$f" != "$carpeta"* ]]; then
+              errores+=("\`$f\` está fuera de tu carpeta (\`$carpeta\`).")
+            elif [[ "$f" == *..* || "$f" == *//* ]]; then
+              errores+=("\`$f\` tiene un nombre de ruta no permitido.")
+            elif ! [[ "${f,,}" =~ \.($ext)$ ]]; then
+              errores+=("\`$f\` no es un tipo de archivo permitido.")
+            fi
+          done
+          if [ "${#errores[@]}" -gt 0 ]; then
+            {
+              echo "Hola @$AUTOR. Este pull request no se puede incorporar todavía:"
+              echo
+              printf -- '- %s\n' "${errores[@]}"
+              echo
+              echo "Corregilo en la misma rama y volvé a subir: el robot lo revisa de nuevo. Las reglas están en el README."
+            } > /tmp/msg.md
+            gh pr comment "$PR" --repo "$REPO" --body-file /tmp/msg.md
+            exit 1
+          fi
+          gh pr merge "$PR" --repo "$REPO" --squash --subject "Proyecto de $AUTOR" --body "Incorporado automáticamente: solo toca $carpeta"
+          echo "Incorporado."

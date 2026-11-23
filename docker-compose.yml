@@ -1,0 +1,19 @@
+# Producción: el contenedor clona el repositorio público y lo actualiza solo (cada 20 s o con el webhook de GitHub).
+# Escucha solo en 127.0.0.1: un proxy (Caddy) publica el subdominio.
+services:
+  lab:
+    build: .
+    restart: unless-stopped
+    ports: ["127.0.0.1:${LAB_PORT:-3300}:3000"]
+    environment:
+      REPO_URL: ${REPO_URL:?Falta REPO_URL (https://github.com/usuario/repositorio)}
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET:-}
+    volumes: [labdata:/data]
+    read_only: true
+    tmpfs: ["/tmp"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 192m
+    pids_limit: 128
+volumes:
+  labdata:
