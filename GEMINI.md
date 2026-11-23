@@ -5,7 +5,7 @@ Este repositorio es un lab de un curso: cada persona tiene **una carpeta** `estu
 ## Reglas (obligatorias)
 
 1. **Solo escribas dentro de `estudiantes/<usuario>/`**, donde `<usuario>` es el usuario de GitHub de la persona, en minúsculas. Preguntáselo si no lo sabés. **No modifiques ningún otro archivo del repositorio**: ni `server.js`, ni `public/`, ni `.github/`, ni las carpetas de otras personas.
-2. Para empezar, copiá `estudiantes/_plantilla` a `estudiantes/<usuario>`.
+2. Para empezar, copiá `estudiantes/_plantilla` a `estudiantes/<usuario>` y **reemplazá su contenido por el proyecto de la persona** (podés conservar lo que sirva, pero no subas la plantilla tal cual).
 3. Archivos obligatorios en la carpeta:
    - `index.html`: la página principal del proyecto.
    - `datos.json` (si el proyecto usa datos): ver la sección de datos más abajo.
@@ -29,13 +29,14 @@ Si el proyecto maneja datos (una lista, un catálogo, puntajes, lugares, lo que 
 
 ## Cómo entregar
 
-1. Hacé un fork del repositorio (`gh repo fork --clone`) si todavía no lo hay, y trabajá en una rama nueva.
-2. Hacé commits chicos con mensajes claros en español.
-3. Subí la rama a **su fork** y abrí un pull request hacia `main` del repositorio original (`gh pr create --fill`). El robot del repositorio lo revisa y, si solo toca la carpeta de la persona, lo incorpora solo.
-4. Si el robot comenta un problema, corregilo en la misma rama y volvé a subir.
+1. **Fork y copia local.** Si todavía no hay copia del repositorio: `gh repo fork 3-ppp/lab --clone` (hace el fork en la cuenta de la persona y lo clona en una carpeta `lab`). Si ya lo clonaste: `gh repo fork 3-ppp/lab --remote --remote-name fork` (agrega el fork como remoto). Pedí confirmación antes de hacer el fork.
+2. **Rama nueva:** `git checkout -b proyecto-<usuario>`.
+3. Hacé commits chicos con mensajes claros en español.
+4. **Subí la rama a su fork** (`git push -u origin proyecto-<usuario>`, o `-u fork` si agregaste el remoto `fork`) y abrí el pull request hacia `main` del repositorio original: `gh pr create --repo 3-ppp/lab --fill`. El robot lo revisa y, si solo toca la carpeta de la persona, lo incorpora solo.
+5. Si el robot comenta un problema, corregilo en la misma rama y volvé a subir.
 
 ## Buenas prácticas para el proyecto
 
 - Un `index.html` simple y prolijo, que se vea bien en el celular.
-- Mejor de a una funcionalidad por vez, probando cada cambio abriendo `index.html` en el navegador.
+- Mejor de a una funcionalidad por vez, probando cada cambio en el navegador (si el proyecto usa `datos.json`, desde un servidor local, no con doble clic).
 - Pedile a la persona que describa su idea con sus palabras antes de empezar; que el proyecto sea suyo.

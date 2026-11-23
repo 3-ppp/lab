@@ -30,10 +30,12 @@ Todos los caminos terminan igual: **un pull request** (una propuesta de cambio) 
 
 ```bash
 gh repo fork 3-ppp/lab --clone && cd lab
+git checkout -b mi-proyecto
 cp -r estudiantes/_plantilla estudiantes/tu-usuario
-# armá tu proyecto, y después:
+# armá tu proyecto (reemplazá el contenido de la plantilla), y después:
 git add estudiantes/tu-usuario && git commit -m "Mi proyecto"
-git push && gh pr create --fill
+git push -u origin mi-proyecto
+gh pr create --repo 3-ppp/lab --fill
 ```
 
 ## Qué va en tu carpeta
