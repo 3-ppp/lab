@@ -41,7 +41,7 @@ git push && gh pr create --fill
 | Archivo | Para qué |
 |---|---|
 | `index.html` | **Obligatorio.** La página principal de tu proyecto. |
-| `proyecto.json` | Título, tu nombre y una descripción corta: es lo que se ve en el mapa. |
+| `proyecto.json` | Título y una descripción corta. En el mapa tu proyecto se muestra con tu usuario de GitHub. |
 | otros `.css`, `.js`, imágenes | Lo que necesite tu proyecto. |
 
 Tipos de archivo permitidos: `html`, `css`, `js`, `json`, `svg`, `png`, `jpg`, `gif`, `webp`, `ico`, `txt`, `md`, `woff`, `woff2`. Cada archivo, hasta 2 MB.

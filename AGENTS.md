@@ -8,7 +8,7 @@ Este repositorio es un lab de un curso: cada persona tiene **una carpeta** `estu
 2. Para empezar, copiá `estudiantes/_plantilla` a `estudiantes/<usuario>`.
 3. Archivos obligatorios en la carpeta:
    - `index.html`: la página principal del proyecto.
-   - `proyecto.json` con `titulo` (hasta 80 caracteres), `nombre` (hasta 60) y `descripcion` (hasta 240), todos texto.
+   - `proyecto.json` con `titulo` (hasta 80 caracteres) y `descripcion` (hasta 240), ambos texto. En el mapa cada proyecto se muestra con el usuario de GitHub de la persona (el nombre de su carpeta).
 4. Solo estos tipos de archivo: `html, css, js, json, svg, png, jpg, gif, webp, ico, txt, md, woff, woff2`. Hasta 2 MB por archivo. Sin enlaces simbólicos.
 5. El proyecto corre **aislado** (sandbox, sin `localStorage` ni cookies): que funcione guardando todo en memoria. No uses servidores, bases de datos ni formularios que envíen datos afuera.
 6. **Nunca incluyas** datos personales, contraseñas, claves de API, tokens ni nada sensible. Todo lo que se sube es **público**.

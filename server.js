@@ -94,7 +94,7 @@ async function scan() {
     projects.push({
       id,
       titulo: str(meta.titulo, 80) || id,
-      nombre: str(meta.nombre, 60) || id,
+      nombre: id, // en el mapa se muestra el usuario de GitHub (el nombre de la carpeta): no se puede elegir otro
       descripcion: str(meta.descripcion, 240),
       archivos: files.length,
       commits: h.commits,
