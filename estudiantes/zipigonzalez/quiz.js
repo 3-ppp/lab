@@ -2,17 +2,37 @@
 // - datos.json: las finales de los Mundiales. Cada final es un registro con los campos
 //   id, anio, fecha, sede, local, visitante, golesLocal, golesVisitante, alargue,
 //   penales, campeon, goles (lista con minuto, jugador, equipo, penal, enContra) y nota.
-// - preguntas.json: preguntas escritas a mano (id, pregunta, opciones, correcta, dato).
+// - preguntas.json: preguntas escritas a mano (id, dificultad, pregunta, opciones, correcta, dato).
 // Todo se guarda en memoria: al recargar la página, el juego vuelve a empezar.
 
-const PREGUNTAS_FIJAS = 3; // cuántas preguntas escritas a mano entran en cada partida
-const PREGUNTAS_DE_FINALES = 7; // cuántas se arman a partir de las finales
+// Cuánta "sabiduría" vale cada pregunta según su dificultad.
+const DIFICULTADES = {
+  facil: { nombre: "Fácil", valor: 1 },
+  media: { nombre: "Media", valor: 2 },
+  dificil: { nombre: "Difícil", valor: 3 },
+};
+
+// Cuántas preguntas de cada dificultad tiene cada modo de juego.
+const MODOS = {
+  corta: { facil: 3, media: 4, dificil: 3 }, // 10 preguntas
+  larga: { facil: 8, media: 11, dificil: 11 }, // 30 preguntas
+};
+
+// Resultado final según el porcentaje de sabiduría (de mayor a menor).
+const RESULTADOS = [
+  { desde: 85, titulo: "Te sentás en la mesa con Macaya", frase: "", emoji: "🎙️" },
+  { desde: 65, titulo: "Futbolero", frase: "", emoji: "⚽" },
+  { desde: 40, titulo: "Mirás fútbol cada 4 años", frase: "Para no quedarte afuera.", emoji: "📺" },
+  { desde: 0, titulo: "Volvé a ver Utilísima", frase: "No sabés una joraca de fútbol.", emoji: "🧶" },
+];
 
 let finales = [];
 let preguntasFijas = [];
 let preguntas = [];
 let actual = 0;
-let puntos = 0;
+let aciertos = 0;
+let sabiduria = 0; // puntos de sabiduría ganados
+let sabiduriaPosible = 0; // puntos de sabiduría que se podían ganar
 
 const el = (id) => document.getElementById(id);
 
@@ -31,10 +51,10 @@ const alAzar = (lista) => lista[Math.floor(Math.random() * lista.length)];
 const sinRepetir = (lista) => [...new Set(lista)];
 
 // Arma una pregunta con la respuesta correcta y tres opciones incorrectas, mezcladas.
-function armarPregunta(texto, correcta, incorrectas, dato) {
+function armarPregunta(dificultad, texto, correcta, incorrectas, dato) {
   const otras = mezclar(sinRepetir(incorrectas).filter((x) => x !== correcta)).slice(0, 3);
   const opciones = mezclar([correcta, ...otras]);
-  return { pregunta: texto, opciones, correcta: opciones.indexOf(correcta), dato };
+  return { dificultad, pregunta: texto, opciones, correcta: opciones.indexOf(correcta), dato };
 }
 
 function marcador(p) {
@@ -51,23 +71,50 @@ const resumen = (p) => `Final ${p.anio}, ${p.sede}: ${marcador(p)}. Campeón: ${
 const todosLosEquipos = () => sinRepetir(finales.flatMap((p) => [p.local, p.visitante]));
 const golesNormales = (p) => p.goles.filter((g) => !g.enContra);
 
-const tiposDePregunta = [
-  // ¿Quién ganó?
+// Intermedias: quién ganó, cómo terminó, dónde se jugó.
+const tiposMedios = [
   (p) =>
     armarPregunta(
+      "media",
       `¿Qué selección ganó la final del Mundial ${p.anio}?`,
       p.campeon,
       [p.local, p.visitante, ...mezclar(todosLosEquipos())],
       resumen(p)
     ),
 
-  // ¿Quién hizo el gol en tal minuto?
+  (p) => {
+    const real = `${p.golesLocal}-${p.golesVisitante}`;
+    const incorrectos = [];
+    for (let a = 0; a <= 4; a++) for (let b = 0; b <= 4; b++) if (`${a}-${b}` !== real) incorrectos.push(`${a}-${b}`);
+    const aclaracion = p.alargue ? " (contando el alargue, sin penales)" : "";
+    return armarPregunta(
+      "media",
+      `¿Cómo terminó la final de ${p.anio} entre ${p.local} y ${p.visitante}${aclaracion}?`,
+      real,
+      mezclar(incorrectos),
+      resumen(p)
+    );
+  },
+
+  (p) =>
+    armarPregunta(
+      "media",
+      `¿En qué ciudad se jugó la final del Mundial ${p.anio}?`,
+      p.sede.split(",")[0],
+      mezclar(finales.map((x) => x.sede.split(",")[0])),
+      resumen(p)
+    ),
+];
+
+// Difíciles: quién hizo el gol y en qué minuto.
+const tiposDificiles = [
   (p) => {
     const goles = golesNormales(p);
     if (!goles.length) return null;
     const g = alAzar(goles);
     const otros = finales.flatMap((x) => golesNormales(x).map((y) => y.jugador)).filter((j) => j !== g.jugador);
     return armarPregunta(
+      "dificil",
       `En la final de ${p.anio} (${p.local} vs ${p.visitante}), ¿quién hizo el gol de ${g.equipo} en el minuto ${g.minuto}?`,
       g.jugador,
       mezclar(otros),
@@ -75,7 +122,6 @@ const tiposDePregunta = [
     );
   },
 
-  // ¿En qué minuto?
   (p) => {
     const unicos = golesNormales(p).filter((g) => p.goles.filter((x) => x.jugador === g.jugador).length === 1);
     if (!unicos.length) return null;
@@ -87,69 +133,74 @@ const tiposDePregunta = [
       if (Math.abs(m - g.minuto) >= 5 && !incorrectos.some((x) => Math.abs(x - m) < 5)) incorrectos.push(m);
     }
     return armarPregunta(
+      "dificil",
       `¿En qué minuto hizo ${g.jugador} su gol en la final de ${p.anio}?`,
       `Minuto ${g.minuto}`,
       incorrectos.map((m) => `Minuto ${m}`),
       resumen(p)
     );
   },
-
-  // ¿Cómo terminó?
-  (p) => {
-    const real = `${p.golesLocal}-${p.golesVisitante}`;
-    const incorrectos = [];
-    for (let a = 0; a <= 4; a++) for (let b = 0; b <= 4; b++) if (`${a}-${b}` !== real) incorrectos.push(`${a}-${b}`);
-    const aclaracion = p.alargue ? " (contando el alargue, sin penales)" : "";
-    return armarPregunta(
-      `¿Cómo terminó la final de ${p.anio} entre ${p.local} y ${p.visitante}${aclaracion}?`,
-      real,
-      mezclar(incorrectos),
-      resumen(p)
-    );
-  },
-
-  // ¿Dónde se jugó?
-  (p) =>
-    armarPregunta(
-      `¿En qué ciudad se jugó la final del Mundial ${p.anio}?`,
-      p.sede.split(",")[0],
-      mezclar(finales.map((x) => x.sede.split(",")[0])),
-      resumen(p)
-    ),
 ];
 
-function preguntasDeFinales(cantidad) {
+function preguntasDeFinales(tipos, cantidad, yaElegidas) {
   const resultado = [];
   let intentos = 0;
-  while (resultado.length < cantidad && intentos < 100) {
+  while (resultado.length < cantidad && intentos < 500) {
     intentos++;
-    const pregunta = alAzar(tiposDePregunta)(alAzar(finales));
-    if (pregunta && !resultado.some((x) => x.pregunta === pregunta.pregunta)) resultado.push(pregunta);
+    const pregunta = alAzar(tipos)(alAzar(finales));
+    const repetida = [...yaElegidas, ...resultado].some((x) => x.pregunta === pregunta?.pregunta);
+    if (pregunta && !repetida) resultado.push(pregunta);
   }
   return resultado;
 }
 
+// Elige las preguntas de una partida según el modo.
+function armarPartida(modo) {
+  const cuantas = MODOS[modo];
+  const fijas = (dificultad) => mezclar(preguntasFijas.filter((p) => p.dificultad === dificultad));
+
+  // Fáciles: todas escritas a mano.
+  const faciles = fijas("facil").slice(0, cuantas.facil);
+  // Intermedias: la mitad escritas a mano y el resto armadas con las finales.
+  const mediasFijas = fijas("media").slice(0, Math.floor(cuantas.media / 2));
+  const medias = [...mediasFijas, ...preguntasDeFinales(tiposMedios, cuantas.media - mediasFijas.length, mediasFijas)];
+  // Difíciles: todas armadas con las finales.
+  const dificiles = preguntasDeFinales(tiposDificiles, cuantas.dificil, []);
+
+  return mezclar([...faciles, ...medias, ...dificiles]);
+}
+
 // ---------- Juego ----------
 
-function empezar() {
-  preguntas = mezclar([
-    ...mezclar(preguntasFijas).slice(0, PREGUNTAS_FIJAS),
-    ...preguntasDeFinales(PREGUNTAS_DE_FINALES),
-  ]);
+function mostrarPantalla(cual) {
+  el("inicio").hidden = cual !== "inicio";
+  el("juego").hidden = cual !== "juego";
+  el("final").hidden = cual !== "final";
+}
+
+function empezar(modo) {
+  preguntas = armarPartida(modo);
   actual = 0;
-  puntos = 0;
-  el("final").hidden = true;
-  el("juego").hidden = false;
+  aciertos = 0;
+  sabiduria = 0;
+  sabiduriaPosible = preguntas.reduce((total, p) => total + DIFICULTADES[p.dificultad].valor, 0);
+  mostrarPantalla("juego");
   mostrarPregunta();
 }
 
+const porcentaje = () => (sabiduriaPosible ? Math.round((sabiduria / sabiduriaPosible) * 100) : 0);
+
 function actualizarProgreso() {
-  el("progreso").textContent = `Pregunta ${actual + 1} de ${preguntas.length} · Puntos: ${puntos}`;
+  el("progreso").textContent =
+    `Pregunta ${actual + 1} de ${preguntas.length} · Aciertos: ${aciertos} · Sabiduría: ${porcentaje()}%`;
 }
 
 function mostrarPregunta() {
   const p = preguntas[actual];
+  const dif = DIFICULTADES[p.dificultad];
   actualizarProgreso();
+  el("dificultad").textContent = `${dif.nombre} · +${dif.valor} de sabiduría`;
+  el("dificultad").className = `etiqueta ${p.dificultad}`;
   el("pregunta").textContent = p.pregunta;
   el("mensaje").textContent = "";
   el("siguiente").hidden = true;
@@ -170,8 +221,10 @@ function responder(elegida) {
   botones.forEach((b) => (b.disabled = true));
   botones[p.correcta].classList.add("correcta");
 
-  if (elegida === p.correcta) {
-    puntos++;
+  p.acertada = elegida === p.correcta;
+  if (p.acertada) {
+    aciertos++;
+    sabiduria += DIFICULTADES[p.dificultad].valor;
     el("mensaje").textContent = `✅ ¡Correcto! ${p.dato}`;
   } else {
     botones[elegida].classList.add("incorrecta");
@@ -186,16 +239,29 @@ function responder(elegida) {
 }
 
 function mostrarFinal() {
-  el("juego").hidden = true;
-  el("final").hidden = false;
-  const total = preguntas.length;
-  const porcentaje = Math.round((puntos / total) * 100);
-  let frase = "¡A seguir practicando!";
-  if (porcentaje === 100) frase = "¡Perfecto! Sos un crack. 🏆";
-  else if (porcentaje >= 70) frase = "¡Muy bien jugado! 👏";
-  else if (porcentaje >= 40) frase = "Nada mal, ¡vas por buen camino!";
+  mostrarPantalla("final");
+  const pct = porcentaje();
+  const resultado = RESULTADOS.find((r) => pct >= r.desde);
+
   el("progreso").textContent = "Fin del partido";
-  el("resultado").textContent = `Acertaste ${puntos} de ${total} (${porcentaje}%). ${frase}`;
+  el("titulo-resultado").textContent = `${resultado.emoji} ${resultado.titulo}`;
+  el("frase-resultado").textContent = resultado.frase;
+  el("frase-resultado").hidden = !resultado.frase;
+  el("porcentaje").textContent = `${pct}% de sabiduría`;
+  el("barra-relleno").style.width = `${pct}%`;
+
+  // Detalle: aciertos por dificultad.
+  const detalle = el("detalle");
+  detalle.innerHTML = "";
+  for (const [clave, dif] of Object.entries(DIFICULTADES)) {
+    const deEsta = preguntas.filter((p) => p.dificultad === clave);
+    if (!deEsta.length) continue;
+    const bien = deEsta.filter((p) => p.acertada).length;
+    const item = document.createElement("li");
+    item.textContent = `${dif.nombre}: ${bien} de ${deEsta.length} (vale ${dif.valor} cada una)`;
+    detalle.appendChild(item);
+  }
+  el("aciertos-total").textContent = `Acertaste ${aciertos} de ${preguntas.length} preguntas.`;
 }
 
 el("siguiente").addEventListener("click", () => {
@@ -203,7 +269,12 @@ el("siguiente").addEventListener("click", () => {
   if (actual < preguntas.length) mostrarPregunta();
   else mostrarFinal();
 });
-el("reiniciar").addEventListener("click", empezar);
+el("modo-corta").addEventListener("click", () => empezar("corta"));
+el("modo-larga").addEventListener("click", () => empezar("larga"));
+el("reiniciar").addEventListener("click", () => {
+  el("progreso").textContent = "Elegí cómo querés jugar";
+  mostrarPantalla("inicio");
+});
 
 // ---------- Vista de finales ----------
 
@@ -310,7 +381,8 @@ Promise.all([
     preguntasFijas = datosPreguntas;
     llenarFiltro();
     mostrarFinales();
-    empezar();
+    el("progreso").textContent = "Elegí cómo querés jugar";
+    mostrarPantalla("inicio");
   })
   .catch(() => {
     el("progreso").textContent =

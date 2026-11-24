@@ -58,7 +58,7 @@ button.incorrecta { background: #fde0e0; border-color: #d33; }
 .principal:hover { background: #095c30; }
 
 #mensaje { min-height: 1.5em; margin: 16px 0 0; }
-#resultado { font-size: 1.15rem; }
+
 
 /* Pestañas */
 .pestanas { display: flex; gap: 8px; justify-content: center; margin: 8px 0 16px; }
@@ -83,3 +83,24 @@ select { font: inherit; width: 100%; padding: 10px; border-radius: 10px; border:
 
 footer { margin-top: 24px; font-size: 0.8rem; color: #777; text-align: center; }
 footer a { color: #0b6e3a; }
+
+/* Pantalla de inicio: modos de juego */
+.modo { display: block; width: 100%; margin-top: 12px; text-align: center; padding: 18px 16px; }
+.modo strong { display: block; font-size: 1.15rem; color: #0b6e3a; }
+.modo span { display: block; margin-top: 4px; color: #555; font-size: 0.95rem; }
+
+/* Etiqueta de dificultad */
+.etiqueta { display: inline-block; font-size: 0.8rem; font-weight: bold; padding: 3px 10px; border-radius: 999px; }
+.etiqueta.facil { background: #e3f4ff; color: #0a5a8a; }
+.etiqueta.media { background: #fff2cc; color: #8a6200; }
+.etiqueta.dificil { background: #fde0e0; color: #a12222; }
+
+/* Resultado final */
+#final { text-align: center; }
+#final .intro { margin-bottom: 0; }
+.titulo-resultado { font-size: 1.6rem; margin: 6px 0; }
+.frase-resultado { margin: 0 0 12px; color: #555; font-style: italic; }
+.barra { height: 14px; background: #eee; border-radius: 999px; overflow: hidden; margin: 12px 0 6px; }
+.barra-relleno { height: 100%; width: 0; background: #0b6e3a; transition: width 0.8s ease; }
+.porcentaje { font-weight: bold; font-size: 1.15rem; margin: 0 0 8px; }
+.detalle { list-style: none; padding: 0; margin: 0; color: #555; font-size: 0.95rem; line-height: 1.6; }
