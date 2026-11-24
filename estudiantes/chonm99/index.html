@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mi camino por Moderna</title>
+<style>
+:root{--navy:#063854;--blue:#087eaa;--sky:#22b6d2;--lime:#d2ed3e;--green:#71b92f;--cream:#fffdf0;--ink:#12344a;--red:#e44e58}*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#e3f7f7 0,#f7fbef 46%,#e9f2c8 100%);color:var(--ink);font:16px/1.45 "Trebuchet MS",Arial,sans-serif}.wrap{max-width:1120px;margin:auto;padding:20px}.hero{position:relative;overflow:hidden;border:5px solid #fff;border-radius:30px;background:radial-gradient(ellipse at 75% 4%,#6dd6d8 0 10%,transparent 35%),linear-gradient(145deg,#06608a,#0a91bb 55%,#075077);color:white;padding:30px 34px 26px;box-shadow:0 12px 30px #08486b33}.hero:after{content:"";position:absolute;width:410px;height:160px;right:-40px;bottom:-93px;border-radius:50%;background:repeating-radial-gradient(ellipse at center,#72bd2f 0 13px,#a4d82b 14px 25px,#3e9e34 26px 38px);transform:rotate(-9deg)}.hero-content{position:relative;z-index:1;max-width:700px}.eyebrow{font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:900;color:#d9f64d}.hero h1{font-size:clamp(32px,5vw,54px);line-height:.98;margin:12px 0 9px;text-shadow:2px 3px 0 #034360}.hero p{max-width:590px;margin:0;color:#e5fbff}.ball{position:absolute;right:45px;top:33px;width:120px;height:120px;border:9px solid white;border-radius:50%;background:radial-gradient(circle at 50% 50%,#fff 0 12%,transparent 13%),conic-gradient(from 20deg,#fff 0 12%,#23a5c5 12% 24%,#fff 24% 36%,#23a5c5 36% 48%,#fff 48% 60%,#23a5c5 60% 72%,#fff 72% 84%,#23a5c5 84%);box-shadow:0 5px 10px #00354a88;transform:rotate(-17deg)}.ball:after{content:"";position:absolute;inset:30px;border:7px solid #087da2;border-radius:50%}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.stat{background:#fff;border:2px solid #d2e9d0;border-radius:18px;padding:16px 18px;box-shadow:0 5px 12px #16475912}.stat small{display:block;font-size:11px;font-weight:900;letter-spacing:1px;text-transform:uppercase;color:#537586}.stat strong{display:block;font-size:29px;color:#08698e;line-height:1.15;margin-top:4px}.stat.rate{background:var(--lime);border-color:#b7d531}.stat.rate strong{color:#285f28}.sub{font-size:12px;color:#56717c;margin-top:4px}.progress{height:12px;background:#d8e8dd;border-radius:99px;overflow:hidden;margin:0 0 18px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#12a5c4,#83c92e);border-radius:99px;transition:width .25s}.panel{background:#fff;border-radius:22px;border:2px solid #d7e9dc;box-shadow:0 8px 20px #16475912;overflow:hidden}.tools{display:flex;gap:10px;align-items:center;padding:15px;border-bottom:1px solid #e6eee5;flex-wrap:wrap}.tabs{display:flex;gap:6px}.tab,.clear{border:0;border-radius:99px;padding:9px 15px;font:700 14px inherit;cursor:pointer;background:#eaf3ed;color:#31586a}.tab.active{background:#087eaa;color:white}.search{flex:1;min-width:190px;border:2px solid #d7e7e2;border-radius:99px;padding:10px 15px;font:inherit;outline:none}.search:focus{border-color:#19a4be}.clear{color:#a23b43;background:#fff0ee}.group-title{padding:16px 20px 9px;font-size:12px;text-transform:uppercase;letter-spacing:1.5px;color:#087596;font-weight:900;background:#f7fbf5}.entry{display:flex;gap:13px;align-items:flex-start;padding:12px 20px;border-top:1px solid #edf2ed;cursor:pointer;transition:background .15s}.entry:hover{background:#f7fcf7}.entry input{appearance:none;flex:0 0 23px;width:23px;height:23px;margin:1px 0 0;border:2px solid #85a9a8;border-radius:7px;background:white;cursor:pointer}.entry input:checked{background:#73b62e;border-color:#73b62e}.entry input:checked:after{content:"✓";display:block;color:white;font-weight:900;text-align:center;font-size:17px;line-height:19px}.entry:has(input:checked) .name{text-decoration:line-through;color:#77908c}.num{min-width:36px;color:#0a82a2;font-size:12px;font-weight:900;padding-top:3px}.name{font-weight:700;line-height:1.35}.empty{padding:30px;text-align:center;color:#607d7e}.foot{font-size:12px;color:#5c7c83;text-align:center;padding:15px}.deadline{font-weight:800;color:#d4f24c}@media(max-width:700px){.wrap{padding:12px}.hero{padding:24px}.ball{width:78px;height:78px;right:18px;top:20px;border-width:6px;opacity:.75}.ball:after{inset:20px;border-width:5px}.hero-content{max-width:78%}.stats{grid-template-columns:repeat(2,1fr)}.stat{padding:12px}.stat strong{font-size:24px}.tools{padding:12px}.entry{padding:12px}.num{min-width:30px}}@media(max-width:400px){.hero-content{max-width:100%}.ball{display:none}.tabs{width:100%}.tab{flex:1}}
+</style>
+</head>
+<body><main class="wrap">
+<header class="hero"><div class="ball" aria-hidden="true"></div><div class="hero-content"><div class="eyebrow">Rumbo al cierre de cursada</div><h1>Mi camino<br>por Moderna</h1><p>Marcá cada lectura cuando la termines. Tu avance y el ritmo diario se actualizan hasta el <span class="deadline">16 de diciembre de 2026</span>.</p></div></header>
+<section class="stats" aria-live="polite"><div class="stat"><small>Textos leídos</small><strong id="read">0</strong><div class="sub">de <span id="totalA">0</span> en total</div></div><div class="stat"><small>Te faltan</small><strong id="remaining">0</strong><div class="sub">lecturas por completar</div></div><div class="stat"><small>Avance</small><strong id="percent">0%</strong><div class="sub">¡cada tilde cuenta!</div></div><div class="stat rate"><small>Ritmo diario sugerido</small><strong id="rate">0</strong><div class="sub" id="days"></div></div></section>
+<div class="progress" role="progressbar" aria-label="Avance de lecturas" aria-valuemin="0" aria-valuemax="100"><span id="bar"></span></div>
+<section class="panel"><div class="tools"><div class="tabs"><button class="tab active" data-filter="all" type="button">Todos</button><button class="tab" data-filter="read" type="button">Leídos</button><button class="tab" data-filter="todo" type="button">Pendientes</button></div><input class="search" id="search" placeholder="Buscar por autor o título…" aria-label="Buscar lecturas"><button class="clear" id="reset" type="button">Desmarcar todo</button></div><div id="list" aria-live="polite"></div></section>
+<p class="foot">Las marcas se guardan solo mientras esta página está abierta. Al recargar, el progreso se reinicia.</p>
+<script>
+let items = [];
+let done = {};
+let filter = 'all';
+const list = document.querySelector('#list');
+function update() {
+  const total = items.length;
+  const read = items.filter(item => done[item.id]).length;
+  const remaining = total - read;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const deadline = new Date(2026, 11, 16);
+  const days = Math.max(1, Math.ceil((deadline - today) / 86400000) + 1);
+  document.querySelector('#read').textContent = read;
+  document.querySelector('#remaining').textContent = remaining;
+  document.querySelector('#totalA').textContent = total;
+  document.querySelector('#percent').textContent = total ? Math.round(read / total * 100) + '%' : '0%';
+  document.querySelector('#rate').textContent = (remaining / days).toLocaleString('es-AR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  document.querySelector('#days').textContent = days + ' días disponibles · incluyendo hoy';
+  const percent = total ? read / total * 100 : 0;
+  document.querySelector('#bar').style.width = percent + '%';
+  document.querySelector('.progress').setAttribute('aria-valuenow', String(Math.round(percent)));
+}
+function draw() {
+  const query = document.querySelector('#search').value.trim().toLocaleLowerCase('es');
+  list.replaceChildren();
+  let visible = 0;
+  const groups = [...new Set(items.map(item => item.grupo))];
+  for (const group of groups) {
+    const subset = items.filter(item => item.grupo === group && (!query || item.titulo.toLocaleLowerCase('es').includes(query)) && (filter === 'all' || (filter === 'read' ? !!done[item.id] : !done[item.id])));
+    if (!subset.length) continue;
+    visible += subset.length;
+    const heading = document.createElement('div');
+    heading.className = 'group-title';
+    heading.textContent = group;
+    list.append(heading);
+    for (const item of subset) {
+      const row = document.createElement('label');
+      row.className = 'entry';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = !!done[item.id];
+      checkbox.setAttribute('aria-label', 'Marcar como leído: ' + item.titulo);
+      checkbox.addEventListener('change', () => { done[item.id] = checkbox.checked; update(); draw(); });
+      const number = document.createElement('span');
+      number.className = 'num';
+      number.textContent = String(items.indexOf(item) + 1).padStart(2, '0');
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = item.titulo;
+      row.append(checkbox, number, name);
+      list.append(row);
+    }
+  }
+  if (!visible) {
+    const empty = document.createElement('div');
+    empty.className = 'empty';
+    empty.textContent = 'No hay lecturas que coincidan con tu búsqueda.';
+    list.append(empty);
+  }
+}
+document.querySelectorAll('.tab').forEach(button => button.addEventListener('click', () => {
+  filter = button.dataset.filter;
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.toggle('active', tab === button));
+  draw();
+}));
+document.querySelector('#search').addEventListener('input', draw);
+document.querySelector('#reset').addEventListener('click', () => { done = {}; update(); draw(); });
+fetch('datos.json').then(response => {
+  if (!response.ok) throw new Error('No se pudo leer datos.json');
+  return response.json();
+}).then(data => { items = data; update(); draw(); }).catch(() => {
+  list.textContent = 'No pude cargar datos.json. Abrí el proyecto desde el lab o con un servidor local.';
+});
+</script></main></body></html>
+
