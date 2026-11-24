@@ -3,6 +3,7 @@
 //   id, anio, fecha, sede, local, visitante, golesLocal, golesVisitante, alargue,
 //   penales, campeon, goles (lista con minuto, jugador, equipo, penal, enContra) y nota.
 // - preguntas.json: preguntas escritas a mano (id, dificultad, pregunta, opciones, correcta, dato).
+// - goleadores.json: jugadores con 2 o más goles en cada Mundial (id, anio, jugador, seleccion, goles).
 // Todo se guarda en memoria: al recargar la página, el juego vuelve a empezar.
 
 // Cuánta "sabiduría" vale cada pregunta según su dificultad.
@@ -12,10 +13,11 @@ const DIFICULTADES = {
   dificil: { nombre: "Difícil", valor: 3 },
 };
 
-// Cuántas preguntas de cada dificultad tiene cada modo de juego.
+// Cuántas preguntas de cada dificultad tiene cada modo de juego, y los límites:
+// como mucho tantas preguntas de minutos de goles y tantas sobre Argentina.
 const MODOS = {
-  corta: { facil: 3, media: 4, dificil: 3 }, // 10 preguntas
-  larga: { facil: 8, media: 11, dificil: 11 }, // 30 preguntas
+  corta: { facil: 3, media: 4, dificil: 3, maxMinutos: 1, maxArgentina: 2 }, // 10 preguntas
+  larga: { facil: 8, media: 11, dificil: 11, maxMinutos: 2, maxArgentina: 5 }, // 30 preguntas
 };
 
 // Resultado final según el porcentaje de sabiduría (de mayor a menor).
@@ -28,6 +30,7 @@ const RESULTADOS = [
 
 let finales = [];
 let preguntasFijas = [];
+let goleadores = [];
 let preguntas = [];
 let actual = 0;
 let aciertos = 0;
@@ -94,23 +97,21 @@ const tiposMedios = [
     );
   },
 
-  // ¿Cómo terminó? Opciones parecidas: el resultado dado vuelta y por un gol de diferencia.
+  // ¿Cómo terminó? Cada opción dice cuántos goles hizo cada selección, por ejemplo
+  // "Suecia 2 - Brasil 5". Opciones parecidas: el resultado dado vuelta y por un gol de diferencia.
   (p) => {
     const a = p.golesLocal;
     const b = p.golesVisitante;
-    const real = `${a}-${b}`;
+    const texto = (x, y) => `${p.local} ${x} - ${p.visitante} ${y}`;
     const parecidos = [
       [a + 1, b], [a, b + 1], [a - 1, b], [a, b - 1], [a + 1, b + 1], [a - 1, b - 1],
     ].filter(([x, y]) => x >= 0 && y >= 0);
-    const incorrectos = [
-      `${b}-${a}`,
-      ...mezclar(parecidos).map(([x, y]) => `${x}-${y}`),
-    ];
+    const incorrectos = [texto(b, a), ...mezclar(parecidos).map(([x, y]) => texto(x, y))];
     const aclaracion = p.alargue ? " (contando el alargue, sin penales)" : "";
     return armarPregunta(
       "media",
-      `¿Cómo terminó la final de ${p.anio} entre ${p.local} y ${p.visitante}${aclaracion}?`,
-      real,
+      `¿Cómo terminó la final del Mundial ${p.anio}${aclaracion}?`,
+      texto(a, b),
       incorrectos,
       resumen(p)
     );
@@ -187,32 +188,101 @@ const tiposDificiles = [
   },
 ];
 
-function preguntasDeFinales(tipos, cantidad, yaElegidas) {
-  const resultado = [];
-  let intentos = 0;
-  while (resultado.length < cantidad && intentos < 500) {
-    intentos++;
-    const pregunta = alAzar(tipos)(alAzar(finales));
-    const repetida = [...yaElegidas, ...resultado].some((x) => x.pregunta === pregunta?.pregunta);
-    if (pregunta && !repetida) resultado.push(pregunta);
-  }
-  return resultado;
+// ¿Quién fue el goleador de un Mundial? Los datos salen de goleadores.json.
+// Las opciones son otros goleadores de ESE Mundial y goleadores del Mundial anterior o el siguiente.
+function preguntaGoleadorDelMundial() {
+  const anios = sinRepetir(goleadores.map((g) => g.anio)).sort((a, b) => a - b);
+  const anio = alAzar(anios);
+  const i = anios.indexOf(anio);
+  const delMundial = (a) => goleadores.filter((g) => g.anio === a).sort((x, y) => y.goles - x.goles);
+  const nombre = (g) => `${g.jugador} (${g.seleccion})`;
+
+  const deEse = delMundial(anio);
+  const maximo = deEse[0].goles;
+  const empatados = deEse.filter((g) => g.goles === maximo);
+  const noEmpatados = (lista) => lista.filter((g) => !empatados.some((e) => e.jugador === g.jugador));
+  const correcto = alAzar(empatados);
+
+  // Los que más goles hicieron en ese Mundial, después de los primeros.
+  const delMismo = noEmpatados(deEse).slice(0, 4);
+  // Los goleadores del Mundial anterior y el siguiente.
+  const vecinos = noEmpatados([...delMundial(anios[i - 1]), ...delMundial(anios[i + 1])].slice(0, 99))
+    .sort((x, y) => y.goles - x.goles)
+    .slice(0, 4);
+
+  const texto =
+    empatados.length > 1
+      ? `¿Quién fue uno de los goleadores del Mundial ${anio}? (hubo ${empatados.length} empatados con ${maximo} goles)`
+      : `¿Quién fue el goleador del Mundial ${anio}?`;
+  const segundo = noEmpatados(deEse)[0];
+  const dato =
+    `${empatados.map((g) => nombre(g)).join(", ")}: ${maximo} goles.` +
+    (segundo ? ` Detrás quedó ${nombre(segundo)} con ${segundo.goles}.` : "");
+
+  return armarPregunta(
+    "dificil",
+    texto,
+    nombre(correcto),
+    [
+      ...mezclar(delMismo).slice(0, 2).map(nombre),
+      ...mezclar(vecinos).slice(0, 1).map(nombre),
+      ...delMismo.map(nombre),
+      ...vecinos.map(nombre),
+    ],
+    dato
+  );
 }
 
-// Elige las preguntas de una partida según el modo.
+// Generadores: cada uno arma una pregunta nueva al azar.
+const conTipo = (pregunta, tipo) => pregunta && { ...pregunta, tipo };
+const generadoresMedios = tiposMedios.map((tipo) => () => tipo(alAzar(finales)));
+const generadoresDificiles = [
+  () => conTipo(tiposDificiles[0](alAzar(finales)), "goleador-final"),
+  () => conTipo(tiposDificiles[1](alAzar(finales)), "minuto"),
+  () => conTipo(preguntaGoleadorDelMundial(), "goleador-mundial"),
+];
+
+// Las preguntas sobre Argentina son las que más se saben: hay un límite por partida.
+const esDeArgentina = (p) => /Argentin|Messi|Maradona|Boca Juniors|Scaloni/.test(p.pregunta + " " + p.opciones[p.correcta]);
+
+// Elige las preguntas de una partida según el modo, respetando los límites.
 function armarPartida(modo) {
   const cuantas = MODOS[modo];
-  const fijas = (dificultad) => mezclar(preguntasFijas.filter((p) => p.dificultad === dificultad));
+  const partida = [];
 
-  // Fáciles: todas escritas a mano.
-  const faciles = fijas("facil").slice(0, cuantas.facil);
+  const sePuede = (p) => {
+    if (!p || partida.some((x) => x.pregunta === p.pregunta)) return false;
+    if (esDeArgentina(p) && partida.filter(esDeArgentina).length >= cuantas.maxArgentina) return false;
+    if (p.tipo === "minuto" && partida.filter((x) => x.tipo === "minuto").length >= cuantas.maxMinutos) return false;
+    return true;
+  };
+  // Agrega hasta "cantidad" preguntas sacadas de una lista fija o de generadores al azar.
+  const agregarDeLista = (lista, cantidad) => {
+    let agregadas = 0;
+    for (const p of mezclar(lista)) {
+      if (agregadas >= cantidad) break;
+      if (sePuede(p)) { partida.push(p); agregadas++; }
+    }
+    return agregadas;
+  };
+  const agregarGeneradas = (generadores, cantidad) => {
+    let agregadas = 0;
+    for (let intentos = 0; agregadas < cantidad && intentos < 1000; intentos++) {
+      const p = alAzar(generadores)();
+      if (sePuede(p)) { partida.push(p); agregadas++; }
+    }
+  };
+  const fijas = (dificultad) => preguntasFijas.filter((p) => p.dificultad === dificultad);
+
+  // Fáciles: escritas a mano.
+  agregarDeLista(fijas("facil"), cuantas.facil);
   // Intermedias: la mitad escritas a mano y el resto armadas con las finales.
-  const mediasFijas = fijas("media").slice(0, Math.floor(cuantas.media / 2));
-  const medias = [...mediasFijas, ...preguntasDeFinales(tiposMedios, cuantas.media - mediasFijas.length, mediasFijas)];
-  // Difíciles: todas armadas con las finales.
-  const dificiles = preguntasDeFinales(tiposDificiles, cuantas.dificil, []);
+  const mediasFijas = agregarDeLista(fijas("media"), Math.floor(cuantas.media / 2));
+  agregarGeneradas(generadoresMedios, cuantas.media - mediasFijas);
+  // Difíciles: goleadores de las finales, minutos (con límite) y goleadores de cada Mundial.
+  agregarGeneradas(generadoresDificiles, cuantas.dificil);
 
-  return mezclar([...faciles, ...medias, ...dificiles]);
+  return mezclar(partida);
 }
 
 // ---------- Juego ----------
@@ -420,10 +490,12 @@ el("tab-partidos").addEventListener("click", () => mostrarVista("partidos"));
 Promise.all([
   fetch("datos.json").then((r) => r.json()),
   fetch("preguntas.json").then((r) => r.json()),
+  fetch("goleadores.json").then((r) => r.json()),
 ])
-  .then(([datosFinales, datosPreguntas]) => {
+  .then(([datosFinales, datosPreguntas, datosGoleadores]) => {
     finales = datosFinales;
     preguntasFijas = datosPreguntas;
+    goleadores = datosGoleadores;
     llenarFiltro();
     mostrarFinales();
     el("progreso").textContent = "Elegí cómo querés jugar";
