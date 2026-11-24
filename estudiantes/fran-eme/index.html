@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa Laboral de Argentina — EPH INDEC (2019–2026)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div>
+        <p class="eyebrow">INDEC · Encuesta Permanente de Hogares (2° Trim. 2019 – 2° Trim. 2026)</p>
+        <h1>Mapa de Desempleo, Subempleo y Ramas de Actividad</h1>
+      </div>
+      <div class="summary-pills" id="resumen-nacional"></div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel map-panel" aria-label="Mapa interactivo de Argentina">
+      <div class="panel-header">
+        <div class="tabs" role="tablist" aria-label="Indicador del mapa">
+          <button id="tab-desocupacion" class="tab active" role="tab" aria-selected="true" data-metric="desocupacion">
+            Desocupación
+          </button>
+          <button id="tab-subocupacion" class="tab" role="tab" aria-selected="false" data-metric="subocupacion">
+            Subocupación
+          </button>
+        </div>
+
+        <div class="zoom-controls" aria-label="Controles del mapa">
+          <button type="button" class="chip" data-zoom="reset" title="Ver todo el país">País</button>
+          <button type="button" class="chip" data-zoom="amba" title="Acercar a AMBA y La Plata">AMBA</button>
+          <button type="button" class="chip" data-zoom="litoral" title="Acercar a Rosario, Santa Fe y Paraná">Litoral</button>
+          <button type="button" class="icon-btn" id="zoom-in" aria-label="Acercar">+</button>
+          <button type="button" class="icon-btn" id="zoom-out" aria-label="Alejar">−</button>
+        </div>
+      </div>
+
+      <p class="metric-desc" id="metric-desc"></p>
+
+      <div class="map-stage" id="map-stage">
+        <svg id="mapa-svg" viewBox="0 0 403.9 820" role="img" aria-label="Mapa de Argentina con círculos proporcionales por aglomerado urbano">
+          <g id="viewport">
+            <g id="capa-provincias"></g>
+            <g id="capa-ciudades"></g>
+            <g id="capa-etiquetas"></g>
+          </g>
+        </svg>
+
+        <div class="legend" id="leyenda"></div>
+        <div class="map-tooltip" id="map-tooltip" hidden></div>
+      </div>
+
+      <div class="city-browser">
+        <div class="browser-controls">
+          <input id="buscar-ciudad" type="search" placeholder="Buscar ciudad o provincia…" aria-label="Buscar ciudad o provincia">
+          <select id="filtro-region" aria-label="Filtrar por región">
+            <option value="todas">Todas las regiones</option>
+            <option value="Gran Buenos Aires">Gran Buenos Aires</option>
+            <option value="Pampeana">Pampeana</option>
+            <option value="Cuyo">Cuyo</option>
+            <option value="Noroeste">Noroeste</option>
+            <option value="Noreste">Noreste</option>
+            <option value="Patagonia">Patagonia</option>
+          </select>
+          <select id="ordenar-por" aria-label="Ordenar ciudades">
+            <option value="metric_desc">Mayor tasa primero</option>
+            <option value="metric_asc">Menor tasa primero</option>
+            <option value="nombre">Alfabético (A–Z)</option>
+          </select>
+        </div>
+        <div class="city-chips" id="lista-ciudades" role="list"></div>
+      </div>
+    </section>
+
+    <section class="panel detail-panel" id="panel-detalle" aria-live="polite">
+      <div class="empty-state" id="estado-carga">Cargando datos oficiales del INDEC…</div>
+      <div id="detalle-contenido" hidden>
+        <div class="detail-head">
+          <div>
+            <span class="region-badge" id="det-region"></span>
+            <h2 id="det-nombre"></h2>
+            <p class="subtitle" id="det-subtitulo"></p>
+          </div>
+          <div class="pop-box" id="det-poblacion"></div>
+        </div>
+
+        <div class="kpi-grid" id="det-kpis"></div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Evolución laboral (2° Trim. 2019 – 2026)</h3>
+            <div class="chart-legend">
+              <span><i class="dot dot-des"></i> Desocupación</span>
+              <span><i class="dot dot-sub"></i> Subocupación</span>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg id="chart-tasas" viewBox="0 0 540 190" role="img" aria-label="Evolución de desocupación y subocupación 2019 a 2026"></svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Ramas de actividad preponderantes (2026) y evolución 2019–2026</h3>
+            <button type="button" class="link-btn" id="toggle-todas-ramas">Ver todas</button>
+          </div>
+          <p class="card-note">Porcentaje sobre la población ocupada del aglomerado (2° trimestre de cada año). Hacé clic en una rama para ver su serie anual.</p>
+          <div id="rama-destacada" class="rama-spotlight" hidden></div>
+          <ul class="ramas-list" id="lista-ramas"></ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      <strong>Fuentes oficiales:</strong> INDEC — Encuesta Permanente de Hogares (EPH), informe <em>"Mercado de trabajo. Tasas e indicadores socioeconómicos"</em> (2° trimestre de 2026, cuadros 1.2, 1.3, 1.8 y 1.10) y procesamiento de bases de microdatos individuales EPH (2° trimestre 2019–2026, clasificador CAES-Mercosur). Límites provinciales: Georef AR / IGN (<code>datos.gob.ar</code>).
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
