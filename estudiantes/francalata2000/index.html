@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo de compra · Revistas AHIRA</title>
+<style>
+  :root{
+    --bg:#f6f3ee; --card:#fffdf9; --ink:#231f1a; --muted:#6d655b; --line:#e2dbcf;
+    --accent:#8a2b1c; --accent-ink:#fff; --ml:#c98a00; --fb:#1f5fbf; --ok:#2f6b3a;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#17140f; --card:#211d17; --ink:#efe8dc; --muted:#a79d8d; --line:#383128;
+      --accent:#e0705c; --accent-ink:#1a0d09; --ml:#e6b030; --fb:#6ea2f2; --ok:#7bc38a; }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Georgia,"Times New Roman",serif}
+  header{padding:28px 16px 12px;max-width:1100px;margin:0 auto}
+  h1{margin:0 0 4px;font-size:1.9rem;letter-spacing:.2px}
+  .sub{color:var(--muted);margin:0}
+  .sub a{color:var(--accent)}
+  .notice{max-width:1100px;margin:8px auto 0;padding:0 16px}
+  .notice div{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--ml);padding:10px 14px;border-radius:6px;font:14px/1.5 system-ui,sans-serif}
+  .controls{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 16px;margin-top:12px}
+  .controls-in{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;gap:10px;align-items:end;font:14px system-ui,sans-serif}
+  .controls label{display:flex;flex-direction:column;gap:2px;color:var(--muted);font-size:12px}
+  .controls input[type=search],.controls select,.controls button{font:14px system-ui,sans-serif;padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink)}
+  .controls input[type=search]{min-width:210px}
+  .controls .chk{flex-direction:row;align-items:center;gap:6px;color:var(--ink);font-size:14px;padding-bottom:7px}
+  button{cursor:pointer}
+  button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+  .spacer{flex:1}
+  main{max-width:1100px;margin:0 auto;padding:12px 16px 60px}
+  .count{font:13px system-ui,sans-serif;color:var(--muted);margin:8px 0}
+  .error{color:#b00020;font:14px system-ui,sans-serif;margin:12px 0}
+  details.mag{background:var(--card);border:1px solid var(--line);border-radius:8px;margin:8px 0}
+  details.mag>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+  details.mag>summary::-webkit-details-marker{display:none}
+  details.mag>summary::before{content:"▸";color:var(--muted);transition:transform .15s}
+  details.mag[open]>summary::before{transform:rotate(90deg)}
+  .mt{font-weight:bold;font-size:1.08rem}
+  .yrs{color:var(--muted);font:14px system-ui,sans-serif}
+  .badge{margin-left:auto;font:12px system-ui,sans-serif;color:var(--muted);text-align:right}
+  .badge b{color:var(--ok)}
+  .body{padding:10px 14px 14px;border-top:1px solid var(--line)}
+  .desc{margin:0 0 10px;color:var(--ink);font-size:.97rem;line-height:1.55}
+  .links{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;font:13px system-ui,sans-serif}
+  .links a{padding:6px 10px;border-radius:6px;text-decoration:none;color:#fff;border:1px solid transparent}
+  .links a.ml{background:var(--ml);color:#201700}
+  .links a.fb{background:var(--fb);color:#fff}
+  .links a.ah{background:transparent;color:var(--accent);border-color:var(--line)}
+  table{width:100%;border-collapse:collapse;font:14px system-ui,sans-serif}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+  th{color:var(--muted);font-weight:600;font-size:12px}
+  td.num,th.num{text-align:right;white-space:nowrap}
+  .pill{display:inline-block;font-size:11px;padding:1px 7px;border-radius:10px;color:#fff}
+  .pill.ml{background:var(--ml);color:#201700}.pill.fb{background:var(--fb)}
+  .buy{display:inline-block;padding:4px 9px;border-radius:5px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-size:12px;white-space:nowrap}
+  .buy:hover{opacity:.9}
+  .empty{color:var(--muted);font:14px system-ui,sans-serif;margin:6px 0 10px}
+  form.add{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px;font:13px system-ui,sans-serif;align-items:end}
+  form.add label{display:flex;flex-direction:column;gap:2px;color:var(--muted);font-size:12px}
+  form.add input,form.add select{padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font:13px system-ui,sans-serif}
+  form.add .wide{grid-column:span 2}
+  .del{background:none;border:none;color:var(--muted);font-size:16px;padding:0 4px}
+  .del:hover{color:var(--accent)}
+  footer{max-width:1100px;margin:0 auto;padding:0 16px 40px;color:var(--muted);font:13px system-ui,sans-serif}
+  @media(max-width:600px){ form.add .wide{grid-column:span 1} .badge{margin-left:0;text-align:left;width:100%} }
+</style>
+</head>
+<body>
+<header>
+  <h1>Catálogo de compra · Revistas AHIRA</h1>
+  <p class="sub">Base de datos de las revistas del <a href="https://ahira.com.ar/revistas/" target="_blank" rel="noopener">Archivo Histórico de Revistas Argentinas</a>, con su descripción y catálogo de ofertas en Mercado Libre y Facebook Marketplace.</p>
+</header>
+
+<div class="notice"><div>
+  <b>Cómo funciona:</b> la lista de revistas, sus descripciones y las ofertas precargadas se leen desde <code>datos.json</code>. Cada revista tiene botones para buscar ejemplares en Mercado Libre, Marketplace o ver la colección digital en AHIRA. Si cargás una oferta nueva, vive <b>en memoria</b> mientras la página está abierta (al recargar vuelve al estado de <code>datos.json</code>): usá <b>Exportar JSON</b> si querés descargar el archivo actualizado para subirlo al repositorio.
+</div></div>
+
+<div class="controls"><div class="controls-in">
+  <label>Buscar revista<input type="search" id="q" placeholder="Ej: Crisis, poesía, historieta…"></label>
+  <label>Ordenar por
+    <select id="sortBy">
+      <option value="year">Año de publicación</option>
+      <option value="price">Precio</option>
+      <option value="ship">Precio del envío</option>
+    </select>
+  </label>
+  <label>Sentido
+    <select id="sortDir">
+      <option value="asc">Menor a mayor</option>
+      <option value="desc">Mayor a menor</option>
+    </select>
+  </label>
+  <label>Plataforma
+    <select id="plat">
+      <option value="all">Todas</option>
+      <option value="ml">Mercado Libre</option>
+      <option value="fb">Marketplace</option>
+    </select>
+  </label>
+  <label>Época
+    <select id="era"><option value="">Todas</option></select>
+  </label>
+  <label class="chk"><input type="checkbox" id="onlyOffers"> Solo con ofertas</label>
+  <span class="spacer"></span>
+  <button id="btnOpen" type="button">Abrir todas</button>
+  <button id="btnClose" type="button">Cerrar todas</button>
+  <button id="btnExport" type="button">Exportar JSON</button>
+  <button id="btnImport" type="button">Importar JSON</button>
+  <input type="file" id="fileImport" accept="application/json" hidden>
+</div></div>
+
+<main>
+  <div class="count" id="count">Cargando catálogo desde datos.json…</div>
+  <p id="aviso" class="error" hidden></p>
+  <div id="list"></div>
+</main>
+<footer>Fuente del listado y descripciones: ahira.com.ar. Los años corresponden al período de publicación informado por el archivo.</footer>
+
+<script>
+const norm = s => String(s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const slugify = s => norm(s).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ars = n => n == null ? "—" : new Intl.NumberFormat("es-AR", {style:"currency", currency:"ARS", maximumFractionDigits:0}).format(n);
+
+let MAGS = [];
+let offers = [];
+const $ = id => document.getElementById(id);
+const openState = new Set();
+
+function makeMag(r, idx){
+  const title = r.titulo || "";
+  const main = title.split(/\. | \(/)[0].replace(/[…!]+$/, "").trim();
+  const slug = r.slug || slugify(title);
+  return {
+    id: r.id ?? (idx + 1),
+    key: title,
+    title,
+    from: +r.desde,
+    to: +r.hasta,
+    slug,
+    description: r.descripcion || "",
+    ahira: "https://ahira.com.ar/revistas/" + slug + "/",
+    q: "revista " + main
+  };
+}
+
+function loadFromRecords(records){
+  MAGS = records.map(makeMag);
+  offers = [];
+  records.forEach((r) => {
+    if (!Array.isArray(r.ofertas)) return;
+    r.ofertas.forEach((o, i) => {
+      offers.push({
+        id: o.id || ("o" + r.id + "-" + i + "-" + Math.random().toString(36).slice(2, 6)),
+        mag: r.titulo,
+        platform: o.platform === "fb" ? "fb" : "ml",
+        title: o.title || "",
+        issueYear: o.issueYear ?? null,
+        price: o.price ?? null,
+        shipping: o.shipping ?? null,
+        url: o.url || ""
+      });
+    });
+  });
+}
+
+const val = (o, by) => by === "year" ? o.issueYear : by === "price" ? o.price : (o.shipping === 0 ? 0 : o.shipping);
+function cmp(a, b, dir){
+  const an = a == null, bn = b == null;
+  if (an && bn) return 0;
+  if (an) return 1;
+  if (bn) return -1;
+  return dir === "asc" ? a - b : b - a;
+}
+function magKey(m, mo, by){
+  if (by === "year") return m.from;
+  const v = mo.map(o => val(o, by)).filter(x => x != null);
+  return v.length ? Math.min(...v) : null;
+}
+
+function eras(){
+  const sel = $("era");
+  sel.innerHTML = '<option value="">Todas</option>';
+  const set = new Set(MAGS.map(m => Math.floor(m.from / 10) * 10));
+  [...set].sort((a, b) => a - b).forEach(d => {
+    const o = document.createElement("option");
+    o.value = d;
+    o.textContent = d < 1900 ? "Siglo XIX (" + d + "s)" : d + "s";
+    sel.appendChild(o);
+  });
+}
+
+function render(){
+  const q = norm($("q").value.trim());
+  const by = $("sortBy").value, dir = $("sortDir").value, plat = $("plat").value;
+  const era = $("era").value, only = $("onlyOffers").checked;
+
+  let rows = MAGS.map(m => {
+    const mo = offers.filter(o => o.mag === m.key && (plat === "all" || o.platform === plat));
+    return {m, mo};
+  }).filter(({m, mo}) =>
+    (!q || norm(m.title + " " + m.description).includes(q)) &&
+    (!era || Math.floor(m.from / 10) * 10 === +era) &&
+    (!only || mo.length)
+  );
+
+  rows.sort((a, b) => {
+    const c = cmp(magKey(a.m, a.mo, by), magKey(b.m, b.mo, by), dir);
+    return c || a.m.from - b.m.from || a.m.title.localeCompare(b.m.title, "es");
+  });
+
+  const total = offers.length;
+  $("count").textContent = rows.length + " de " + MAGS.length + " revistas · " + total + " oferta" + (total === 1 ? "" : "s") + " cargada" + (total === 1 ? "" : "s");
+
+  $("list").innerHTML = rows.map(({m, mo}) => {
+    mo = [...mo].sort((a, b) => cmp(val(a, by), val(b, by), dir));
+    const prices = mo.map(o => o.price).filter(x => x != null);
+    const yrs = m.from === m.to ? m.from : m.from + " – " + m.to;
+    const ml = "https://listado.mercadolibre.com.ar/" + slugify(m.q);
+    const fb = "https://www.facebook.com/marketplace/search/?query=" + encodeURIComponent(m.q);
+    const isOpen = openState.has(m.key) ? " open" : "";
+    const table = mo.length ? `
+      <table>
+        <thead><tr><th>Plat.</th><th>Publicación</th><th class="num">Año</th><th class="num">Precio</th><th class="num">Envío</th><th>Compra</th><th></th></tr></thead>
+        <tbody>${mo.map(o => `
+          <tr>
+            <td><span class="pill ${o.platform}">${o.platform === "ml" ? "ML" : "FB"}</span></td>
+            <td>${esc(o.title || "Publicación sin título")}</td>
+            <td class="num">${o.issueYear ?? "—"}</td>
+            <td class="num">${ars(o.price)}</td>
+            <td class="num">${o.shipping === 0 ? "Gratis" : o.shipping == null ? "A coordinar" : ars(o.shipping)}</td>
+            <td>${o.url ? `<a class="buy" href="${esc(o.url)}" target="_blank" rel="noopener">Comprar ↗</a>` : `<span class="yrs">Sin enlace</span>`}</td>
+            <td><button class="del" title="Quitar" data-del="${esc(o.id)}">×</button></td>
+          </tr>`).join("")}
+        </tbody>
+      </table>` : `<p class="empty">Todavía no hay ofertas cargadas para esta revista.</p>`;
+
+    return `
+    <details class="mag" data-key="${esc(m.key)}"${isOpen}>
+      <summary>
+        <span class="mt">${esc(m.title)}</span><span class="yrs">${yrs}</span>
+        <span class="badge">${mo.length ? `<b>${mo.length} oferta${mo.length > 1 ? "s" : ""}</b>${prices.length ? " · desde " + ars(Math.min(...prices)) : ""}` : "sin ofertas cargadas"}</span>
+      </summary>
+      <div class="body">
+        <p class="desc">${esc(m.description)}</p>
+        <div class="links">
+          <a class="ml" href="${ml}" target="_blank" rel="noopener">Buscar en Mercado Libre</a>
+          <a class="fb" href="${fb}" target="_blank" rel="noopener">Buscar en Marketplace</a>
+          <a class="ah" href="${esc(m.ahira)}" target="_blank" rel="noopener">Ver en AHIRA</a>
+        </div>
+        ${table}
+        <form class="add" data-mag="${esc(m.key)}">
+          <label>Plataforma<select name="platform"><option value="ml">Mercado Libre</option><option value="fb">Marketplace</option></select></label>
+          <label class="wide">Título de la publicación<input name="title" required placeholder="Ej: ${esc(m.title)} n° 12"></label>
+          <label>Año del número<input name="issueYear" type="number" min="1800" max="2100" placeholder="${m.from}"></label>
+          <label>Precio (ARS)<input name="price" type="number" min="0" step="1" required></label>
+          <label>Envío (ARS)<input name="shipping" type="number" min="0" step="1" placeholder="vacío = a coordinar"></label>
+          <label><span>&nbsp;</span><span><input type="checkbox" name="free"> Envío gratis</span></label>
+          <label class="wide">Enlace de compra<input name="url" type="url" placeholder="https://…"></label>
+          <button class="primary" type="submit">Agregar oferta</button>
+        </form>
+      </div>
+    </details>`;
+  }).join("");
+}
+
+["q", "sortBy", "sortDir", "plat", "era", "onlyOffers"].forEach(id => $(id).addEventListener("input", render));
+
+$("list").addEventListener("toggle", e => {
+  const d = e.target;
+  if (!d.matches || !d.matches("details.mag")) return;
+  d.open ? openState.add(d.dataset.key) : openState.delete(d.dataset.key);
+}, true);
+
+$("list").addEventListener("submit", e => {
+  e.preventDefault();
+  const f = e.target, fd = new FormData(f);
+  const num = k => fd.get(k) === "" || fd.get(k) == null ? null : +fd.get(k);
+  offers.push({
+    id: "o" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
+    mag: f.dataset.mag,
+    platform: fd.get("platform"),
+    title: fd.get("title").trim(),
+    issueYear: num("issueYear"),
+    price: num("price"),
+    shipping: fd.get("free") ? 0 : num("shipping"),
+    url: (fd.get("url") || "").trim()
+  });
+  openState.add(f.dataset.mag);
+  render();
+});
+
+$("list").addEventListener("click", e => {
+  const id = e.target.dataset && e.target.dataset.del;
+  if (!id) return;
+  offers = offers.filter(o => o.id !== id);
+  render();
+});
+
+$("btnOpen").onclick = () => { MAGS.forEach(m => openState.add(m.key)); render(); };
+$("btnClose").onclick = () => { openState.clear(); render(); };
+
+$("btnExport").onclick = () => {
+  const byMag = new Map();
+  offers.forEach(o => {
+    if (!byMag.has(o.mag)) byMag.set(o.mag, []);
+    byMag.get(o.mag).push({
+      platform: o.platform,
+      title: o.title,
+      issueYear: o.issueYear,
+      price: o.price,
+      shipping: o.shipping,
+      url: o.url
+    });
+  });
+  const payload = MAGS.map(m => ({
+    id: m.id,
+    titulo: m.title,
+    desde: m.from,
+    hasta: m.to,
+    slug: m.slug,
+    descripcion: m.description,
+    ofertas: byMag.get(m.key) || []
+  }));
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "datos.json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+$("btnImport").onclick = () => $("fileImport").click();
+$("fileImport").onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    if (!Array.isArray(data)) throw new Error("Formato inválido");
+    if (data.length && "titulo" in data[0] && Array.isArray(data[0].ofertas)) {
+      loadFromRecords(data);
+      eras();
+    } else {
+      const have = new Set(offers.map(o => o.mag + "|" + o.url + "|" + o.title));
+      data.forEach(o => {
+        if (o && o.mag && !have.has(o.mag + "|" + (o.url || "") + "|" + (o.title || ""))) {
+          offers.push({id:"o" + Math.random().toString(36).slice(2, 9), ...o});
+        }
+      });
+    }
+    render();
+  } catch (err) {
+    alert("El archivo no tiene el formato esperado (JSON válido de datos.json o lista de ofertas).");
+  }
+  e.target.value = "";
+};
+
+fetch("datos.json")
+  .then(r => {
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  })
+  .then(records => {
+    loadFromRecords(records);
+    eras();
+    render();
+  })
+  .catch(() => {
+    const aviso = $("aviso");
+    aviso.hidden = false;
+    aviso.textContent = "No pude cargar datos.json. Si abriste el archivo con doble clic (file://), probá verlo desde el lab o con un servidor local.";
+    $("count").textContent = "Error al cargar datos.json";
+  });
+</script>
+</body>
+</html>
