@@ -23,7 +23,7 @@ const RESULTADOS = [
   { desde: 85, titulo: "Te sentás en la mesa con Macaya", frase: "", emoji: "🎙️" },
   { desde: 65, titulo: "Futbolero", frase: "", emoji: "⚽" },
   { desde: 40, titulo: "Mirás fútbol cada 4 años", frase: "Para no quedarte afuera.", emoji: "📺" },
-  { desde: 0, titulo: "Volvé a ver Utilísima", frase: "No sabés una joraca de fútbol.", emoji: "🧶" },
+  { desde: 0, titulo: "Volvé a ver Utilísima", frase: "No sabés un joraca de fútbol.", emoji: "🧶" },
 ];
 
 let finales = [];
