@@ -50,9 +50,10 @@ function mezclar(lista) {
 const alAzar = (lista) => lista[Math.floor(Math.random() * lista.length)];
 const sinRepetir = (lista) => [...new Set(lista)];
 
-// Arma una pregunta con la respuesta correcta y tres opciones incorrectas, mezcladas.
+// Arma una pregunta con la respuesta correcta y tres opciones incorrectas.
+// Las incorrectas llegan ordenadas de la más capciosa a la menos: se usan las tres primeras.
 function armarPregunta(dificultad, texto, correcta, incorrectas, dato) {
-  const otras = mezclar(sinRepetir(incorrectas).filter((x) => x !== correcta)).slice(0, 3);
+  const otras = sinRepetir(incorrectas).filter((x) => x !== correcta).slice(0, 3);
   const opciones = mezclar([correcta, ...otras]);
   return { dificultad, pregunta: texto, opciones, correcta: opciones.indexOf(correcta), dato };
 }
@@ -71,66 +72,110 @@ const resumen = (p) => `Final ${p.anio}, ${p.sede}: ${marcador(p)}. Campeón: ${
 const todosLosEquipos = () => sinRepetir(finales.flatMap((p) => [p.local, p.visitante]));
 const golesNormales = (p) => p.goles.filter((g) => !g.enContra);
 
+// Alemania y Alemania Federal cuentan como la misma selección.
+const mismaSeleccion = (a, b) => a.replace(" Federal", "") === b.replace(" Federal", "");
+// Finales "de la misma época" que la final p (hasta tantos años antes o después).
+const deLaEpoca = (p, anios) => finales.filter((x) => x !== p && Math.abs(x.anio - p.anio) <= anios);
+const ciudad = (p) => p.sede.split(",")[0];
+const pais = (p) => p.sede.split(", ")[1];
+
 // Intermedias: quién ganó, cómo terminó, dónde se jugó.
 const tiposMedios = [
-  (p) =>
-    armarPregunta(
+  // ¿Quién ganó? Siempre aparece el rival, y el resto son finalistas de esa época.
+  (p) => {
+    const rival = p.campeon === p.local ? p.visitante : p.local;
+    const deEsaEpoca = deLaEpoca(p, 12).flatMap((x) => [x.local, x.visitante]);
+    return armarPregunta(
       "media",
       `¿Qué selección ganó la final del Mundial ${p.anio}?`,
       p.campeon,
-      [p.local, p.visitante, ...mezclar(todosLosEquipos())],
+      [rival, ...mezclar(deEsaEpoca), ...mezclar(todosLosEquipos())],
       resumen(p)
-    ),
+    );
+  },
 
+  // ¿Cómo terminó? Opciones parecidas: el resultado dado vuelta y por un gol de diferencia.
   (p) => {
-    const real = `${p.golesLocal}-${p.golesVisitante}`;
-    const incorrectos = [];
-    for (let a = 0; a <= 4; a++) for (let b = 0; b <= 4; b++) if (`${a}-${b}` !== real) incorrectos.push(`${a}-${b}`);
+    const a = p.golesLocal;
+    const b = p.golesVisitante;
+    const real = `${a}-${b}`;
+    const parecidos = [
+      [a + 1, b], [a, b + 1], [a - 1, b], [a, b - 1], [a + 1, b + 1], [a - 1, b - 1],
+    ].filter(([x, y]) => x >= 0 && y >= 0);
+    const incorrectos = [
+      `${b}-${a}`,
+      ...mezclar(parecidos).map(([x, y]) => `${x}-${y}`),
+    ];
     const aclaracion = p.alargue ? " (contando el alargue, sin penales)" : "";
     return armarPregunta(
       "media",
       `¿Cómo terminó la final de ${p.anio} entre ${p.local} y ${p.visitante}${aclaracion}?`,
       real,
-      mezclar(incorrectos),
+      incorrectos,
       resumen(p)
     );
   },
 
+  // ¿Dónde se jugó? Primero otras ciudades del mismo país, después sedes de esa época.
   (p) =>
     armarPregunta(
       "media",
       `¿En qué ciudad se jugó la final del Mundial ${p.anio}?`,
-      p.sede.split(",")[0],
-      mezclar(finales.map((x) => x.sede.split(",")[0])),
+      ciudad(p),
+      [
+        ...mezclar(finales.filter((x) => pais(x) === pais(p)).map(ciudad)),
+        ...mezclar(deLaEpoca(p, 16).map(ciudad)),
+        ...mezclar(finales.map(ciudad)),
+      ],
       resumen(p)
     ),
 ];
 
 // Difíciles: quién hizo el gol y en qué minuto.
 const tiposDificiles = [
+  // ¿Quién hizo el gol? Las opciones son goleadores de la MISMA selección en otras finales
+  // y goleadores del rival en ese mismo partido. Nunca alguien de una selección que no tiene nada que ver.
   (p) => {
     const goles = golesNormales(p);
     if (!goles.length) return null;
     const g = alAzar(goles);
-    const otros = finales.flatMap((x) => golesNormales(x).map((y) => y.jugador)).filter((j) => j !== g.jugador);
+    const goleadores = (filtro) =>
+      mezclar(sinRepetir(finales.flatMap((x) => golesNormales(x).filter((y) => filtro(x, y)).map((y) => y.jugador))));
+    const deSuSeleccion = goleadores((x, y) => mismaSeleccion(y.equipo, g.equipo));
+    const delRival = goleadores((x, y) => x === p && !mismaSeleccion(y.equipo, g.equipo));
+    const deLaMismaEpoca = goleadores((x) => Math.abs(x.anio - p.anio) <= 12);
     return armarPregunta(
       "dificil",
       `En la final de ${p.anio} (${p.local} vs ${p.visitante}), ¿quién hizo el gol de ${g.equipo} en el minuto ${g.minuto}?`,
       g.jugador,
-      mezclar(otros),
+      [
+        ...deSuSeleccion.filter((j) => j !== g.jugador).slice(0, 2),
+        ...delRival.slice(0, 1),
+        ...deSuSeleccion,
+        ...delRival,
+        ...deLaMismaEpoca,
+      ],
       resumen(p)
     );
   },
 
+  // ¿En qué minuto? Las opciones son minutos de otros goles de ese partido y minutos cercanos.
   (p) => {
     const unicos = golesNormales(p).filter((g) => p.goles.filter((x) => x.jugador === g.jugador).length === 1);
     if (!unicos.length) return null;
     const g = alAzar(unicos);
     const tope = p.alargue ? 120 : 90;
+    const valido = (m, lista) => m >= 1 && m <= tope && m !== g.minuto && !lista.includes(m);
     const incorrectos = [];
-    while (incorrectos.length < 3) {
-      const m = 1 + Math.floor(Math.random() * tope);
-      if (Math.abs(m - g.minuto) >= 5 && !incorrectos.some((x) => Math.abs(x - m) < 5)) incorrectos.push(m);
+    const otrosGoles = mezclar(p.goles.map((x) => x.minuto));
+    if (otrosGoles.length && valido(otrosGoles[0], incorrectos)) incorrectos.push(otrosGoles[0]);
+    let intentos = 0;
+    while (incorrectos.length < 3 && intentos < 200) {
+      intentos++;
+      // Cerca del minuto real (entre 2 y 9 minutos antes o después), y si no, cualquiera.
+      const cerca = g.minuto + (Math.random() < 0.5 ? -1 : 1) * (2 + Math.floor(Math.random() * 8));
+      const m = intentos < 100 ? cerca : 1 + Math.floor(Math.random() * tope);
+      if (valido(m, incorrectos)) incorrectos.push(m);
     }
     return armarPregunta(
       "dificil",
