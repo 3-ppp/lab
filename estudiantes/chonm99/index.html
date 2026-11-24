@@ -119,12 +119,15 @@ button, input { font: inherit; }
 .study-note { margin: 0 0 13px; color: var(--muted); font-size: 13px; }
 .upload-label, .counter-button, .remove-file { display: inline-block; padding: 8px 12px; border: 1px solid #aa9875; border-radius: 0; color: var(--ink); background: #f7f0e1; cursor: pointer; font: inherit; font-variant: small-caps; }
 .upload-label { color: #fff5df; background: var(--wine); }
+.upload-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.upload-label.secondary { color: var(--wine); background: #f7f0e1; }
 .file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
 .file-input:focus-visible + .upload-label, button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .file-list { display: grid; gap: 8px; margin-top: 13px; }
 .file-item { padding: 10px; border: 1px solid var(--line); background: #fffaf0; }
 .file-item summary { color: var(--wine); cursor: pointer; overflow-wrap: anywhere; }
 .file-item pre { max-height: 260px; overflow: auto; margin: 10px 0; padding: 10px; border: 1px solid var(--line); background: #f7f0e1; white-space: pre-wrap; overflow-wrap: anywhere; font: 13px/1.5 Georgia, serif; }
+.pdf-preview { width: 100%; height: min(560px, 70vh); margin: 10px 0; border: 1px solid var(--line); background: white; }
 .remove-file { padding: 5px 9px; color: var(--wine); font-size: 13px; }
 .counter { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
 .counter strong { min-width: 56px; color: var(--wine); font-size: 42px; line-height: 1; text-align: center; }
@@ -216,7 +219,7 @@ button, input { font: inherit; }
 <section class="stats" aria-live="polite"><div class="stat"><small>Textos leídos</small><strong id="read">0</strong><div class="sub">de <span id="totalA">0</span> en total</div></div><div class="stat"><small>Te faltan</small><strong id="remaining">0</strong><div class="sub">lecturas por completar</div></div><div class="stat"><small>Avance</small><strong id="percent">0%</strong><div class="sub">¡cada tilde cuenta!</div></div><div class="stat rate"><small>Ritmo diario sugerido</small><strong id="rate">0</strong><div class="sub" id="days"></div></div></section>
 <div class="progress" role="progressbar" aria-label="Avance de lecturas" aria-valuemin="0" aria-valuemax="100"><span id="bar"></span></div>
 <section class="study-tools" aria-label="Herramientas para preparar el final">
-  <div class="study-card"><h2>Mis resúmenes</h2><p class="study-note">Elegí archivos de texto o Markdown desde tu PC. Se pueden leer acá mientras la página esté abierta.</p><input class="file-input" id="summaryFiles" type="file" accept=".txt,.md,text/plain,text/markdown" multiple aria-label="Elegir resúmenes de texto o Markdown"><label class="upload-label" for="summaryFiles">＋ Adjuntar resúmenes</label><div class="file-list" id="fileList" aria-live="polite"><span class="study-note">Todavía no adjuntaste resúmenes.</span></div></div>
+  <div class="study-card"><h2>Mis resúmenes</h2><p class="study-note">Elegí archivos .txt, .md o .pdf, o una carpeta entera. Podés leerlos acá mientras la página esté abierta.</p><div class="upload-actions"><input class="file-input" id="summaryFiles" type="file" accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf" multiple aria-label="Elegir archivos de resumen"><label class="upload-label" for="summaryFiles">＋ Adjuntar archivos</label><input class="file-input" id="summaryFolder" type="file" accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf" webkitdirectory directory multiple aria-label="Elegir una carpeta de resúmenes"><label class="upload-label secondary" for="summaryFolder">＋ Adjuntar carpeta</label></div><div class="file-list" id="fileList" aria-live="polite"><span class="study-note">Todavía no adjuntaste resúmenes.</span></div></div>
   <div class="study-card"><h2>Contador de puchos</h2><p class="study-note">Un registro para acompañar tus horas de estudio.</p><div class="counter"><button class="counter-button" id="smokeLess" type="button" aria-label="Restar un pucho">−</button><strong id="smokeCount" aria-live="polite">0</strong><button class="counter-button" id="smokeMore" type="button" aria-label="Sumar un pucho">＋</button></div><div class="counter-caption">fumados mientras preparás el final · solo por esta sesión</div></div>
 </section>
 <section class="panel"><div class="tools"><div class="tabs"><button class="tab active" data-filter="all" type="button">Todos</button><button class="tab" data-filter="read" type="button">Leídos</button><button class="tab" data-filter="todo" type="button">Pendientes</button></div><input class="search" id="search" placeholder="Buscar por autor o título…" aria-label="Buscar lecturas"><button class="clear" id="reset" type="button">Desmarcar todo</button></div><div id="list" aria-live="polite"></div></section>
@@ -243,29 +246,55 @@ function drawSummaries() {
     article.className = 'file-item';
     const title = document.createElement('summary');
     title.textContent = summary.name;
-    const content = document.createElement('pre');
-    content.textContent = summary.content;
+    let content;
+    if (summary.type === 'application/pdf') {
+      content = document.createElement('iframe');
+      content.className = 'pdf-preview';
+      content.src = summary.url;
+      content.title = 'Vista previa: ' + summary.name;
+    } else {
+      content = document.createElement('pre');
+      content.textContent = summary.content;
+    }
     const remove = document.createElement('button');
     remove.type = 'button';
     remove.className = 'remove-file';
     remove.textContent = 'Quitar';
     remove.setAttribute('aria-label', 'Quitar ' + summary.name);
-    remove.addEventListener('click', () => { summaries.splice(index, 1); drawSummaries(); });
+    remove.addEventListener('click', () => {
+      const [removed] = summaries.splice(index, 1);
+      if (removed.url) URL.revokeObjectURL(removed.url);
+      drawSummaries();
+    });
     article.append(title, content, remove);
     fileList.append(article);
   });
 }
-document.querySelector('#summaryFiles').addEventListener('change', async event => {
-  const selected = [...event.target.files];
+async function addSummaries(selectedFiles, input) {
+  const selected = [...selectedFiles];
   const errors = [];
   for (const file of selected) {
-    if (!/\.(txt|md)$/i.test(file.name)) { errors.push(file.name + ': solo se aceptan .txt y .md.'); continue; }
+    const isText = /\.(txt|md)$/i.test(file.name);
+    const isPdf = /\.pdf$/i.test(file.name);
+    const name = file.webkitRelativePath || file.name;
+    if (!isText && !isPdf) { errors.push(name + ': solo se aceptan .txt, .md y .pdf.'); continue; }
     if (file.size > 2 * 1024 * 1024) { errors.push(file.name + ': supera el máximo de 2 MB.'); continue; }
-    summaries.push({ name: file.name, content: await file.text() });
+    summaries.push({
+      name,
+      type: isPdf ? 'application/pdf' : 'text/plain',
+      content: isText ? await file.text() : '',
+      url: isPdf ? URL.createObjectURL(file) : ''
+    });
   }
   drawSummaries();
   if (errors.length) alert(errors.join('\n'));
-  event.target.value = '';
+  input.value = '';
+}
+document.querySelector('#summaryFiles').addEventListener('change', event => {
+  addSummaries(event.target.files, event.target);
+});
+document.querySelector('#summaryFolder').addEventListener('change', event => {
+  addSummaries(event.target.files, event.target);
 });
 document.querySelector('#smokeMore').addEventListener('click', () => { smokeCount += 1; document.querySelector('#smokeCount').textContent = smokeCount; });
 document.querySelector('#smokeLess').addEventListener('click', () => { smokeCount = Math.max(0, smokeCount - 1); document.querySelector('#smokeCount').textContent = smokeCount; });
