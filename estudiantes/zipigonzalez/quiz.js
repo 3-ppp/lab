@@ -36,6 +36,11 @@ let actual = 0;
 let aciertos = 0;
 let sabiduria = 0; // puntos de sabiduría ganados
 let sabiduriaPosible = 0; // puntos de sabiduría que se podían ganar
+let apodo = ""; // el apodo del jugador (solo en memoria: no se guarda en ningún lado)
+let modoActual = "corta";
+
+// Dirección pública del juego, para el texto que se comparte.
+const URL_DEL_JUEGO = "https://lab.puaj.club/p/zipigonzalez/";
 
 const el = (id) => document.getElementById(id);
 
@@ -294,6 +299,15 @@ function mostrarPantalla(cual) {
 }
 
 function empezar(modo) {
+  // Antes de jugar hay que poner un apodo. Queda en memoria para la próxima partida.
+  apodo = el("apodo").value.trim();
+  if (!apodo) {
+    el("aviso-apodo").textContent = "Poné tu apodo para empezar.";
+    el("apodo").focus();
+    return;
+  }
+  el("aviso-apodo").textContent = "";
+  modoActual = modo;
   preguntas = armarPartida(modo);
   actual = 0;
   aciertos = 0;
@@ -307,7 +321,7 @@ const porcentaje = () => (sabiduriaPosible ? Math.round((sabiduria / sabiduriaPo
 
 function actualizarProgreso() {
   el("progreso").textContent =
-    `Pregunta ${actual + 1} de ${preguntas.length} · Aciertos: ${aciertos} · Sabiduría: ${porcentaje()}%`;
+    `${apodo} · Pregunta ${actual + 1} de ${preguntas.length} · Aciertos: ${aciertos} · Sabiduría: ${porcentaje()}%`;
 }
 
 function mostrarPregunta() {
@@ -359,6 +373,7 @@ function mostrarFinal() {
   const resultado = RESULTADOS.find((r) => pct >= r.desde);
 
   el("progreso").textContent = "Fin del partido";
+  el("jugador-resultado").textContent = `${apodo} · Partida ${modoActual} (${preguntas.length} preguntas)`;
   el("titulo-resultado").textContent = `${resultado.emoji} ${resultado.titulo}`;
   el("frase-resultado").textContent = resultado.frase;
   el("frase-resultado").hidden = !resultado.frase;
@@ -377,7 +392,55 @@ function mostrarFinal() {
     detalle.appendChild(item);
   }
   el("aciertos-total").textContent = `Acertaste ${aciertos} de ${preguntas.length} preguntas.`;
+
+  prepararCompartir(pct, resultado);
 }
+
+// ---------- Compartir el resultado ----------
+
+function prepararCompartir(pct, resultado) {
+  const texto =
+    `⚽ Probá tu sabiduría futbolera\n` +
+    `${apodo} sacó ${pct}% de sabiduría en la partida ${modoActual}: ${resultado.emoji} ${resultado.titulo}.\n` +
+    `Acertó ${aciertos} de ${preguntas.length} preguntas. ¿Te animás a superarlo?\n` +
+    URL_DEL_JUEGO;
+  el("texto-compartir").value = texto;
+  el("aviso-compartir").textContent = "";
+  el("enlace-whatsapp").href = "https://wa.me/?text=" + encodeURIComponent(texto);
+  el("enlace-x").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(texto);
+  // El botón "Compartir" abre el menú del celular, si el navegador lo permite.
+  el("boton-compartir").hidden = !navigator.share;
+}
+
+function avisar(texto, bien) {
+  el("aviso-compartir").textContent = texto;
+  el("aviso-compartir").className = bien ? "aviso ok" : "aviso";
+}
+
+el("boton-compartir").addEventListener("click", async () => {
+  try {
+    await navigator.share({ text: el("texto-compartir").value });
+  } catch (error) {
+    if (error.name !== "AbortError") avisar("Este navegador no dejó compartir. Probá con «Copiar texto».");
+  }
+});
+
+el("boton-copiar").addEventListener("click", async () => {
+  const caja = el("texto-compartir");
+  try {
+    await navigator.clipboard.writeText(caja.value);
+    avisar("¡Copiado! Pegalo donde quieras.", true);
+  } catch {
+    // Plan B: seleccionar el texto y copiarlo "a la antigua".
+    caja.focus();
+    caja.select();
+    let copiado = false;
+    try {
+      copiado = document.execCommand("copy");
+    } catch {}
+    avisar(copiado ? "¡Copiado! Pegalo donde quieras." : "No se pudo copiar solo: el texto quedó seleccionado, copialo a mano.", copiado);
+  }
+});
 
 el("siguiente").addEventListener("click", () => {
   actual++;
@@ -386,6 +449,7 @@ el("siguiente").addEventListener("click", () => {
 });
 el("modo-corta").addEventListener("click", () => empezar("corta"));
 el("modo-larga").addEventListener("click", () => empezar("larga"));
+el("apodo").addEventListener("input", () => (el("aviso-apodo").textContent = ""));
 el("reiniciar").addEventListener("click", () => {
   el("progreso").textContent = "Elegí cómo querés jugar";
   mostrarPantalla("inicio");

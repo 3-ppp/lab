@@ -104,3 +104,25 @@ footer a { color: #0b6e3a; }
 .barra-relleno { height: 100%; width: 0; background: #0b6e3a; transition: width 0.8s ease; }
 .porcentaje { font-weight: bold; font-size: 1.15rem; margin: 0 0 8px; }
 .detalle { list-style: none; padding: 0; margin: 0; color: #555; font-size: 0.95rem; line-height: 1.6; }
+
+/* Apodo */
+input[type="text"] { font: inherit; width: 100%; padding: 12px; border-radius: 10px; border: 2px solid #ccc; margin-top: 4px; }
+input[type="text"]:focus { outline: none; border-color: #0b6e3a; }
+.ayuda { font-size: 0.85rem; color: #666; margin: 6px 0 0; }
+.aviso { min-height: 1.2em; margin: 4px 0 0; font-size: 0.9rem; color: #a12222; font-weight: bold; }
+.aviso.ok { color: #0b6e3a; }
+
+/* Tarjeta del resultado */
+.tarjeta-resultado { border: 3px solid #0b6e3a; border-radius: 16px; padding: 16px; background: #f4fbf6; }
+.marca { margin: 0; font-size: 0.85rem; font-weight: bold; color: #0b6e3a; }
+.jugador-resultado { margin: 10px 0 0; font-size: 1.1rem; }
+
+/* Compartir */
+.compartir { margin-top: 20px; text-align: left; }
+.compartir h3 { margin: 0 0 8px; font-size: 1.1rem; text-align: center; }
+textarea { font: inherit; font-size: 0.9rem; width: 100%; padding: 10px; border-radius: 10px; border: 2px solid #ccc; resize: none; background: #fafafa; }
+.botones-compartir { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.botones-compartir .principal { margin-top: 0; }
+.boton-enlace { display: block; padding: 14px 16px; border-radius: 10px; border: 2px solid #0b6e3a; color: #0b6e3a; text-align: center; text-decoration: none; font-weight: bold; }
+.boton-enlace:hover { background: #e9f6ee; }
+.secundario { display: block; width: 100%; margin-top: 16px; text-align: center; font-weight: bold; }

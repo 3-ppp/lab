@@ -21,6 +21,10 @@
 
       <section id="inicio" hidden>
         <p class="intro">Cada pregunta suma <strong>sabiduría</strong> según su dificultad: las fáciles valen 1, las medias 2 y las difíciles 3.</p>
+        <label for="apodo">¿Cómo te llamamos?</label>
+        <input id="apodo" type="text" maxlength="20" placeholder="Tu apodo" autocomplete="off">
+        <p class="ayuda">Usá un apodo: no pongas tu nombre completo ni datos personales.</p>
+        <p id="aviso-apodo" class="aviso" aria-live="polite"></p>
         <button id="modo-corta" class="modo">
           <strong>Partida corta</strong>
           <span>10 preguntas · para cagones</span>
@@ -40,14 +44,32 @@
       </section>
 
       <section id="final" hidden>
-        <p class="intro">Tu resultado</p>
-        <h2 id="titulo-resultado" class="titulo-resultado"></h2>
-        <p id="frase-resultado" class="frase-resultado"></p>
-        <div class="barra"><div id="barra-relleno" class="barra-relleno"></div></div>
-        <p id="porcentaje" class="porcentaje"></p>
-        <p id="aciertos-total"></p>
-        <ul id="detalle" class="detalle"></ul>
-        <button id="reiniciar" class="principal">Jugar de nuevo</button>
+        <!-- Tarjeta del resultado: pensada también para sacarle una captura de pantalla. -->
+        <div class="tarjeta-resultado">
+          <p class="marca">⚽ Probá tu sabiduría futbolera</p>
+          <p id="jugador-resultado" class="jugador-resultado"></p>
+          <h2 id="titulo-resultado" class="titulo-resultado"></h2>
+          <p id="frase-resultado" class="frase-resultado"></p>
+          <div class="barra"><div id="barra-relleno" class="barra-relleno"></div></div>
+          <p id="porcentaje" class="porcentaje"></p>
+          <p id="aciertos-total"></p>
+          <ul id="detalle" class="detalle"></ul>
+        </div>
+
+        <div class="compartir">
+          <h3>Compartí tu resultado</h3>
+          <textarea id="texto-compartir" rows="5" readonly></textarea>
+          <div class="botones-compartir">
+            <button id="boton-compartir" class="principal" hidden>Compartir</button>
+            <button id="boton-copiar" class="principal">Copiar texto</button>
+            <a id="enlace-whatsapp" class="boton-enlace" target="_blank" rel="noopener">WhatsApp</a>
+            <a id="enlace-x" class="boton-enlace" target="_blank" rel="noopener">X (Twitter)</a>
+          </div>
+          <p id="aviso-compartir" class="aviso" aria-live="polite"></p>
+          <p class="ayuda">Si ningún botón funciona (pasa en la vista previa del lab), copiá el texto a mano o sacale una captura a la tarjeta.</p>
+        </div>
+
+        <button id="reiniciar" class="secundario">Jugar de nuevo</button>
       </section>
     </div>
 
