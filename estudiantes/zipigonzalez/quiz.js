@@ -406,8 +406,9 @@ function prepararCompartir(pct, resultado) {
     URL_DEL_JUEGO;
   el("texto-compartir").value = texto;
   el("aviso-compartir").textContent = "";
-  el("enlace-whatsapp").href = "https://wa.me/?text=" + encodeURIComponent(texto);
-  el("enlace-x").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(texto);
+  // Abre directamente la app de WhatsApp. La página web de WhatsApp (wa.me) no sirve acá:
+  // se niega a abrirse desde una página aislada como la del lab (error ERR_BLOCKED_BY_RESPONSE).
+  el("enlace-whatsapp").href = "whatsapp://send?text=" + encodeURIComponent(texto);
   // El botón "Compartir" abre el menú del celular, si el navegador lo permite.
   el("boton-compartir").hidden = !navigator.share;
 }
