@@ -1,0 +1,524 @@
+[
+  {
+    "id": 1,
+    "nombre": "Rusia–Ucrania",
+    "region": "Europa",
+    "intensidad": 5,
+    "nivel": "Crítica",
+    "descripcion": "Desde feb. 2022. ONU (HRMMU): 12.477 civiles muertos o heridos en los primeros 7 meses de 2026 (1.830 muertos); julio fue el mes más letal para civiles desde marzo de 2022. A mediados de noviembre hubo conversaciones trilaterales con EE. UU. sin alto el fuego.",
+    "frentes": [
+      {
+        "lon": 37.8,
+        "lat": 48.2,
+        "radio_km": 260,
+        "intensidad": 5
+      },
+      {
+        "lon": 35.2,
+        "lat": 47.8,
+        "radio_km": 150,
+        "intensidad": 4
+      },
+      {
+        "lon": 36.3,
+        "lat": 49.9,
+        "radio_km": 150,
+        "intensidad": 4
+      },
+      {
+        "lon": 30.5,
+        "lat": 50.4,
+        "radio_km": 90,
+        "intensidad": 4
+      },
+      {
+        "lon": 30.7,
+        "lat": 46.5,
+        "radio_km": 100,
+        "intensidad": 3
+      },
+      {
+        "lon": 25,
+        "lat": 50.5,
+        "radio_km": 150,
+        "intensidad": 3
+      },
+      {
+        "lon": 36.5,
+        "lat": 51.5,
+        "radio_km": 150,
+        "intensidad": 3
+      },
+      {
+        "lon": 37.6,
+        "lat": 55.8,
+        "radio_km": 80,
+        "intensidad": 2
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Guerra de Irán con EE. UU. e Israel",
+    "region": "Medio Oriente",
+    "intensidad": 5,
+    "nivel": "Crítica",
+    "descripcion": "Desde el 28 feb. 2026. Cierre del estrecho de Ormuz y crisis mundial de combustible. Alto el fuego en abril y memorando de Islamabad en junio; la tregua se rompió el 8 jul. y siguen ataques con drones (Baréin, 15 nov.). Muertos en Irán: 3.636 según HRANA (1.701 civiles) y al menos 2.362 civiles según el Ministerio de Salud iraní; en Israel, 39 soldados y 23 civiles por misiles (al 27 oct.).",
+    "frentes": [
+      {
+        "lon": 53,
+        "lat": 32.5,
+        "radio_km": 650,
+        "intensidad": 4
+      },
+      {
+        "lon": 56.5,
+        "lat": 26.5,
+        "radio_km": 250,
+        "intensidad": 5
+      },
+      {
+        "lon": 50.55,
+        "lat": 26.1,
+        "radio_km": 140,
+        "intensidad": 4
+      },
+      {
+        "lon": 47.9,
+        "lat": 29.4,
+        "radio_km": 120,
+        "intensidad": 3
+      },
+      {
+        "lon": 54.4,
+        "lat": 24.4,
+        "radio_km": 150,
+        "intensidad": 3
+      },
+      {
+        "lon": 51.5,
+        "lat": 25.3,
+        "radio_km": 90,
+        "intensidad": 3
+      },
+      {
+        "lon": 56.3,
+        "lat": 24.5,
+        "radio_km": 150,
+        "intensidad": 3
+      },
+      {
+        "lon": 35,
+        "lat": 31.5,
+        "radio_km": 150,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "nombre": "Líbano–Israel",
+    "region": "Medio Oriente",
+    "intensidad": 4,
+    "nivel": "Alta",
+    "descripcion": "Desde el 2 mar. 2026: 4.328 muertos y 12.227 heridos (Ministerio de Salud libanés, al 17 jul.). Tregua con Hezbolá desde el 19 jun.",
+    "frentes": [
+      {
+        "lon": 35.8,
+        "lat": 33.7,
+        "radio_km": 140,
+        "intensidad": 4
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "nombre": "Gaza y Cisjordania",
+    "region": "Medio Oriente",
+    "intensidad": 4,
+    "nivel": "Alta",
+    "descripcion": "Alto el fuego desde oct. 2025 con ataques continuos: más de 1.000 muertos desde la tregua (Ministerio de Salud de Gaza, al 18 jun. 2026). Total de la guerra: unos 69.500 (cifra de nov. 2025). ACLED: Palestina encabeza su Índice de Conflicto y registra violencia alta en cerca del 70% del territorio.",
+    "frentes": [
+      {
+        "lon": 34.4,
+        "lat": 31.4,
+        "radio_km": 45,
+        "intensidad": 4
+      },
+      {
+        "lon": 35.3,
+        "lat": 32,
+        "radio_km": 70,
+        "intensidad": 4
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "nombre": "Yemen y mar Rojo",
+    "region": "Medio Oriente",
+    "intensidad": 4,
+    "nivel": "Alta",
+    "descripcion": "Los hutíes retomaron los ataques contra Israel el 28 mar. 2026 y a mediados de nov. se reporta que controlan un paso clave del mar Rojo.",
+    "frentes": [
+      {
+        "lon": 45,
+        "lat": 15.5,
+        "radio_km": 350,
+        "intensidad": 4
+      },
+      {
+        "lon": 43.3,
+        "lat": 13,
+        "radio_km": 240,
+        "intensidad": 4
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "nombre": "Sudán",
+    "region": "África",
+    "intensidad": 5,
+    "nivel": "Crítica",
+    "descripcion": "Guerra entre el ejército y las RSF desde abr. 2023. Más de 11 millones de desplazados (abr. 2026) y más de 30 millones necesitan ayuda (OCHA, ago. 2026); hambruna confirmada en El Fasher y Kadugli. UCDP 2025: ~12.200 muertes en combate y la mayor parte de los ~76.500 muertos por violencia contra civiles. ~700 muertos por drones, sobre todo en el 1.er trimestre de 2026 (ONU).",
+    "frentes": [
+      {
+        "lon": 29.5,
+        "lat": 12,
+        "radio_km": 320,
+        "intensidad": 5
+      },
+      {
+        "lon": 25,
+        "lat": 13.5,
+        "radio_km": 300,
+        "intensidad": 5
+      },
+      {
+        "lon": 33,
+        "lat": 13.5,
+        "radio_km": 200,
+        "intensidad": 4
+      },
+      {
+        "lon": 34,
+        "lat": 11.5,
+        "radio_km": 150,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "nombre": "Myanmar",
+    "region": "Asia",
+    "intensidad": 5,
+    "nivel": "Crítica",
+    "descripcion": "Guerra civil desde el golpe de 2021. 3.059 civiles muertos por bombardeos de la junta hasta jul. 2026; cerca del 70% de más de 2.400 ataques aéreos apuntó a civiles (Myanmar Peace Monitor, oct. 2026). UCDP: cinco conflictos simultáneos en 2025.",
+    "frentes": [
+      {
+        "lon": 95,
+        "lat": 22.5,
+        "radio_km": 320,
+        "intensidad": 5
+      },
+      {
+        "lon": 93.5,
+        "lat": 20,
+        "radio_km": 250,
+        "intensidad": 4
+      },
+      {
+        "lon": 97.5,
+        "lat": 24,
+        "radio_km": 260,
+        "intensidad": 4
+      },
+      {
+        "lon": 97.3,
+        "lat": 18,
+        "radio_km": 220,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "nombre": "RD Congo (este)",
+    "region": "África",
+    "intensidad": 4,
+    "nivel": "Alta",
+    "descripcion": "AFC/M23 (con apoyo de Ruanda, según la ONU) controla Goma y Bukavu desde 2025. Acuerdo marco de Doha (nov. 2025) y hoja de ruta (ago. 2026), pero siguen los combates; unos 5,3 millones de desplazados.",
+    "frentes": [
+      {
+        "lon": 28.8,
+        "lat": -1.8,
+        "radio_km": 330,
+        "intensidad": 4
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "nombre": "Sahel (Malí, Burkina Faso, Níger)",
+    "region": "África",
+    "intensidad": 4,
+    "nivel": "Alta",
+    "descripcion": "Insurgencia yihadista de alta intensidad según las listas de conflictos activos de 2026.",
+    "frentes": [
+      {
+        "lon": -3,
+        "lat": 14.5,
+        "radio_km": 450,
+        "intensidad": 4
+      },
+      {
+        "lon": -1.5,
+        "lat": 12.5,
+        "radio_km": 350,
+        "intensidad": 4
+      },
+      {
+        "lon": 2,
+        "lat": 14,
+        "radio_km": 350,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "nombre": "Nigeria",
+    "region": "África",
+    "intensidad": 3,
+    "nivel": "Media",
+    "descripcion": "Insurgencia yihadista de más de una década; 14 de los 75 conflictos no estatales de 2025 ocurrieron en Nigeria (UCDP/PRIO).",
+    "frentes": [
+      {
+        "lon": 13,
+        "lat": 11.5,
+        "radio_km": 300,
+        "intensidad": 3
+      },
+      {
+        "lon": 7.5,
+        "lat": 11.5,
+        "radio_km": 300,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "nombre": "Somalia",
+    "region": "África",
+    "intensidad": 3,
+    "nivel": "Media",
+    "descripcion": "Figura entre los conflictos activos de 2026.",
+    "frentes": [
+      {
+        "lon": 46,
+        "lat": 3,
+        "radio_km": 420,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "nombre": "Etiopía",
+    "region": "África",
+    "intensidad": 3,
+    "nivel": "Media",
+    "descripcion": "Figura entre los conflictos activos de 2026.",
+    "frentes": [
+      {
+        "lon": 38,
+        "lat": 11.5,
+        "radio_km": 300,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "nombre": "Sudán del Sur",
+    "region": "África",
+    "intensidad": 3,
+    "nivel": "Media",
+    "descripcion": "Intensidad media; primeras elecciones en medio de violencia creciente (ONU, nov. 2026).",
+    "frentes": [
+      {
+        "lon": 31,
+        "lat": 7,
+        "radio_km": 420,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "nombre": "Haití",
+    "region": "América",
+    "intensidad": 4,
+    "nivel": "Alta",
+    "descripcion": "Violencia de pandillas con uso creciente de drones; ACLED lo ubica entre los 10 países con violencia más severa de 2025.",
+    "frentes": [
+      {
+        "lon": -72.3,
+        "lat": 18.9,
+        "radio_km": 150,
+        "intensidad": 4
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "nombre": "Crimen organizado en América Latina",
+    "region": "América",
+    "intensidad": 3,
+    "nivel": "Media",
+    "descripcion": "México, Ecuador y Brasil están entre los 10 países con violencia más severa de 2025 (ACLED); México figura entre los tres lugares más peligrosos del mundo.",
+    "frentes": [
+      {
+        "lon": -107.5,
+        "lat": 25,
+        "radio_km": 280,
+        "intensidad": 3
+      },
+      {
+        "lon": -101.5,
+        "lat": 18.5,
+        "radio_km": 260,
+        "intensidad": 3
+      },
+      {
+        "lon": -106,
+        "lat": 28.5,
+        "radio_km": 200,
+        "intensidad": 3
+      },
+      {
+        "lon": -79.8,
+        "lat": -2,
+        "radio_km": 200,
+        "intensidad": 3
+      },
+      {
+        "lon": -43.2,
+        "lat": -22.9,
+        "radio_km": 110,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "nombre": "Pakistán–Afganistán–India",
+    "region": "Asia",
+    "intensidad": 3,
+    "nivel": "Media",
+    "descripcion": "Pakistán combina tensión con India, choques con Afganistán y violencia interna; sube en el Índice de Conflicto de ACLED.",
+    "frentes": [
+      {
+        "lon": 70.5,
+        "lat": 33,
+        "radio_km": 350,
+        "intensidad": 3
+      },
+      {
+        "lon": 66,
+        "lat": 29,
+        "radio_km": 250,
+        "intensidad": 3
+      },
+      {
+        "lon": 74.5,
+        "lat": 34,
+        "radio_km": 150,
+        "intensidad": 2
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "nombre": "Siria",
+    "region": "Medio Oriente",
+    "intensidad": 3,
+    "nivel": "Media",
+    "descripcion": "Violencia persistente; figura entre los conflictos activos de 2026.",
+    "frentes": [
+      {
+        "lon": 38.5,
+        "lat": 35,
+        "radio_km": 300,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "nombre": "Irak",
+    "region": "Medio Oriente",
+    "intensidad": 2,
+    "nivel": "Moderada",
+    "descripcion": "Figura entre los conflictos activos de 2026.",
+    "frentes": [
+      {
+        "lon": 44,
+        "lat": 33.3,
+        "radio_km": 300,
+        "intensidad": 2
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "nombre": "Mozambique (Cabo Delgado)",
+    "region": "África",
+    "intensidad": 3,
+    "nivel": "Media",
+    "descripcion": "Insurgencia activa; figura entre los conflictos de 2026.",
+    "frentes": [
+      {
+        "lon": 40,
+        "lat": -12.5,
+        "radio_km": 200,
+        "intensidad": 3
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "nombre": "República Centroafricana",
+    "region": "África",
+    "intensidad": 2,
+    "nivel": "Moderada",
+    "descripcion": "Figura entre los conflictos activos de 2026.",
+    "frentes": [
+      {
+        "lon": 21,
+        "lat": 6,
+        "radio_km": 400,
+        "intensidad": 2
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "nombre": "Tailandia–Camboya",
+    "region": "Asia",
+    "intensidad": 2,
+    "nivel": "Moderada",
+    "descripcion": "Disputa fronteriza con choques armados; figura entre los conflictos de 2026.",
+    "frentes": [
+      {
+        "lon": 103.5,
+        "lat": 14.5,
+        "radio_km": 120,
+        "intensidad": 2
+      }
+    ]
+  }
+]
