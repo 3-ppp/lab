@@ -1,0 +1,1477 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Elecciones Presidenciales Argentina (1983–2023)</title>
+  <style>
+    :root {
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --surface-alt: #f8fafc;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-soft: #64748b;
+      --accent: #0369a1;
+      --accent-soft: #e0f2fe;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .num {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Header */
+    .topbar {
+      background: #0f172a;
+      color: #f8fafc;
+      border-bottom: 3px solid #38bdf8;
+    }
+    .topbar-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.15rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem 1.5rem;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+      font-weight: 700;
+      letter-spacing: -0.015em;
+    }
+    .brand p {
+      margin: 0.2rem 0 0;
+      font-size: 0.875rem;
+      color: #cbd5e1;
+    }
+    .badge-period {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(56, 189, 248, 0.14);
+      color: #bae6fd;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 999px;
+      padding: 0.35rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.15rem 1.25rem;
+    }
+
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .card-title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .card-subtitle {
+      margin: 0.15rem 0 0;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    /* Timeline Selector */
+    .timeline-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .timeline-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+    .year-btn {
+      appearance: none;
+      border: 1px solid var(--border-strong);
+      background: var(--surface-alt);
+      color: var(--text);
+      border-radius: 9px;
+      padding: 0.45rem 0.75rem;
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 68px;
+      transition: all 0.15s ease;
+    }
+    .year-btn:hover {
+      border-color: var(--accent);
+      background: #f0f9ff;
+    }
+    .year-btn.active {
+      background: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.22);
+    }
+    .year-btn .y-sub {
+      font-size: 0.68rem;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+    .year-btn .y-dot {
+      width: 18px;
+      height: 4px;
+      border-radius: 999px;
+      margin-top: 4px;
+    }
+
+    /* Election summary strip */
+    .election-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem 1.25rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    .election-note {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      max-width: 72ch;
+    }
+    .election-note strong { color: var(--text); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+      gap: 0.85rem;
+    }
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+      box-shadow: var(--shadow);
+    }
+    .kpi-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-soft);
+      font-weight: 600;
+    }
+    .kpi-value {
+      margin-top: 0.25rem;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .kpi-sub {
+      margin-top: 0.15rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Main 2-column dashboard */
+    .main-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.95fr) minmax(360px, 1.35fr);
+      gap: 1.25rem;
+      align-items: start;
+    }
+    .right-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+    @media (max-width: 920px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Map */
+    .map-stage {
+      position: relative;
+      background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #map-container {
+      width: 100%;
+      max-width: 440px;
+      aspect-ratio: 450 / 740;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #map-container svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    #map-container svg path {
+      stroke: #ffffff;
+      stroke-width: 1.1;
+      cursor: pointer;
+      transition: opacity 0.15s ease, stroke-width 0.15s ease, filter 0.15s ease;
+    }
+    #map-container svg path:hover {
+      opacity: 0.88;
+      stroke: #0f172a;
+      stroke-width: 2;
+    }
+    #map-container svg path.selected {
+      stroke: #0f172a;
+      stroke-width: 2.8;
+      filter: drop-shadow(0 0 4px rgba(15, 23, 42, 0.35));
+    }
+    .caba-inset-circle {
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .caba-inset-circle:hover {
+      stroke: #0f172a;
+      stroke-width: 2.5;
+    }
+
+    .map-tooltip {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.96);
+      color: #f8fafc;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.25);
+      min-width: 190px;
+      display: none;
+    }
+    .map-tooltip .tt-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      font-size: 0.86rem;
+    }
+    .map-tooltip .tt-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      color: #cbd5e1;
+    }
+
+    .map-legend {
+      width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 0.85rem;
+      margin-top: 0.75rem;
+      padding-top: 0.65rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .legend-swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .btn-ghost {
+      appearance: none;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.38rem 0.7rem;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-ghost:hover {
+      background: var(--surface-alt);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    .btn-ghost:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    /* Bar Chart */
+    .scope-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .bar-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .bar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .bar-label {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+    .bar-sigla {
+      font-size: 0.73rem;
+      font-weight: 700;
+      padding: 0.12rem 0.45rem;
+      border-radius: 5px;
+      color: #fff;
+    }
+    .bar-vice {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--text-soft);
+    }
+    .bar-winner-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: #dcfce7;
+      color: #166534;
+      padding: 0.12rem 0.45rem;
+      border-radius: 5px;
+    }
+    .bar-stats {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+    .bar-stats strong {
+      color: var(--text);
+      font-size: 0.96rem;
+    }
+    .bar-track {
+      height: 14px;
+      background: #f1f5f9;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      min-width: 2px;
+    }
+
+    .scope-stats {
+      margin-top: 1rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.65rem;
+      font-size: 0.82rem;
+    }
+    .scope-stat-item span {
+      display: block;
+      color: var(--text-soft);
+      font-size: 0.74rem;
+    }
+    .scope-stat-item strong {
+      font-size: 0.94rem;
+      color: var(--text);
+    }
+
+    /* Comparator */
+    .compare-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+    .select-box {
+      font: inherit;
+      font-size: 0.86rem;
+      font-weight: 600;
+      padding: 0.45rem 0.65rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--text);
+      max-width: 100%;
+    }
+    .vs-badge {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--text-soft);
+      padding: 0.2rem 0.5rem;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.85rem;
+      align-items: stretch;
+    }
+    @media (max-width: 640px) {
+      .compare-grid { grid-template-columns: 1fr; }
+    }
+    .formula-card {
+      border: 1px solid var(--border);
+      border-top-width: 4px;
+      border-radius: 10px;
+      padding: 0.95rem 1rem;
+      background: var(--surface-alt);
+    }
+    .formula-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+    .formula-card .f-vice {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+    }
+    .formula-card .f-party {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      margin-top: 0.15rem;
+    }
+    .formula-metrics {
+      margin-top: 0.75rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .formula-metrics div {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0.45rem 0.6rem;
+    }
+    .formula-metrics span {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--text-soft);
+    }
+    .formula-metrics strong {
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .diff-panel {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem 1rem;
+      text-align: left;
+      padding: 0.7rem 1rem;
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 10px;
+    }
+    .diff-panel .d-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+    }
+    .diff-panel .d-main {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 0;
+      color: #38bdf8;
+    }
+    .diff-panel .d-sub {
+      font-size: 0.82rem;
+      color: #cbd5e1;
+    }
+
+    .tug-bar {
+      margin-top: 1rem;
+      height: 16px;
+      border-radius: 999px;
+      overflow: hidden;
+      display: flex;
+      background: #e2e8f0;
+    }
+    .tug-seg {
+      height: 100%;
+      transition: width 0.35s ease;
+    }
+    .tug-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* Historical Chart */
+    .history-chart {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 0.35rem;
+    }
+    .history-bars {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(56px, 1fr));
+      gap: 0.5rem;
+      align-items: end;
+      height: 190px;
+      padding-top: 1.4rem;
+      border-bottom: 1px solid var(--border-strong);
+    }
+    .h-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+      cursor: pointer;
+      padding: 0 0.15rem;
+      border-radius: 6px 6px 0 0;
+      transition: background 0.15s ease;
+    }
+    .h-col:hover {
+      background: #f1f5f9;
+    }
+    .h-col.active {
+      background: #e0f2fe;
+    }
+    .h-pct {
+      font-size: 0.73rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      color: var(--text);
+    }
+    .h-bar {
+      width: 100%;
+      max-width: 34px;
+      border-radius: 6px 6px 0 0;
+      transition: height 0.3s ease;
+    }
+    .history-labels {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(56px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.35rem;
+      text-align: center;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+    .history-labels .hl-yr { font-weight: 700; color: var(--text); }
+    .history-labels .hl-sig { font-size: 0.68rem; color: var(--text-soft); }
+
+    /* Table */
+    .table-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+      margin-bottom: 0.85rem;
+    }
+    .search-input {
+      font: inherit;
+      font-size: 0.86rem;
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      min-width: 210px;
+      flex: 1;
+      max-width: 300px;
+    }
+    .table-scroll {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    th, td {
+      padding: 0.58rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    th {
+      background: var(--surface-alt);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-soft);
+      font-weight: 700;
+    }
+    td.right, th.right { text-align: right; }
+    tbody tr {
+      cursor: pointer;
+      transition: background 0.12s ease;
+    }
+    tbody tr:hover { background: #f8fafc; }
+    tbody tr.selected-row { background: #e0f2fe; }
+    .winner-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 600;
+    }
+    .winner-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    footer {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.5rem 1.25rem 2rem;
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    .error-banner {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <h1>Elecciones Presidenciales en Argentina (1983–2023)</h1>
+        <p>Explorador interactivo de votos nacionales y por jurisdicción desde el retorno a la democracia</p>
+      </div>
+      <div class="badge-period">10 ciclos · 12 votaciones · 24 distritos</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div id="error-box" class="error-banner"></div>
+
+    <!-- Timeline selector -->
+    <section class="card" aria-label="Selector de elección">
+      <div class="card-header" style="margin-bottom:0.65rem;">
+        <div>
+          <h2 class="card-title">Elegí una elección presidencial</h2>
+          <p class="card-subtitle">Incluye las primeras vueltas y los balotajes de 2015 y 2023</p>
+        </div>
+      </div>
+      <div class="timeline-wrap">
+        <div id="timeline-pills" class="timeline-pills"></div>
+        <div class="election-meta">
+          <div id="election-note" class="election-note"></div>
+          <div id="election-system" class="badge-period" style="background:#f1f5f9;color:#334155;border-color:#cbd5e1;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI summary -->
+    <section class="kpi-grid" aria-label="Indicadores principales">
+      <div class="kpi">
+        <div class="kpi-label">Fórmula ganadora</div>
+        <div id="kpi-winner" class="kpi-value" style="font-size:1.1rem;">—</div>
+        <div id="kpi-winner-sub" class="kpi-sub">—</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Votos afirmativos</div>
+        <div id="kpi-positivos" class="kpi-value num">—</div>
+        <div id="kpi-positivos-sub" class="kpi-sub">—</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Participación</div>
+        <div id="kpi-turnout" class="kpi-value num">—</div>
+        <div id="kpi-turnout-sub" class="kpi-sub">—</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Distritos ganados (1.º lugar)</div>
+        <div id="kpi-districts" class="kpi-value num">—</div>
+        <div id="kpi-districts-sub" class="kpi-sub">—</div>
+      </div>
+    </section>
+
+    <!-- Main Interactive Map + Right Stack (Bar Chart + Comparator) -->
+    <section class="main-grid">
+      <article class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Mapa por jurisdicción</h2>
+            <p class="card-subtitle">Pasá el cursor o hacé clic en una provincia (o CABA) para ver su detalle</p>
+          </div>
+          <button id="btn-reset-scope" class="btn-ghost" type="button" disabled>Todo el país</button>
+        </div>
+        <div class="map-stage">
+          <div id="map-container" aria-label="Mapa de Argentina por provincia"></div>
+          <div id="map-legend" class="map-legend"></div>
+        </div>
+      </article>
+
+      <div class="right-stack">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Resultados por fórmula</h2>
+              <p class="card-subtitle" id="chart-subtitle">Porcentaje sobre votos afirmativos</p>
+            </div>
+            <span id="scope-pill" class="scope-pill">Todo el país</span>
+          </div>
+          <div id="bar-list" class="bar-list"></div>
+          <div id="scope-stats" class="scope-stats"></div>
+        </article>
+
+        <!-- Head-to-head Formula Comparator -->
+        <section class="card" aria-label="Comparador de fórmulas principales">
+          <div class="card-header">
+            <div>
+              <h2 class="card-title">Comparador de fórmulas principales</h2>
+              <p class="card-subtitle">Contrastá dos fórmulas de la elección seleccionada: votos, diferencia, distritos ganados y mejores desempeños</p>
+            </div>
+          </div>
+
+          <div class="compare-controls">
+            <label for="cmp-a" style="font-size:0.84rem;font-weight:600;color:var(--text-muted);">Fórmula A:</label>
+            <select id="cmp-a" class="select-box"></select>
+            <span class="vs-badge">VS</span>
+            <label for="cmp-b" style="font-size:0.84rem;font-weight:600;color:var(--text-muted);">Fórmula B:</label>
+            <select id="cmp-b" class="select-box"></select>
+          </div>
+
+          <div id="compare-grid" class="compare-grid"></div>
+          <div class="tug-bar" id="tug-bar"></div>
+          <div class="tug-labels" id="tug-labels"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Historical Comparison Strip 1983-2023 -->
+    <section class="card" aria-label="Evolución histórica 1983-2023">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Serie histórica 1983–2023</h2>
+          <p class="card-subtitle" id="history-subtitle">Porcentaje de la fórmula más votada en cada elección (hacé clic en una barra para seleccionarla)</p>
+        </div>
+        <div style="display:flex;gap:0.4rem;">
+          <button id="hist-mode-winner" class="btn-ghost" type="button">% 1.ª fórmula</button>
+          <button id="hist-mode-turnout" class="btn-ghost" type="button">% Participación</button>
+        </div>
+      </div>
+      <div class="history-chart">
+        <div id="history-bars" class="history-bars"></div>
+        <div id="history-labels" class="history-labels"></div>
+      </div>
+    </section>
+
+    <!-- Searchable / Sortable District Table -->
+    <section class="card" aria-label="Detalle por distrito">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Detalle por provincia y CABA</h2>
+          <p class="card-subtitle" id="table-summary">Filtrá por nombre o ganador y ordená las 24 jurisdicciones</p>
+        </div>
+      </div>
+      <div class="table-tools">
+        <input id="search-prov" class="search-input" type="search" placeholder="Buscar provincia o CABA…" aria-label="Buscar provincia">
+        <select id="filter-winner" class="select-box" aria-label="Filtrar por ganador">
+          <option value="all">Todas las fuerzas ganadoras</option>
+        </select>
+        <select id="sort-prov" class="select-box" aria-label="Ordenar distritos">
+          <option value="name">Ordenar: A–Z</option>
+          <option value="winnerPct">Ordenar: Mayor % ganador</option>
+          <option value="marginPct">Ordenar: Mayor diferencia</option>
+          <option value="totalVotos">Ordenar: Más votantes</option>
+          <option value="turnoutPct">Ordenar: Mayor participación</option>
+        </select>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Jurisdicción</th>
+              <th>Ganador en distrito</th>
+              <th class="right">Votos 1.º</th>
+              <th class="right">% 1.º</th>
+              <th class="right">Diferencia vs 2.º</th>
+              <th class="right">Total votantes</th>
+              <th class="right">Participación</th>
+            </tr>
+          </thead>
+          <tbody id="prov-tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Datos electorales almacenados en <code>datos.json</code> (escrutinios definitivos 1983–2023, DINE / CNE). Todo funciona en memoria sin cookies ni almacenamiento local.</span>
+    <span>Mapa base SVG: <a href="https://simplemaps.com/svg/country/ar" target="_blank" rel="noopener">Simplemaps</a></span>
+  </footer>
+
+  <div id="map-tooltip" class="map-tooltip" role="status" aria-live="polite"></div>
+
+  <script>
+    const fmtNum = new Intl.NumberFormat("es-AR");
+    const fmtPct = (v) => Number(v).toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%";
+
+    const state = {
+      elections: [],
+      selectedElectionId: "2023-2",
+      selectedDistrict: null, // null = Nacional, or "ARB", "ARC", etc.
+      compareA: null,
+      compareB: null,
+      historyMode: "winner", // "winner" | "turnout"
+      search: "",
+      filterWinner: "all",
+      sortBy: "name",
+      svgLoaded: false
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function currentElection() {
+      return state.elections.find((e) => e.id === state.selectedElectionId) || state.elections[state.elections.length - 1];
+    }
+
+    function getFormulaById(el, fid) {
+      return el.formulas.find((f) => f.id === fid) || { id: fid, presidente: fid, vicepresidente: "", fuerza: fid, sigla: fid, color: "#64748b" };
+    }
+
+    function getDistrictRanking(el, code) {
+      const d = el.distritos[code];
+      if (!d) return [];
+      const positiveSum = Object.values(d.votos).reduce((a, b) => a + b, 0);
+      return el.formulas
+        .map((f) => {
+          const v = d.votos[f.id] || 0;
+          const pct = positiveSum > 0 ? (v * 100) / positiveSum : 0;
+          return { ...f, votosDist: v, pctDist: pct };
+        })
+        .sort((a, b) => {
+          if (a.id === "otros") return 1;
+          if (b.id === "otros") return -1;
+          return b.votosDist - a.votosDist;
+        });
+    }
+
+    function countDistrictWins(el) {
+      const counts = {};
+      for (const f of el.formulas) counts[f.id] = 0;
+      for (const code of Object.keys(el.distritos)) {
+        const g = el.distritos[code].ganador;
+        counts[g] = (counts[g] || 0) + 1;
+      }
+      return counts;
+    }
+
+    function renderTimeline() {
+      const wrap = $("timeline-pills");
+      wrap.replaceChildren();
+      const elCurrent = currentElection();
+      for (const el of state.elections) {
+        const winFormula = el.formulas.find((f) => f.ganadora) || el.formulas[0];
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "year-btn" + (el.id === elCurrent.id ? " active" : "");
+        btn.innerHTML = `
+          <span>${el.anio}</span>
+          <span class="y-sub">${el.id.includes("-2") ? "Balotaje" : (el.id.includes("-1") ? "1.ª v." : winFormula.sigla)}</span>
+          <span class="y-dot" style="background:${winFormula.color}"></span>
+        `;
+        btn.addEventListener("click", () => selectElection(el.id));
+        wrap.append(btn);
+      }
+
+      $("election-note").innerHTML = `<strong>${elCurrent.titulo}</strong> (${elCurrent.fecha}): ${elCurrent.nota}`;
+      $("election-system").textContent = elCurrent.sistema;
+    }
+
+    function renderKPIs() {
+      const el = currentElection();
+      const winner = el.formulas.find((f) => f.ganadora) || el.formulas[0];
+      const topByVotes = [...el.formulas].sort((a, b) => b.votos - a.votos)[0];
+      const wins = countDistrictWins(el);
+      const sortedWins = Object.entries(wins).sort((a, b) => b[1] - a[1]);
+      const topDistF = getFormulaById(el, sortedWins[0][0]);
+
+      $("kpi-winner").textContent = `${winner.presidente} (${winner.sigla})`;
+      $("kpi-winner").style.color = winner.color;
+      $("kpi-winner-sub").textContent = winner.id === topByVotes.id
+        ? `${fmtPct(winner.porcentaje)} · ${fmtNum.format(winner.votos)} votos`
+        : `Asumió tras renuncia al balotaje (${fmtPct(winner.porcentaje)})`;
+
+      $("kpi-positivos").textContent = fmtNum.format(el.votosPositivos);
+      $("kpi-positivos-sub").textContent = `Blancos y nulos: ${fmtNum.format(el.blancosNulos)}`;
+
+      $("kpi-turnout").textContent = fmtPct(el.participacionPct);
+      $("kpi-turnout-sub").textContent = `${fmtNum.format(el.participacionVotos)} de ${fmtNum.format(el.electoresRegistrados)} electores`;
+
+      $("kpi-districts").textContent = `${sortedWins[0][1]} / 24`;
+      $("kpi-districts-sub").textContent = `Mayoría territorial: ${topDistF.sigla} (${sortedWins[0][1]} distritos)`;
+    }
+
+    function renderMap() {
+      if (!state.svgLoaded) return;
+      const el = currentElection();
+      const svg = $("map-container").querySelector("svg");
+      if (!svg) return;
+
+      for (const code of Object.keys(el.distritos)) {
+        const d = el.distritos[code];
+        const f = getFormulaById(el, d.ganador);
+        const path = svg.getElementById(code);
+        if (path) {
+          path.style.fill = f.color;
+          path.classList.toggle("selected", state.selectedDistrict === code);
+        }
+      }
+
+      // Update CABA inset circle
+      const cabaDot = svg.getElementById("caba-inset-dot");
+      if (cabaDot && el.distritos.ARC) {
+        const fCaba = getFormulaById(el, el.distritos.ARC.ganador);
+        cabaDot.style.fill = fCaba.color;
+        cabaDot.style.strokeWidth = state.selectedDistrict === "ARC" ? "3.2" : "1.8";
+        cabaDot.style.stroke = state.selectedDistrict === "ARC" ? "#0f172a" : "#ffffff";
+      }
+
+      // Legend
+      const legend = $("map-legend");
+      legend.replaceChildren();
+      const wins = countDistrictWins(el);
+      for (const f of el.formulas) {
+        if (f.id === "otros" && !wins[f.id]) continue;
+        const item = document.createElement("span");
+        item.className = "legend-item";
+        item.innerHTML = `<span class="legend-swatch" style="background:${f.color}"></span><span>${f.sigla} (${wins[f.id] || 0})</span>`;
+        legend.append(item);
+      }
+
+      $("btn-reset-scope").disabled = state.selectedDistrict === null;
+    }
+
+    function renderBarChart() {
+      const el = currentElection();
+      const code = state.selectedDistrict;
+      const barList = $("bar-list");
+      const scopeStats = $("scope-stats");
+      barList.replaceChildren();
+      scopeStats.replaceChildren();
+
+      let rows = [];
+      if (!code) {
+        $("scope-pill").textContent = "Todo el país";
+        $("chart-subtitle").textContent = `Voto popular nacional · ${el.vuelta}`;
+        rows = el.formulas.map((f) => ({
+          ...f,
+          v: f.votos,
+          pct: f.porcentaje
+        }));
+      } else {
+        const d = el.distritos[code];
+        $("scope-pill").textContent = d.nombre;
+        $("chart-subtitle").textContent = `Resultados en ${d.nombre} · ${el.vuelta}`;
+        rows = getDistrictRanking(el, code).map((r) => ({
+          ...r,
+          v: r.votosDist,
+          pct: r.pctDist
+        }));
+      }
+
+      const maxPct = Math.max(...rows.map((r) => r.pct), 1);
+      for (const r of rows) {
+        const rowEl = document.createElement("div");
+        rowEl.className = "bar-row";
+        const isLocalWinner = code
+          ? el.distritos[code].ganador === r.id
+          : Boolean(r.ganadora);
+
+        rowEl.innerHTML = `
+          <div class="bar-head">
+            <div class="bar-label">
+              <span class="bar-sigla" style="background:${r.color}">${r.sigla}</span>
+              <span>${r.presidente}</span>
+              ${r.vicepresidente ? `<span class="bar-vice">/ ${r.vicepresidente}</span>` : ""}
+              ${isLocalWinner ? `<span class="bar-winner-tag">${code ? "1.º en distrito" : "Ganadora"}</span>` : ""}
+            </div>
+            <div class="bar-stats num">
+              <strong>${fmtPct(r.pct)}</strong> · ${fmtNum.format(r.v)} votos
+            </div>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${(r.pct / maxPct) * 100}%;background:${r.color};"></div>
+          </div>
+        `;
+        barList.append(rowEl);
+      }
+
+      if (!code) {
+        scopeStats.innerHTML = `
+          <div class="scope-stat-item"><span>Total votantes</span><strong class="num">${fmtNum.format(el.participacionVotos)}</strong></div>
+          <div class="scope-stat-item"><span>Votos positivos</span><strong class="num">${fmtNum.format(el.votosPositivos)}</strong></div>
+          <div class="scope-stat-item"><span>Blancos y nulos</span><strong class="num">${fmtNum.format(el.blancosNulos)}</strong></div>
+          <div class="scope-stat-item"><span>Participación</span><strong class="num">${fmtPct(el.participacionPct)}</strong></div>
+        `;
+      } else {
+        const d = el.distritos[code];
+        const pos = Object.values(d.votos).reduce((a, b) => a + b, 0);
+        scopeStats.innerHTML = `
+          <div class="scope-stat-item"><span>Total votantes</span><strong class="num">${fmtNum.format(d.totalVotos)}</strong></div>
+          <div class="scope-stat-item"><span>Votos positivos</span><strong class="num">${fmtNum.format(pos)}</strong></div>
+          <div class="scope-stat-item"><span>Blancos y nulos</span><strong class="num">${fmtNum.format(d.blancosNulos)}</strong></div>
+          <div class="scope-stat-item"><span>Participación</span><strong class="num">${fmtPct(d.participacionPct)}</strong></div>
+        `;
+      }
+    }
+
+    function populateCompareSelects() {
+      const el = currentElection();
+      const candidates = el.formulas.filter((f) => f.id !== "otros");
+      const selA = $("cmp-a");
+      const selB = $("cmp-b");
+      selA.replaceChildren();
+      selB.replaceChildren();
+
+      for (const f of candidates) {
+        const oA = new Option(`${f.presidente} (${f.sigla} · ${fmtPct(f.porcentaje)})`, f.id);
+        const oB = new Option(`${f.presidente} (${f.sigla} · ${fmtPct(f.porcentaje)})`, f.id);
+        selA.add(oA);
+        selB.add(oB);
+      }
+
+      if (!candidates.some((c) => c.id === state.compareA)) {
+        state.compareA = candidates[0] ? candidates[0].id : null;
+      }
+      if (!candidates.some((c) => c.id === state.compareB) || state.compareB === state.compareA) {
+        state.compareB = candidates[1] ? candidates[1].id : (candidates[0] ? candidates[0].id : null);
+      }
+      selA.value = state.compareA;
+      selB.value = state.compareB;
+    }
+
+    function formulaStatsByDistrict(el, fid) {
+      let wins = 0;
+      let best = { nombre: "—", pct: -1 };
+      let worst = { nombre: "—", pct: 101 };
+      for (const code of Object.keys(el.distritos)) {
+        const d = el.distritos[code];
+        if (d.ganador === fid) wins++;
+        const pos = Object.values(d.votos).reduce((a, b) => a + b, 0);
+        const pct = pos > 0 ? ((d.votos[fid] || 0) * 100) / pos : 0;
+        if (pct > best.pct) best = { nombre: d.nombre, pct };
+        if (pct < worst.pct) worst = { nombre: d.nombre, pct };
+      }
+      return { wins, best, worst };
+    }
+
+    function renderComparator() {
+      const el = currentElection();
+      const fA = getFormulaById(el, state.compareA);
+      const fB = getFormulaById(el, state.compareB);
+      const sA = formulaStatsByDistrict(el, fA.id);
+      const sB = formulaStatsByDistrict(el, fB.id);
+
+      const diffVotes = Math.abs(fA.votos - fB.votos);
+      const diffPct = Math.abs(fA.porcentaje - fB.porcentaje);
+      const ahead = fA.votos >= fB.votos ? fA : fB;
+
+      const cardHTML = (f, s) => `
+        <div class="formula-card" style="border-top-color:${f.color}">
+          <h3>${f.presidente} <span class="bar-sigla" style="background:${f.color};vertical-align:middle;">${f.sigla}</span></h3>
+          <div class="f-vice">Vice: ${f.vicepresidente || "—"}</div>
+          <div class="f-party">${f.fuerza}</div>
+          <div class="formula-metrics">
+            <div><span>Votos nacionales</span><strong class="num">${fmtNum.format(f.votos)}</strong></div>
+            <div><span>Porcentaje</span><strong class="num">${fmtPct(f.porcentaje)}</strong></div>
+            <div><span>Distritos ganados</span><strong class="num">${s.wins} / 24</strong></div>
+            <div><span>Mejor distrito</span><strong>${s.best.nombre} (${fmtPct(s.best.pct)})</strong></div>
+          </div>
+        </div>
+      `;
+
+      $("compare-grid").innerHTML = `
+        ${cardHTML(fA, sA)}
+        ${cardHTML(fB, sB)}
+        <div class="diff-panel">
+          <div>
+            <div class="d-label">Brecha nacional (${ahead.sigla} adelante)</div>
+            <div class="d-sub num">${fmtNum.format(diffVotes)} votos de diferencia</div>
+          </div>
+          <div class="d-main num">${fmtPct(diffPct)}</div>
+        </div>
+      `;
+
+      const sumAB = fA.votos + fB.votos;
+      const pctA = sumAB > 0 ? (fA.votos * 100) / sumAB : 50;
+      const pctB = 100 - pctA;
+
+      $("tug-bar").innerHTML = `
+        <div class="tug-seg" style="width:${pctA}%;background:${fA.color};"></div>
+        <div class="tug-seg" style="width:${pctB}%;background:${fB.color};"></div>
+      `;
+      $("tug-labels").innerHTML = `
+        <span><strong>${fA.sigla}</strong>: ${fmtPct(pctA)} del duelo directo</span>
+        <span><strong>${fB.sigla}</strong>: ${fmtPct(pctB)} del duelo directo</span>
+      `;
+    }
+
+    function renderHistory() {
+      const bars = $("history-bars");
+      const labels = $("history-labels");
+      bars.replaceChildren();
+      labels.replaceChildren();
+
+      const isTurnout = state.historyMode === "turnout";
+      $("hist-mode-winner").classList.toggle("active", !isTurnout);
+      $("hist-mode-winner").style.borderColor = !isTurnout ? "#0369a1" : "";
+      $("hist-mode-turnout").style.borderColor = isTurnout ? "#0369a1" : "";
+
+      $("history-subtitle").textContent = isTurnout
+        ? "Participación electoral (% del padrón) en cada votación 1983–2023"
+        : "Porcentaje de la fórmula más votada en cada elección 1983–2023 (clic para abrir)";
+
+      for (const el of state.elections) {
+        const top = [...el.formulas].sort((a, b) => b.votos - a.votos)[0];
+        const val = isTurnout ? el.participacionPct : top.porcentaje;
+        const barColor = isTurnout ? "#0369a1" : top.color;
+        const heightPct = Math.max(12, Math.min(100, val));
+
+        const col = document.createElement("div");
+        col.className = "h-col" + (el.id === state.selectedElectionId ? " active" : "");
+        col.title = `${el.titulo}: ${fmtPct(val)}`;
+        col.innerHTML = `
+          <div class="h-pct num">${fmtPct(val)}</div>
+          <div class="h-bar" style="height:${heightPct}%;background:${barColor};"></div>
+        `;
+        col.addEventListener("click", () => selectElection(el.id));
+        bars.append(col);
+
+        const lbl = document.createElement("div");
+        lbl.innerHTML = `
+          <div class="hl-yr">${el.anio}${el.id.includes("-2") ? " (B)" : (el.id.includes("-1") ? " (1ª)" : "")}</div>
+          <div class="hl-sig">${isTurnout ? "Padrón" : top.sigla}</div>
+        `;
+        labels.append(lbl);
+      }
+    }
+
+    function populateWinnerFilter() {
+      const el = currentElection();
+      const sel = $("filter-winner");
+      const prev = state.filterWinner;
+      sel.replaceChildren(new Option("Todas las fuerzas ganadoras", "all"));
+      const wins = countDistrictWins(el);
+      for (const f of el.formulas) {
+        if ((wins[f.id] || 0) > 0) {
+          sel.add(new Option(`${f.sigla} — ${f.presidente} (${wins[f.id]})`, f.id));
+        }
+      }
+      state.filterWinner = [...sel.options].some((o) => o.value === prev) ? prev : "all";
+      sel.value = state.filterWinner;
+    }
+
+    function renderTable() {
+      const el = currentElection();
+      const tbody = $("prov-tbody");
+      tbody.replaceChildren();
+
+      const q = state.search.trim().toLowerCase();
+      let rows = Object.entries(el.distritos).map(([code, d]) => {
+        const ranked = getDistrictRanking(el, code);
+        const first = ranked[0];
+        const second = ranked[1] || { votosDist: 0, pctDist: 0 };
+        const marginPct = first.pctDist - second.pctDist;
+        return { code, d, first, marginPct };
+      });
+
+      if (q) {
+        rows = rows.filter((r) => r.d.nombre.toLowerCase().includes(q));
+      }
+      if (state.filterWinner !== "all") {
+        rows = rows.filter((r) => r.d.ganador === state.filterWinner);
+      }
+
+      rows.sort((a, b) => {
+        if (state.sortBy === "winnerPct") return b.first.pctDist - a.first.pctDist;
+        if (state.sortBy === "marginPct") return b.marginPct - a.marginPct;
+        if (state.sortBy === "totalVotos") return b.d.totalVotos - a.d.totalVotos;
+        if (state.sortBy === "turnoutPct") return b.d.participacionPct - a.d.participacionPct;
+        return a.d.nombre.localeCompare(b.d.nombre, "es");
+      });
+
+      const avgTurnout = rows.length
+        ? rows.reduce((acc, r) => acc + r.d.participacionPct, 0) / rows.length
+        : 0;
+      $("table-summary").textContent = `Mostrando ${rows.length} de 24 distritos · Participación promedio: ${fmtPct(avgTurnout)}`;
+
+      for (const r of rows) {
+        const tr = document.createElement("tr");
+        if (state.selectedDistrict === r.code) tr.className = "selected-row";
+        tr.innerHTML = `
+          <td><strong>${r.d.nombre}</strong></td>
+          <td>
+            <span class="winner-pill">
+              <span class="winner-dot" style="background:${r.first.color}"></span>
+              <span>${r.first.presidente} (${r.first.sigla})</span>
+            </span>
+          </td>
+          <td class="right num">${fmtNum.format(r.first.votosDist)}</td>
+          <td class="right num"><strong>${fmtPct(r.first.pctDist)}</strong></td>
+          <td class="right num">+${fmtPct(r.marginPct)}</td>
+          <td class="right num">${fmtNum.format(r.d.totalVotos)}</td>
+          <td class="right num">${fmtPct(r.d.participacionPct)}</td>
+        `;
+        tr.addEventListener("click", () => {
+          state.selectedDistrict = state.selectedDistrict === r.code ? null : r.code;
+          updateDistrictViews();
+        });
+        tbody.append(tr);
+      }
+    }
+
+    function updateDistrictViews() {
+      renderMap();
+      renderBarChart();
+      renderTable();
+    }
+
+    function selectElection(id) {
+      state.selectedElectionId = id;
+      state.filterWinner = "all";
+      renderTimeline();
+      renderKPIs();
+      populateCompareSelects();
+      populateWinnerFilter();
+      renderComparator();
+      renderHistory();
+      updateDistrictViews();
+    }
+
+    function attachMapInteractions(svg) {
+      // Crop viewBox around Argentina provinces
+      svg.setAttribute("viewBox", "295 35 450 945");
+      svg.removeAttribute("width");
+      svg.removeAttribute("height");
+
+      // Hide helper circles so only provinces + CABA inset are shown
+      const pts = svg.getElementById("points");
+      if (pts) pts.style.display = "none";
+      const lpts = svg.getElementById("label_points");
+      if (lpts) lpts.style.display = "none";
+
+      // Add enlarged CABA inset circle & leader line for easy clicking
+      const ns = "http://www.w3.org/2000/svg";
+      const gInset = document.createElementNS(ns, "g");
+      const line = document.createElementNS(ns, "line");
+      line.setAttribute("x1", "609");
+      line.setAttribute("y1", "349");
+      line.setAttribute("x2", "666");
+      line.setAttribute("y2", "336");
+      line.setAttribute("stroke", "#334155");
+      line.setAttribute("stroke-width", "1.4");
+      line.setAttribute("stroke-dasharray", "3 2");
+
+      const circle = document.createElementNS(ns, "circle");
+      circle.setAttribute("id", "caba-inset-dot");
+      circle.setAttribute("class", "caba-inset-circle");
+      circle.setAttribute("cx", "680");
+      circle.setAttribute("cy", "332");
+      circle.setAttribute("r", "16");
+
+      const txt = document.createElementNS(ns, "text");
+      txt.setAttribute("x", "680");
+      txt.setAttribute("y", "360");
+      txt.setAttribute("text-anchor", "middle");
+      txt.setAttribute("font-size", "13");
+      txt.setAttribute("font-weight", "700");
+      txt.setAttribute("fill", "#0f172a");
+      txt.textContent = "CABA";
+
+      gInset.append(line, circle, txt);
+      svg.append(gInset);
+
+      const tooltip = $("map-tooltip");
+
+      const showTip = (ev, code) => {
+        const el = currentElection();
+        const d = el.distritos[code];
+        if (!d) return;
+        const ranked = getDistrictRanking(el, code);
+        const top2 = ranked.slice(0, 2);
+        tooltip.innerHTML = `
+          <div class="tt-title">${d.nombre}</div>
+          ${top2.map((r) => `
+            <div class="tt-row">
+              <span>${r.sigla} · ${r.presidente}</span>
+              <strong class="num">${fmtPct(r.pctDist)}</strong>
+            </div>
+          `).join("")}
+        `;
+        tooltip.style.display = "block";
+        tooltip.style.left = Math.min(window.innerWidth - 220, ev.clientX + 14) + "px";
+        tooltip.style.top = Math.min(window.innerHeight - 100, ev.clientY + 14) + "px";
+      };
+
+      const hideTip = () => { tooltip.style.display = "none"; };
+
+      const bindDist = (node, code) => {
+        node.addEventListener("mousemove", (ev) => showTip(ev, code));
+        node.addEventListener("mouseleave", hideTip);
+        node.addEventListener("click", () => {
+          state.selectedDistrict = state.selectedDistrict === code ? null : code;
+          updateDistrictViews();
+        });
+      };
+
+      const paths = svg.querySelectorAll("#features path[id]");
+      paths.forEach((p) => bindDist(p, p.id));
+      bindDist(circle, "ARC");
+    }
+
+    async function init() {
+      try {
+        const [datosRes, svgRes] = await Promise.all([
+          fetch("datos.json"),
+          fetch("argentina.svg")
+        ]);
+        if (!datosRes.ok) throw new Error("No se pudo cargar datos.json");
+        if (!svgRes.ok) throw new Error("No se pudo cargar argentina.svg");
+
+        state.elections = await datosRes.json();
+        const svgText = await svgRes.text();
+        const container = $("map-container");
+        container.innerHTML = svgText;
+        const svg = container.querySelector("svg");
+        if (svg) {
+          attachMapInteractions(svg);
+          state.svgLoaded = true;
+        }
+
+        // Bind static controls
+        $("btn-reset-scope").addEventListener("click", () => {
+          state.selectedDistrict = null;
+          updateDistrictViews();
+        });
+        $("cmp-a").addEventListener("change", (e) => {
+          state.compareA = e.target.value;
+          renderComparator();
+        });
+        $("cmp-b").addEventListener("change", (e) => {
+          state.compareB = e.target.value;
+          renderComparator();
+        });
+        $("hist-mode-winner").addEventListener("click", () => {
+          state.historyMode = "winner";
+          renderHistory();
+        });
+        $("hist-mode-turnout").addEventListener("click", () => {
+          state.historyMode = "turnout";
+          renderHistory();
+        });
+        $("search-prov").addEventListener("input", (e) => {
+          state.search = e.target.value;
+          renderTable();
+        });
+        $("filter-winner").addEventListener("change", (e) => {
+          state.filterWinner = e.target.value;
+          renderTable();
+        });
+        $("sort-prov").addEventListener("change", (e) => {
+          state.sortBy = e.target.value;
+          renderTable();
+        });
+
+        selectElection("2023-2");
+      } catch (err) {
+        const box = $("error-box");
+        box.style.display = "block";
+        box.textContent = "Error al cargar los datos electorales. Si abriste el archivo con doble clic (file://), levantá un servidor local o abrilo desde el lab.";
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
