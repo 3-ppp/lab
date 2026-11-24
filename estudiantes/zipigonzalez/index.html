@@ -19,7 +19,20 @@
     <div id="vista-jugar">
       <p id="progreso">Cargando preguntas…</p>
 
+      <section id="inicio" hidden>
+        <p class="intro">Cada pregunta suma <strong>sabiduría</strong> según su dificultad: las fáciles valen 1, las medias 2 y las difíciles 3.</p>
+        <button id="modo-corta" class="modo">
+          <strong>Partida corta</strong>
+          <span>10 preguntas · para un rato</span>
+        </button>
+        <button id="modo-larga" class="modo">
+          <strong>Partida larga</strong>
+          <span>30 preguntas · para los que saben</span>
+        </button>
+      </section>
+
       <section id="juego" hidden>
+        <span id="dificultad" class="etiqueta"></span>
         <h2 id="pregunta"></h2>
         <div id="opciones"></div>
         <p id="mensaje" aria-live="polite"></p>
@@ -27,8 +40,13 @@
       </section>
 
       <section id="final" hidden>
-        <h2>¡Terminaste!</h2>
-        <p id="resultado"></p>
+        <p class="intro">Tu resultado</p>
+        <h2 id="titulo-resultado" class="titulo-resultado"></h2>
+        <p id="frase-resultado" class="frase-resultado"></p>
+        <div class="barra"><div id="barra-relleno" class="barra-relleno"></div></div>
+        <p id="porcentaje" class="porcentaje"></p>
+        <p id="aciertos-total"></p>
+        <ul id="detalle" class="detalle"></ul>
         <button id="reiniciar" class="principal">Jugar de nuevo</button>
       </section>
     </div>
