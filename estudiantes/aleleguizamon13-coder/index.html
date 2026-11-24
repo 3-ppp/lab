@@ -49,14 +49,53 @@ select{border-radius:2px;background:#04100a;color:var(--fg);border-color:var(--b
 .cf-act{white-space:nowrap;text-align:right}
 .cf-msg{font-size:12px;color:#35ff8c;margin:6px 0}
 .cf-err{border:1px solid #ff5a1f;padding:10px;background:#1a0904;color:#ffb499;font-size:13px;margin:8px 0}
+.mp-wrap{position:relative}
+.hud{position:absolute;top:8px;left:8px;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none;z-index:2;max-width:calc(100% - 16px)}
+.hud span{background:rgba(3,10,6,.84);border:1px solid var(--bd);padding:2px 7px;font-size:11px;letter-spacing:.06em;color:var(--fg);text-transform:uppercase}
+.hud b{color:#35ff8c}
+.hud .hud-live{border-color:#35ff8c88;color:#35ff8c}
+.hud .hud-cmp{border-color:#ff5a1f;color:#ff9a5f}
+.tip{position:absolute;display:none;pointer-events:none;z-index:4;max-width:250px;background:rgba(4,14,8,.95);border:1px solid #35ff8c;border-left:3px solid #ff5a1f;padding:6px 8px;font-size:11.5px;line-height:1.35;color:var(--fg);box-shadow:0 6px 20px rgba(0,0,0,.65)}
+.tip b{display:block;color:#35ff8c;margin-bottom:2px}
+.tip .tm{color:var(--mu);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em}
+.lv-bar{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:8px;padding-top:8px;border-top:1px dashed var(--bd)}
+.lv-bar .lk{font-size:11px;padding:3px 8px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.d-eq{background:#ffd166;box-shadow:0 0 6px #ffd166}
+.d-fi{background:#ff7b29;box-shadow:0 0 6px #ff7b29}
+.d-vo{background:#ff3b7f;box-shadow:0 0 6px #ff3b7f}
+.d-cy{background:#38e8ff;box-shadow:0 0 6px #38e8ff}
+.d-fl{background:#4da6ff;box-shadow:0 0 6px #4da6ff}
+.d-no{background:#ff2e63;box-shadow:0 0 6px #ff2e63}
+.d-cf{background:#ff3b1f;box-shadow:0 0 6px #ff3b1f}
+.wx-box{border:1px solid var(--bd);border-left:3px solid #38e8ff;background:#04100a;padding:8px;margin:10px 0}
+.wx-box h3{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#38e8ff}
+.wx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.wx-grid div{border:1px solid #124a2877;padding:5px 6px;background:#030c07}
+.wx-grid b{display:block;font-size:14px;color:var(--fg)}
+.wx-grid span{font-size:10.5px;color:var(--mu);text-transform:uppercase}
+.ev-card{border:1px solid #ff5a1f;background:#120b06;padding:8px;margin-bottom:10px}
+.ev-card b{color:#ffd166}
+.ev-card a{color:#ff9a5f;font-size:11.5px}
+.lv-list{max-height:280px;overflow:auto;margin-top:6px;border-top:1px solid var(--bd)}
+.lv-list table{font-size:12.5px}
+.lv-list td{vertical-align:top}
+.lv-pill{display:inline-block;padding:1px 5px;font-size:10px;border:1px solid var(--bd);text-transform:uppercase;letter-spacing:.05em}
+.cmp-hdr{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px}
+.cmp-win{color:#35ff8c;font-weight:700}
+.cmp-hi{color:#ff5a1f;font-weight:700}
+.act-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.kbd{font-size:10.5px;color:var(--mu);margin-top:6px}
+.kbd code{border:1px solid var(--bd);padding:0 4px;color:var(--fg);background:#04100a}
 </style></head><body><div class="w">
 <h1>◉ Sala de guerra // Atlas de riesgos</h1>
-<div class="st"><span><span class="blink" style="color:#ff5a1f">●</span> Estado: vigilancia activa</span><span>Reloj del Juicio Final: <b>85 s</b></span><span>Ojivas: <b>12.187</b></span><span>Conflictos estatales 2025: <b>65</b></span><span>UTC <b id="utc"></b></span></div>
-<p class="sub">Probabilidad anual estimada de desastres naturales y de una detonación nuclear en cualquier punto del planeta. Tocá el mapa, arrastralo o usá la rueda para acercar.</p>
+<div class="st"><span><span class="blink" style="color:#ff5a1f">●</span> Estado: <b id="st-mode">radar en vivo</b></span><span>Sismos USGS: <b id="st-eq">…</b></span><span>NASA activos: <b id="st-na">…</b></span><span>Alertas NOAA: <b id="st-no">…</b></span><span>Reloj Juicio Final: <b>85 s</b></span><span>UTC <b id="utc"></b></span></div>
+<p class="sub">Modelo de probabilidad anual + eventos reales en vivo (USGS, NASA EONET, Open-Meteo y NOAA). Tocá cualquier punto o marcador del radar, arrastrá para explorar o compará dos lugares.</p>
 <div id="tabs"></div>
-<div class="cd" style="margin-bottom:12px"><div class="sg"><label>Región / bloque<select id="rg"></select></label><label>País<select id="pa"></select></label><button class="lk" id="rs">↺ Mundo</button><span class="nt" style="align-self:center">También podés tocar el mapa para ver el país de cada punto.</span></div></div>
-<div class="g"><div class="cd mp"><canvas id="c"></canvas><div class="lg"><span id="l0"></span><div class="bar"></div><span id="l1"></span><div class="zb"><button id="zi" aria-label="Acercar">+</button><button id="zo" aria-label="Alejar">−</button></div></div></div>
+<div class="cd" style="margin-bottom:12px"><div class="sg"><label>Región / bloque<select id="rg"></select></label><label>País<select id="pa"></select></label><div class="act-row"><button class="lk on" id="btn-live" type="button" title="Mostrar u ocultar eventos reales en vivo (tecla L)">● En vivo</button><button class="lk" id="btn-cmp" type="button" title="Comparar dos puntos del planeta (tecla C)">⇄ Comparar</button><button class="lk" id="btn-jump" type="button" title="Volar al evento real más fuerte activo">⚡ Mayor evento</button><button class="lk" id="btn-snd" type="button" title="Activar o silenciar avisos tácticos de radar">🔇 Sonido</button><button class="lk" id="rs" type="button" title="Volver a vista global (tecla R)">↺ Mundo</button></div></div></div>
+<div class="g"><div class="cd mp"><div class="mp-wrap"><canvas id="c"></canvas><div class="hud"><span id="hud-pos">Pasá el cursor o tocá el mapa</span><span id="hud-info" class="hud-live">Sincronizando APIs…</span></div><div id="tip" class="tip"></div></div><div class="lg"><span id="l0"></span><div class="bar"></div><span id="l1"></span><div class="zb"><button id="zi" aria-label="Acercar">+</button><button id="zo" aria-label="Alejar">−</button></div></div><div class="lv-bar" id="lv-bar"></div><div class="kbd">Atajos: <code>+</code>/<code>−</code> zoom · <code>L</code> en vivo · <code>C</code> comparar A/B · <code>R</code> mundo · <code>Esc</code> limpiar</div></div>
 <div class="cd" id="p"></div></div>
+<div class="cd" id="lv" style="margin-bottom:12px"></div>
 <div class="cd" id="rk" style="margin-bottom:12px"></div>
 <div class="cd" id="cf" style="margin-bottom:12px"></div>
 <div class="cd" style="margin-bottom:12px"><h2>Supuestos nucleares (ajustables)</h2>
@@ -64,9 +103,10 @@ select{border-radius:2px;background:#04100a;color:var(--fg);border-color:var(--b
 <div class="sl"><label>Probabilidad anual de uso nuclear limitado (regional): <b id="vl"></b><input id="pl" type="range" min="0" max="5" step="0.1" value="1"></label>
 <label>Probabilidad anual de intercambio nuclear mayor: <b id="vf"></b><input id="pf" type="range" min="0" max="3" step="0.05" value="0.3"></label></div></div>
 <div class="cd nt"><h2>Datos y método</h2><ul style="padding-left:18px;margin:0">
+<li><b>Fuentes en vivo (abiertas, sin clave de API):</b> sismos reales desde <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener">USGS GeoJSON</a> (actualizado cada minuto), eventos naturales activos desde <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA EONET v3</a> (incendios, volcanes, tormentas severas e inundaciones), clima actual y caudal fluvial por coordenada desde <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo (Weather + Flood API)</a> y alertas extremas/severas activas desde <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">NOAA NWS Alerts</a>.</li>
 <li><b>Arsenales (SIPRI/FAS, enero de 2026):</b> unas 12.187 ojivas en total y ~9.745 en arsenales militares. Rusia ~5.400, EE. UU. ~5.040, China ~620, Francia ~290, Reino Unido ~225, India ~190, Pakistán ~170, Israel ~90, Corea del Norte ~50. El Reloj del Juicio Final está en 85 segundos (27 de enero de 2026, récord) y el tratado New START venció en febrero de 2026. Fuentes: <a href="https://fas.org/initiative/status-world-nuclear-forces/" target="_blank" rel="noopener">FAS</a> · <a href="https://thebulletin.org/doomsday-clock/2026-statement/" target="_blank" rel="noopener">Bulletin of the Atomic Scientists</a>.</li>
 <li><b>Nuclear:</b> los pesos de cada objetivo (capitales, bases, silos, zonas de conflicto) son una modelización propia; la probabilidad local = probabilidad anual de cada escenario × chance de que haya una detonación a menos de ~40 km.</li>
-<li><b>Naturales:</b> modelo simplificado calibrado con frecuencias globales publicadas (≈130 sismos M6+ y ≈15 M7+ por año según USGS, ≈80–90 ciclones tropicales por año, unos 50 volcanes en erupción en un año típico según el Smithsonian) sobre cinturones sísmicos, volcanes activos y zonas ciclónicas, de inundación, incendio y tornados. Son órdenes de magnitud, no datos en vivo.</li>
+<li><b>Naturales (capa de calor):</b> modelo simplificado calibrado con frecuencias globales publicadas (≈130 sismos M6+ y ≈15 M7+ por año según USGS, ≈80–90 ciclones tropicales por año, unos 50 volcanes en erupción en un año típico según el Smithsonian) sobre cinturones sísmicos, volcanes activos y zonas ciclónicas, de inundación, incendio y tornados. Sobre esa capa estadística se superponen los marcadores reales en vivo.</li>
 <li><b>Conflictos armados (datos al 17 de noviembre de 2026):</b> cifras globales de UCDP/PRIO (<a href="https://www.prio.org/resolve/PrioPublication/d81ccf0a-03e0-4579-8dd2-b0b2fe845d60" target="_blank" rel="noopener">Conflict Trends 1946–2025</a>) y <a href="https://acleddata.com/series/acled-conflict-index" target="_blank" rel="noopener">ACLED</a>; cifras por frente de la ONU (<a href="https://www.globalsecurity.org/wmd/library/news/ukraine/2026/08/ukraine-260813-unnews01.htm" target="_blank" rel="noopener">Ucrania</a>), <a href="https://www.globalsecurity.org/military/ops/iran-war-oprep.htm" target="_blank" rel="noopener">Irán</a>, OCHA (Sudán), ministerios de Salud de Gaza y Líbano, AAPP/Myanmar Peace Monitor y rastreadores como <a href="https://warmonit.com/" target="_blank" rel="noopener">WarMonit</a>. Las cifras de bajas son recuentos de cada fuente y pueden diferir entre sí. La capa “Conflictos armados” es una estimación propia: probabilidad anual de combates o ataques a pocos cientos de km de cada frente según su intensidad, no de que una persona resulte herida.</li><li><b>Base local (<code>datos.json</code>):</b> los conflictos armados activos y sus frentes están separados en el archivo <code>datos.json</code> como una lista de registros con <code>id</code>, y la página los lee con <code>fetch</code> para mostrarlos, buscarlos, filtrarlos, ordenarlos, calcular métricas y editarlos en memoria.</li><li>Es una herramienta educativa: no reemplaza los mapas oficiales de protección civil, USGS, NOAA ni los servicios geológicos nacionales.</li></ul></div>
 </div>
 <script>
@@ -127,9 +167,9 @@ const ptv=(k,o,a)=>k==='eq7'?1-Math.pow(1-H.eq(o,a),1/9):k==='all'?H.all(o,a):H[
 function stat(c,k){const L=CL()[c];if(!L.length){const q=CO[c].m;const v=ptv(k,(q[0]+q[1])/2,(q[2]+q[3])/2);return[v,v]}const V=vals(k);let s=0,w=0,x=0;for(const i of L){const t=Math.cos((89.5-((i/360)|0))*R);s+=V[i]*t;w+=t;if(V[i]>x)x=V[i]}return[s/w,x]}
 function pathC(l,X,Y){cx.beginPath();for(const c of l)for(const p of CO[c].r){cx.moveTo(X(p[0]),Y(p[1]));for(let i=2;i<p.length;i+=2)cx.lineTo(X(p[i]),Y(p[i+1]));cx.closePath()}}
 function hl1(X,Y){if(MB){pathC(MB,X,Y);cx.fillStyle='rgba(53,255,140,.13)';cx.fill('evenodd')}}
-function hl2(X,Y){drawCF(X,Y);if(MB){pathC(MB,X,Y);cx.strokeStyle='rgba(141,255,184,.95)';cx.lineWidth=1.3*dp;cx.stroke()}if(cm&&cs>=0){pathC([cs],X,Y);cx.fillStyle='rgba(255,90,31,.15)';cx.fill('evenodd');cx.strokeStyle='#ff5a1f';cx.lineWidth=2.2*dp;cx.stroke()}}
-function setG(i){grp=i;const g=GR[i];MB=i?CO.map((c,n)=>g[4].includes(c.a)?n:-1).filter(n=>n>=0):null;cm=0;cs=-1;sel=null;V0={lo:g[1],la:g[2],z:g[3]};$('#rg').value=i;$('#pa').value='';draw();panel();rank()}
-function setC(c){cs=c;cm=1;sel=null;const q=CO[c].m;V0={lo:(q[0]+q[1])/2,la:(q[2]+q[3])/2,z:Math.max(1,Math.min(14,Math.min(360/((q[1]-q[0]+.4)*1.5),180/((q[3]-q[2]+.4)*1.5))))};$('#pa').value=c;draw();panel()}
+function hl2(X,Y){drawCF(X,Y);if(MB){pathC(MB,X,Y);cx.strokeStyle='rgba(141,255,184,.95)';cx.lineWidth=1.3*dp;cx.stroke()}if(cm&&cs>=0){pathC([cs],X,Y);cx.fillStyle='rgba(255,90,31,.15)';cx.fill('evenodd');cx.strokeStyle='#ff5a1f';cx.lineWidth=2.2*dp;cx.stroke()}drawLive(X,Y);drawCompare(X,Y)}
+function setG(i){grp=i;const g=GR[i];MB=i?CO.map((c,n)=>g[4].includes(c.a)?n:-1).filter(n=>n>=0):null;cm=0;cs=-1;sel=null;LIVE.selectedEv=null;flyTo(g[1],g[2],g[3]);$('#rg').value=i;$('#pa').value='';panel();rank()}
+function setC(c){cs=c;cm=1;sel=null;LIVE.selectedEv=null;const q=CO[c].m;const tz=Math.max(1,Math.min(14,Math.min(360/((q[1]-q[0]+.4)*1.5),180/((q[3]-q[2]+.4)*1.5))));flyTo((q[0]+q[1])/2,(q[2]+q[3])/2,tz);$('#pa').value=c;beep(620,.05);panel()}
 $('#rg').innerHTML=GR.map((g,i)=>`<option value="${i}">${g[0]}</option>`).join('');
 $('#pa').innerHTML='<option value="">Elegir país…</option>'+CO.map((c,i)=>[c.n,i]).sort((a,b)=>a[0].localeCompare(b[0],'es')).map(([n,i])=>`<option value="${i}">${n}</option>`).join('');
 $('#rg').onchange=e=>setG(+e.target.value);$('#pa').onchange=e=>{if(e.target.value!=='')setC(+e.target.value)};$('#rs').onclick=()=>setG(0);
@@ -355,9 +395,10 @@ function enfocarConflicto(id){
   const la=E.reduce((s,x)=>s+x.lat,0)/E.length;
   const sp=Math.max(...E.map(x=>km(lo,la,x.lon,x.lat)+x.radio_km));
   document.querySelector('#tabs [data-k=cf]').click();
-  cm=0;cs=-1;sel=[lo,la,c.nombre];
-  V0={lo,la,z:Math.max(1.6,Math.min(8,2600/Math.max(sp,150)))};
-  draw();panel();
+  cm=0;cs=-1;LIVE.selectedEv=null;sel=[lo,la,c.nombre];
+  flyTo(lo,la,Math.max(1.6,Math.min(8,2600/Math.max(sp,150))));
+  beep(520,.06);
+  panel();
   cv.scrollIntoView({behavior:'smooth',block:'center'});
 }
 
@@ -448,32 +489,604 @@ async function cargarDatos(){
     renderCF();
   }
 }
+/* ====== RADAR EN VIVO (USGS + NASA EONET + OPEN-METEO + NOAA) & INTERACTIVIDAD ====== */
+const LIVE={
+  on:true,cat:'all',eqWin:'week',events:[],
+  counts:{eq:0,nasa:0,noaa:0},
+  status:{usgs:'cargando',nasa:'cargando',noaa:'cargando'},
+  updatedAt:null,loading:false,
+  selectedEv:null,hoverEv:null,
+  sound:false,audioCtx:null,
+  cmpMode:false,cmpA:null,cmpB:null,
+  wxCache:new Map(),wxCtrl:null,
+  jumpIdx:0
+};
+const CAT_META={
+  eq:{label:'Sismo USGS',short:'Sismo',color:'#ffd166',dot:'d-eq',shape:'ring'},
+  fi:{label:'Incendio NASA',short:'Incendio',color:'#ff7b29',dot:'d-fi',shape:'tri'},
+  vo:{label:'Volcán NASA',short:'Volcán',color:'#ff3b7f',dot:'d-vo',shape:'dia'},
+  cy:{label:'Tormenta NASA',short:'Tormenta',color:'#38e8ff',dot:'d-cy',shape:'ring'},
+  fl:{label:'Inundación NASA',short:'Inundación',color:'#4da6ff',dot:'d-fl',shape:'dot'},
+  no:{label:'Alerta NOAA',short:'NOAA',color:'#ff2e63',dot:'d-no',shape:'tri'}
+};
+const WMO_ES={0:'Despejado',1:'Mayormente despejado',2:'Parcialmente nublado',3:'Nublado',45:'Niebla',48:'Niebla helada',51:'Llovizna leve',53:'Llovizna',55:'Llovizna intensa',61:'Lluvia leve',63:'Lluvia moderada',65:'Lluvia fuerte',71:'Nieve leve',73:'Nieve',75:'Nieve fuerte',80:'Chaparrones',81:'Chaparrones fuertes',82:'Chaparrones intensos',95:'Tormenta eléctrica',96:'Tormenta con granizo',99:'Tormenta severa'};
+const safeUrl=u=>typeof u==='string'&&/^https?:\/\//i.test(u)?u:'';
+const ago=ms=>{
+  if(!ms)return'';
+  const m=Math.max(0,Math.round((Date.now()-ms)/60000));
+  if(m<2)return'hace instantes';
+  if(m<60)return`hace ${m} min`;
+  const h=Math.round(m/60);
+  if(h<48)return`hace ${h} h`;
+  return`hace ${Math.round(h/24)} d`;
+};
+function beep(freq=660,dur=.045){
+  if(!LIVE.sound)return;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC)return;
+    if(!LIVE.audioCtx)LIVE.audioCtx=new AC();
+    const ctx=LIVE.audioCtx;
+    if(ctx.state==='suspended')ctx.resume();
+    const osc=ctx.createOscillator(),gn=ctx.createGain();
+    osc.type='sine';osc.frequency.value=freq;
+    gn.gain.setValueAtTime(.045,ctx.currentTime);
+    gn.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+dur);
+    osc.connect(gn);gn.connect(ctx.destination);
+    osc.start();osc.stop(ctx.currentTime+dur);
+  }catch{}
+}
+let camAnim=null,pulseT=0,lastAnim=0;
+const reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function flyTo(lo,la,z,ms=420){
+  if(reduceMotion||ms<=0){camAnim=null;V0={lo,la,z};draw();return}
+  camAnim={t0:performance.now(),ms,a:{...V0},b:{lo,la,z}};
+}
+function animLoop(now){
+  requestAnimationFrame(animLoop);
+  if(document.hidden)return;
+  let dirty=false;
+  if(camAnim){
+    const p=Math.min(1,(now-camAnim.t0)/camAnim.ms);
+    const e=1-Math.pow(1-p,3);
+    V0.lo=camAnim.a.lo+(camAnim.b.lo-camAnim.a.lo)*e;
+    V0.la=camAnim.a.la+(camAnim.b.la-camAnim.a.la)*e;
+    V0.z=camAnim.a.z+(camAnim.b.z-camAnim.a.z)*e;
+    if(p>=1)camAnim=null;
+    dirty=true;
+  }
+  if(!reduceMotion&&(LIVE.on||sel||LIVE.cmpA)&&now-lastAnim>45){
+    pulseT=(now%2200)/2200;
+    lastAnim=now;
+    dirty=true;
+  }
+  if(dirty)draw();
+}
+
+function geomCentroid(g){
+  if(!g||!g.coordinates)return null;
+  if(g.type==='Point'&&g.coordinates.length>=2)return[+g.coordinates[0],+g.coordinates[1]];
+  let ring=null;
+  if(g.type==='Polygon')ring=g.coordinates[0];
+  else if(g.type==='MultiPolygon')ring=g.coordinates[0]?.[0];
+  if(!Array.isArray(ring)||!ring.length)return null;
+  let x=0,y=0,n=0;
+  for(const pt of ring){if(Array.isArray(pt)&&pt.length>=2){x+=+pt[0];y+=+pt[1];n++}}
+  return n?[x/n,y/n]:null;
+}
+
+function visibleLiveEvents(){
+  if(!LIVE.on)return[];
+  return LIVE.events.filter(ev=>{
+    if(LIVE.cat!=='all')return ev.cat===LIVE.cat;
+    return true;
+  });
+}
+
+function drawLive(X,Y){
+  if(!LIVE.on)return;
+  const list=visibleLiveEvents();
+  const w=cv.width,h=cv.height;
+  for(const ev of list){
+    if(ev.lon==null||ev.lat==null)continue;
+    const px=X(ev.lon),py=Y(ev.lat);
+    if(px<-20||px>w+20||py<-20||py>h+20)continue;
+    const m=CAT_META[ev.cat]||CAT_META.eq;
+    const isSel=LIVE.selectedEv&&LIVE.selectedEv.id===ev.id;
+    const isHov=LIVE.hoverEv&&LIVE.hoverEv.id===ev.id;
+    const major=(ev.cat==='eq'&&(ev.mag||0)>=5.5)||ev.cat==='vo'||ev.cat==='cy'||ev.cat==='no'||isSel;
+    const baseR=(ev.cat==='eq'?Math.max(2.6,((ev.mag||4)-2.2)*1.6):3.6)*dp;
+    if(major&&!reduceMotion){
+      const pr=baseR+(isSel?18:11)*dp*pulseT;
+      cx.beginPath();cx.arc(px,py,pr,0,7);
+      cx.strokeStyle=m.color+(isSel?'cc':'55');
+      cx.globalAlpha=Math.max(0,1-pulseT);
+      cx.lineWidth=(isSel?1.8:1.1)*dp;
+      cx.stroke();
+      cx.globalAlpha=1;
+    }
+    cx.fillStyle=m.color;
+    cx.strokeStyle='#030a06';
+    cx.lineWidth=1*dp;
+    cx.beginPath();
+    if(m.shape==='tri'){
+      const s=baseR*1.25;
+      cx.moveTo(px,py-s);cx.lineTo(px+s*.95,py+s*.85);cx.lineTo(px-s*.95,py+s*.85);cx.closePath();
+      cx.fill();cx.stroke();
+    }else if(m.shape==='dia'){
+      const s=baseR*1.25;
+      cx.moveTo(px,py-s);cx.lineTo(px+s,py);cx.lineTo(px,py+s);cx.lineTo(px-s,py);cx.closePath();
+      cx.fill();cx.stroke();
+    }else{
+      cx.arc(px,py,baseR,0,7);cx.fill();cx.stroke();
+    }
+    if(isHov||isSel){
+      cx.beginPath();cx.arc(px,py,baseR+4*dp,0,7);
+      cx.strokeStyle='#ffffff';cx.lineWidth=1.5*dp;cx.stroke();
+    }
+  }
+}
+
+function drawCompare(X,Y){
+  const pts=[LIVE.cmpA,LIVE.cmpB].filter(Boolean);
+  if(!pts.length)return;
+  if(LIVE.cmpA&&LIVE.cmpB){
+    const x1=X(LIVE.cmpA.lon),y1=Y(LIVE.cmpA.lat),x2=X(LIVE.cmpB.lon),y2=Y(LIVE.cmpB.lat);
+    cx.save();
+    cx.beginPath();cx.moveTo(x1,y1);cx.lineTo(x2,y2);
+    cx.strokeStyle='#38e8ff';cx.lineWidth=2*dp;cx.setLineDash([7*dp,5*dp]);cx.stroke();cx.setLineDash([]);
+    const dist=Math.round(km(LIVE.cmpA.lon,LIVE.cmpA.lat,LIVE.cmpB.lon,LIVE.cmpB.lat)).toLocaleString('es-AR')+' km';
+    const mx=(x1+x2)/2,my=(y1+y2)/2;
+    cx.font=`bold ${11*dp}px "Courier New",monospace`;
+    const tw=cx.measureText(dist).width+10*dp;
+    cx.fillStyle='rgba(3,10,6,.9)';cx.fillRect(mx-tw/2,my-10*dp,tw,18*dp);
+    cx.strokeStyle='#38e8ff';cx.lineWidth=1*dp;cx.strokeRect(mx-tw/2,my-10*dp,tw,18*dp);
+    cx.fillStyle='#38e8ff';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(dist,mx,my-1*dp);
+    cx.restore();
+  }
+  pts.forEach((pt,idx)=>{
+    const x=X(pt.lon),y=Y(pt.lat),lbl=idx===0?'A':'B';
+    cx.save();
+    cx.beginPath();cx.arc(x,y,10*dp,0,7);cx.fillStyle=idx===0?'#35ff8c':'#38e8ff';cx.fill();
+    cx.strokeStyle='#030a06';cx.lineWidth=2*dp;cx.stroke();
+    cx.fillStyle='#030a06';cx.font=`bold ${11*dp}px "Courier New",monospace`;cx.textAlign='center';cx.textBaseline='middle';
+    cx.fillText(lbl,x,y+.5*dp);
+    cx.restore();
+  });
+}
+
+function updateLiveBar(){
+  const b=$('#lv-bar');
+  if(!b)return;
+  const counts={all:LIVE.events.length,eq:0,fi:0,vo:0,cy:0,fl:0,no:0};
+  for(const ev of LIVE.events)if(counts[ev.cat]!=null)counts[ev.cat]++;
+  const pills=[
+    ['all','Todos',''],
+    ['eq','Sismos','d-eq'],
+    ['vo','Volcanes','d-vo'],
+    ['fi','Incendios','d-fi'],
+    ['cy','Tormentas','d-cy'],
+    ['fl','Inundaciones','d-fl'],
+    ['no','NOAA','d-no']
+  ];
+  b.innerHTML=pills.map(([k,n,dot])=>`<button type="button" class="lk${LIVE.cat===k&&LIVE.on?' on':''}" data-lcat="${k}">${dot?`<i class="dot ${dot}"></i>`:''}${n} (${counts[k]})</button>`).join('')+
+    `<span style="margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+      <button type="button" class="lk${LIVE.eqWin==='day'?' on':''}" data-eqw="day" title="Sismos M2.5+ últimas 24 horas">24 h</button>
+      <button type="button" class="lk${LIVE.eqWin==='week'?' on':''}" data-eqw="week" title="Sismos M4.5+ últimos 7 días">7 d</button>
+      <button type="button" class="lk" id="lv-ref" title="Volver a consultar USGS, NASA EONET y NOAA">${LIVE.loading?'…':'↻ Sync'}</button>
+    </span>`;
+  $('#st-eq').textContent=LIVE.status.usgs==='error'?'offline':LIVE.counts.eq;
+  $('#st-na').textContent=LIVE.status.nasa==='error'?'offline':LIVE.counts.nasa;
+  $('#st-no').textContent=LIVE.status.noaa==='error'?'offline':LIVE.counts.noaa;
+  $('#st-mode').textContent=LIVE.cmpMode?'comparando A/B':(LIVE.on?'radar en vivo':'solo modelo');
+  const hi=$('#hud-info');
+  if(hi){
+    if(LIVE.cmpMode){
+      hi.className='hud-cmp';
+      hi.textContent=!LIVE.cmpA?'Comparar: tocá Punto A':(!LIVE.cmpB?'Comparar: tocá Punto B':'Comparación A ↔ B activa');
+    }else if(!LIVE.on){
+      hi.className='';hi.textContent='Capa en vivo pausada';
+    }else if(LIVE.loading){
+      hi.className='hud-live';hi.textContent='Sincronizando USGS · NASA · NOAA…';
+    }else{
+      hi.className='hud-live';
+      const hh=LIVE.updatedAt?LIVE.updatedAt.toTimeString().slice(0,5):'';
+      hi.textContent=`● ${visibleLiveEvents().length} eventos en vivo${hh?' · '+hh:''}`;
+    }
+  }
+}
+
+function renderLiveFeed(){
+  const box=$('#lv');
+  if(!box)return;
+  const list=visibleLiveEvents().slice(0,35);
+  const hh=LIVE.updatedAt?LIVE.updatedAt.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}):'—';
+  box.innerHTML=`
+    <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between">
+      <h2 style="margin:0">Radar en vivo · Eventos reales ahora</h2>
+      <span class="nt">USGS (${esc(LIVE.status.usgs)}) · NASA EONET (${esc(LIVE.status.nasa)}) · NOAA (${esc(LIVE.status.noaa)}) · Última sync: <b>${hh}</b></span>
+    </div>
+    <div class="cf-stats">
+      <div><b>${LIVE.counts.eq}</b><span>Sismos USGS (${LIVE.eqWin==='day'?'M2.5+ 24h':'M4.5+ 7d'})</span></div>
+      <div><b>${LIVE.counts.nasa}</b><span>Eventos NASA activos</span></div>
+      <div><b>${LIVE.counts.noaa}</b><span>Alertas NOAA severas</span></div>
+      <div><b>Open-Meteo</b><span>Clima y ríos al tocar mapa</span></div>
+    </div>
+    ${LIVE.loading&&!LIVE.events.length?'<p class="mu">Consultando feeds públicos en tiempo real…</p>':
+      list.length?`<p class="nt" style="margin:4px 0">Tocá cualquier evento para volar hacia ese punto y ver su telemetría en vivo.</p>
+      <div class="lv-list"><table class="rk">
+        <tr><th>Evento real</th><th style="text-align:right">Tipo / Cuándo</th></tr>
+        ${list.map(ev=>{
+          const m=CAT_META[ev.cat]||CAT_META.eq;
+          return `<tr data-lev="${esc(ev.id)}">
+            <td><i class="dot ${m.dot}"></i><b>${esc(ev.title)}</b><div class="cf-meta">${esc(ev.detail||'')}</div></td>
+            <td class="cf-act"><span class="lv-pill" style="border-color:${m.color};color:${m.color}">${esc(m.short)}</span><div class="cf-meta">${esc(ago(ev.time))}</div></td>
+          </tr>`;
+        }).join('')}
+      </table></div>`:
+      '<p class="nt" style="margin:6px 0">No hay eventos visibles con el filtro actual (o el modo En vivo está desactivado).</p>'}
+  `;
+}
+
+async function fetchLiveAPIs(){
+  if(LIVE.loading)return;
+  LIVE.loading=true;
+  LIVE.status={usgs:'cargando',nasa:'cargando',noaa:'cargando'};
+  updateLiveBar();renderLiveFeed();
+
+  const usgsUrl=LIVE.eqWin==='day'
+    ?'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_day.geojson'
+    :'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson';
+
+  const nasaReqs=[
+    ['vo','https://eonet.gsfc.nasa.gov/api/v3/events?category=volcanoes&status=open&limit=25'],
+    ['cy','https://eonet.gsfc.nasa.gov/api/v3/events?category=severeStorms&status=open&limit=25'],
+    ['fl','https://eonet.gsfc.nasa.gov/api/v3/events?category=floods&status=open&limit=25'],
+    ['fi','https://eonet.gsfc.nasa.gov/api/v3/events?category=wildfires&status=open&days=14&limit=35']
+  ];
+  const noaaUrl='https://api.weather.gov/alerts/active?severity=Extreme,Severe';
+
+  const [rUsgs,rNasa,rNoaa]=await Promise.allSettled([
+    fetch(usgsUrl).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}),
+    Promise.allSettled(nasaReqs.map(([cat,u])=>fetch(u).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(d=>[cat,d]))),
+    fetch(noaaUrl).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+  ]);
+
+  const out=[];
+  let eqC=0,naC=0,noC=0;
+
+  if(rUsgs.status==='fulfilled'&&Array.isArray(rUsgs.value?.features)){
+    LIVE.status.usgs='ok';
+    for(const f of rUsgs.value.features.slice(0,120)){
+      const c=f.geometry?.coordinates;
+      const p=f.properties||{};
+      if(!c||c.length<2)continue;
+      eqC++;
+      out.push({
+        id:'usgs_'+f.id,src:'USGS',cat:'eq',
+        title:`M${(p.mag??0).toFixed(1)} · ${p.place||'Sismo registrado'}`,
+        lon:+c[0],lat:+c[1],depth:c[2]!=null?Math.round(+c[2]):null,
+        mag:+(p.mag||0),time:p.time||0,url:safeUrl(p.url),
+        detail:`Profundidad ${c[2]!=null?Math.round(+c[2])+' km':'—'}${p.tsunami?' · ⚠ Aviso tsunami':''}`,
+        score:(p.mag||0)*20+(p.tsunami?40:0)
+      });
+    }
+  }else LIVE.status.usgs='error';
+
+  if(rNasa.status==='fulfilled'){
+    const seen=new Set();let okAny=false;
+    for(const res of rNasa.value){
+      if(res.status!=='fulfilled')continue;
+      okAny=true;
+      const[cat,data]=res.value;
+      for(const ev of (data?.events||[])){
+        if(seen.has(ev.id))continue;
+        const gLast=ev.geometry?.[ev.geometry.length-1];
+        const pt=geomCentroid(gLast);
+        if(!pt)continue;
+        seen.add(ev.id);naC++;
+        const dt=gLast?.date?Date.parse(gLast.date):0;
+        const srcLink=safeUrl(ev.sources?.[0]?.url)||safeUrl(ev.link);
+        out.push({
+          id:'eonet_'+ev.id,src:'NASA EONET',cat,
+          title:ev.title||'Evento natural',
+          lon:pt[0],lat:pt[1],mag:null,time:dt,url:srcLink,
+          detail:`Fuente: ${ev.sources?.[0]?.id||'NASA'} · Satélite activo`,
+          score:cat==='vo'?95:cat==='cy'?92:cat==='fl'?85:70
+        });
+      }
+    }
+    LIVE.status.nasa=okAny?'ok':'error';
+  }else LIVE.status.nasa='error';
+
+  if(rNoaa.status==='fulfilled'&&Array.isArray(rNoaa.value?.features)){
+    LIVE.status.noaa='ok';
+    for(const f of rNoaa.value.features.slice(0,35)){
+      const p=f.properties||{};
+      const pt=geomCentroid(f.geometry);
+      if(!pt)continue;
+      noC++;
+      out.push({
+        id:'noaa_'+(f.id||noC),src:'NOAA NWS',cat:'no',
+        title:`${p.event||'Alerta severa'} (${p.severity||'Severa'})`,
+        lon:pt[0],lat:pt[1],mag:null,time:p.sent?Date.parse(p.sent):0,
+        url:safeUrl(p.web)||'https://www.weather.gov/',
+        detail:(p.areaDesc||'').slice(0,95),
+        score:p.severity==='Extreme'?115:88
+      });
+    }
+  }else LIVE.status.noaa='error';
+
+  out.sort((a,b)=>(b.score-a.score)||(b.time-a.time));
+  LIVE.events=out;
+  LIVE.counts={eq:eqC,nasa:naC,noaa:noC};
+  LIVE.updatedAt=new Date();
+  LIVE.loading=false;
+  updateLiveBar();
+  renderLiveFeed();
+  draw();
+  if(sel&&!cm)panel();
+}
+
+async function fetchTelemetry(lon,lat){
+  const key=lat.toFixed(1)+','+lon.toFixed(1);
+  if(LIVE.wxCache.has(key))return LIVE.wxCache.get(key);
+  try{
+    const wUrl=`https://api.open-meteo.com/v1/forecast?latitude=${lat.toFixed(3)}&longitude=${lon.toFixed(3)}&current=temperature_2m,precipitation,wind_speed_10m,wind_gusts_10m,weather_code`;
+    const fUrl=`https://flood-api.open-meteo.com/v1/flood?latitude=${lat.toFixed(3)}&longitude=${lon.toFixed(3)}&daily=river_discharge,river_discharge_mean&forecast_days=2`;
+    const [rw,rf]=await Promise.allSettled([
+      fetch(wUrl).then(r=>r.ok?r.json():null),
+      fetch(fUrl).then(r=>r.ok?r.json():null)
+    ]);
+    const w=rw.status==='fulfilled'?rw.value?.current:null;
+    const fd=rf.status==='fulfilled'?rf.value?.daily:null;
+    const qNow=fd?.river_discharge?.[0];
+    const qMean=fd?.river_discharge_mean?.[0];
+    const res={
+      temp:w?.temperature_2m,
+      rain:w?.precipitation,
+      wind:w?.wind_speed_10m,
+      gust:w?.wind_gusts_10m,
+      sky:WMO_ES[w?.weather_code]||'Condición variable',
+      qNow,qMean,
+      ok:Boolean(w||fd)
+    };
+    LIVE.wxCache.set(key,res);
+    return res;
+  }catch{return{ok:false}}
+}
+
+function renderWxHtml(wx){
+  if(!wx)return`<div class="wx-box"><h3>Telemetría en vivo · Open-Meteo</h3><div class="nt">Consultando clima y caudal fluvial…</div></div>`;
+  if(!wx.ok)return`<div class="wx-box"><h3>Telemetría en vivo · Open-Meteo</h3><div class="nt">Sin conexión con Open-Meteo en este momento.</div></div>`;
+  const ratio=wx.qNow!=null&&wx.qMean>0.2?wx.qNow/wx.qMean:null;
+  const flTxt=wx.qNow==null?'Sin río cercano':`${wx.qNow.toFixed(1)} m³/s${ratio>1.8?' · ⚠ Crecida':ratio>1.25?' · Elevado':' · Normal'}`;
+  return`<div class="wx-box"><h3>Telemetría en vivo ahora · Open-Meteo</h3>
+    <div class="wx-grid">
+      <div><b>${wx.temp!=null?wx.temp.toFixed(1)+' °C':'—'}</b><span>${esc(wx.sky)}</span></div>
+      <div><b>${wx.wind!=null?Math.round(wx.wind)+' km/h':'—'}</b><span>Viento${wx.gust!=null?' (ráf. '+Math.round(wx.gust)+')':''}</span></div>
+      <div><b>${wx.rain!=null?wx.rain.toFixed(1)+' mm':'—'}</b><span>Precipitación</span></div>
+      <div><b>${esc(flTxt)}</b><span>Caudal fluvial (GloFAS)</span></div>
+    </div></div>`;
+}
+
+function nearLive(o,a){
+  if(!LIVE.events.length)return'';
+  const L=LIVE.events
+    .map(ev=>({ev,d:km(o,a,ev.lon,ev.lat)}))
+    .filter(x=>x.d<900)
+    .sort((p,q)=>p.d-q.d)
+    .slice(0,3);
+  if(!L.length)return'<div style="margin-top:10px"><h2 style="font-size:13px;margin-bottom:4px">Eventos en vivo cercanos</h2><div class="nt">Sin eventos reales registrados a menos de 900 km ahora mismo.</div></div>';
+  return`<div style="margin-top:10px"><h2 style="font-size:13px;margin-bottom:4px">Eventos en vivo cercanos</h2>`+
+    L.map(({ev,d})=>{
+      const m=CAT_META[ev.cat]||CAT_META.eq;
+      return`<div style="margin-bottom:6px;cursor:pointer" data-lev="${esc(ev.id)}"><i class="dot ${m.dot}"></i><b>${esc(ev.title)}</b><div class="nt">A ${Math.round(d).toLocaleString('es-AR')} km · ${esc(m.label)} · ${esc(ago(ev.time))}</div></div>`;
+    }).join('')+'</div>';
+}
+
+function focusLiveEvent(id){
+  const ev=LIVE.events.find(x=>x.id===id);
+  if(!ev)return;
+  LIVE.on=true;
+  $('#btn-live').classList.add('on');
+  LIVE.selectedEv=ev;
+  cm=0;cs=cAt(ev.lon,ev.lat);
+  sel=[ev.lon,ev.lat,ev.title];
+  const mapLayer={eq:'eq',fi:'fi',vo:'vo',cy:'cy',fl:'fl',no:'to'}[ev.cat];
+  if(mapLayer&&cur!==mapLayer){
+    const tabBtn=document.querySelector(`#tabs [data-k="${mapLayer}"]`);
+    if(tabBtn){cur=mapLayer;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.k===cur));leg();rank()}
+  }
+  flyTo(ev.lon,ev.lat,Math.max(V0.z,4.2));
+  beep(780,.06);
+  updateLiveBar();
+  panel();
+  cv.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function calcRisks(o,a){
+  const e=eqL(o,a,0,70),v={eq:1-Math.exp(-.5*e),eq7:1-Math.exp(-.5*e/9),me:6e-8};
+  for(const k of['ts','cy','vo','fl','fi','to','nu','cf'])v[k]=H[k](o,a);
+  v.all=1-['eq','cy','vo','fl','fi','to'].reduce((q,k)=>q*(1-v[k]),1);
+  return v;
+}
+
+function renderComparePanel(){
+  const p=$('#p');
+  if(!LIVE.cmpA){
+    p.innerHTML=`<div class="cmp-hdr"><h2 style="margin:0">Modo Comparar (A vs B)</h2><button class="lk" id="cmp-exit" type="button">✕ Salir</button></div><p class="mu">Tocá el primer punto (<b>A</b>) en el mapa para iniciar la comparación.</p>`;
+    return;
+  }
+  if(!LIVE.cmpB){
+    p.innerHTML=`<div class="cmp-hdr"><h2 style="margin:0">Comparar · Falta Punto B</h2><button class="lk" id="cmp-exit" type="button">✕ Salir</button></div><p class="mu"><b>Punto A:</b> ${esc(LIVE.cmpA.name)}<br>Ahora tocá el segundo lugar (<b>B</b>) en el mapa.</p>`;
+    return;
+  }
+  const A=LIVE.cmpA,B=LIVE.cmpB;
+  const rA=calcRisks(A.lon,A.lat),rB=calcRisks(B.lon,B.lat);
+  const dist=Math.round(km(A.lon,A.lat,B.lon,B.lat)).toLocaleString('es-AR');
+  const rows=[['all','Natural combinado'],['eq','Sismos M≥6'],['ts','Tsunami'],['cy','Ciclón'],['vo','Volcán'],['fl','Inundación'],['fi','Incendio'],['to','Tornado'],['cf','Conflictos'],['nu','Nuclear']];
+  const wxA=LIVE.wxCache.get(A.lat.toFixed(1)+','+A.lon.toFixed(1));
+  const wxB=LIVE.wxCache.get(B.lat.toFixed(1)+','+B.lon.toFixed(1));
+  p.innerHTML=`<div class="cmp-hdr"><h2 style="margin:0">Comparador A ↔ B</h2><button class="lk" id="cmp-exit" type="button">✕ Cerrar</button></div>
+    <div class="cf-meta">Distancia en línea recta: <b style="color:#38e8ff">${dist} km</b></div>
+    <table><tr><th>Riesgo anual</th><th style="color:#35ff8c">A · ${esc(A.short)}</th><th style="color:#38e8ff">B · ${esc(B.short)}</th></tr>
+      ${rows.map(([k,n])=>`<tr><td>${n}</td><td class="${rA[k]>rB[k]*1.15?'cmp-hi':(rA[k]*1.15<rB[k]?'cmp-win':'')}">${fp(rA[k])}</td><td class="${rB[k]>rA[k]*1.15?'cmp-hi':(rB[k]*1.15<rA[k]?'cmp-win':'')}">${fp(rB[k])}</td></tr>`).join('')}
+      <tr><td>Clima ahora</td><td>${wxA?.ok&&wxA.temp!=null?wxA.temp.toFixed(0)+'°C · '+Math.round(wxA.wind||0)+' km/h':'…'}</td><td>${wxB?.ok&&wxB.temp!=null?wxB.temp.toFixed(0)+'°C · '+Math.round(wxB.wind||0)+' km/h':'…'}</td></tr>
+    </table>
+    <p class="nt" style="margin:8px 0 0">En verde el riesgo menor; en naranja el mayor. Tocá otro punto del mapa para reemplazar <b>B</b>.</p>`;
+  if(!wxA)fetchTelemetry(A.lon,A.lat).then(()=>{if(LIVE.cmpMode&&LIVE.cmpA===A&&LIVE.cmpB===B)renderComparePanel()});
+  if(!wxB)fetchTelemetry(B.lon,B.lat).then(()=>{if(LIVE.cmpMode&&LIVE.cmpA===A&&LIVE.cmpB===B)renderComparePanel()});
+}
+
+function hitTest(px,py){
+  const w=cv.width,h=cv.height,k=w/360*V0.z,X=o=>(o-V0.lo)*k+w/2,Y=a=>(V0.la-a)*k+h/2;
+  let best=null,bestD=14*dp;
+  if(LIVE.on){
+    for(const ev of visibleLiveEvents()){
+      const d=Math.hypot(X(ev.lon)-px,Y(ev.lat)-py);
+      if(d<bestD){bestD=d;best=ev}
+    }
+  }
+  return best;
+}
+
 function fit(){dp=window.devicePixelRatio||1;const w=cv.clientWidth;cv.width=w*dp;cv.height=w*dp/2;draw()}
 function clampV(){const k=cv.width/360*V0.z,wv=cv.width/k,hv=cv.height/k;V0.lo=wv>=360?0:Math.max(-180+wv/2,Math.min(180-wv/2,V0.lo));V0.la=hv>=180?0:Math.max(-90+hv/2,Math.min(90-hv/2,V0.la))}
-function draw(){clampV();const w=cv.width,h=cv.height,k=w/360*V0.z,X=o=>(o-V0.lo)*k+w/2,Y=a=>(V0.la-a)*k+h/2,cs=getComputedStyle(document.documentElement),c=n=>cs.getPropertyValue(n).trim();
+function draw(){clampV();const w=cv.width,h=cv.height,k=w/360*V0.z,X=o=>(o-V0.lo)*k+w/2,Y=a=>(V0.la-a)*k+h/2,stc=getComputedStyle(document.documentElement),c=n=>stc.getPropertyValue(n).trim();
 cx.fillStyle=c('--sea');cx.fillRect(0,0,w,h);cx.strokeStyle=c('--bd');cx.lineWidth=dp*.6;cx.beginPath();for(let o=-150;o<=180;o+=30){cx.moveTo(X(o),0);cx.lineTo(X(o),h)}for(let a=-60;a<=60;a+=30){cx.moveTo(0,Y(a));cx.lineTo(w,Y(a))}cx.stroke();
 const path=()=>{cx.beginPath();for(const p of P){cx.moveTo(X(p[0]),Y(p[1]));for(let i=2;i<p.length;i+=2)cx.lineTo(X(p[i]),Y(p[i+1]));cx.closePath()}};
 path();cx.fillStyle=c('--land');cx.fill('evenodd');cx.imageSmoothingEnabled=true;cx.drawImage(grid(cur),X(-180),Y(90),360*k,180*k);hl1(X,Y);cx.beginPath();for(const p of BD){cx.moveTo(X(p[0]),Y(p[1]));for(let i=2;i<p.length;i+=2)cx.lineTo(X(p[i]),Y(p[i+1]))}cx.strokeStyle=c('--bd');cx.lineWidth=dp*.8;cx.stroke();path();cx.strokeStyle=c('--ln');cx.lineWidth=dp;cx.stroke();
-hl2(X,Y);if(sel){const x=X(sel[0]),y=Y(sel[1]);cx.strokeStyle=c('--fg');cx.lineWidth=2*dp;cx.beginPath();cx.arc(x,y,8*dp,0,7);cx.moveTo(x-14*dp,y);cx.lineTo(x+14*dp,y);cx.moveTo(x,y-14*dp);cx.lineTo(x,y+14*dp);cx.stroke()}}
-function pick(e){const r=cv.getBoundingClientRect(),w=cv.width,k=w/360*V0.z,x=(e.clientX-r.left)*dp,y=(e.clientY-r.top)*dp;return[(x-w/2)/k+V0.lo,V0.la-(y-cv.height/2)/k]}
-let dr=null;cv.addEventListener('pointerdown',e=>{dr={x:e.clientX,y:e.clientY,lo:V0.lo,la:V0.la,m:0};cv.setPointerCapture(e.pointerId)});
-cv.addEventListener('pointermove',e=>{if(!dr)return;const dx=e.clientX-dr.x,dy=e.clientY-dr.y;dr.m=Math.max(dr.m,Math.hypot(dx,dy));if(dr.m>4){const k=cv.width/360*V0.z;V0.lo=dr.lo-dx*dp/k;V0.la=dr.la+dy*dp/k;draw()}});
-cv.addEventListener('pointerup',e=>{if(dr&&dr.m<=4){const[o,a]=pick(e);if(Math.abs(a)<=90&&Math.abs(o)<=180){sel=[o,a];cs=cAt(o,a);cm=0;draw();panel()}}dr=null});
-function zoom(f,e){const b=e?pick(e):null;V0.z=Math.max(1,Math.min(14,V0.z*f));if(b){const a=pick(e);V0.lo+=b[0]-a[0];V0.la+=b[1]-a[1]}draw()}
+hl2(X,Y);if(sel&&!LIVE.cmpMode){const x=X(sel[0]),y=Y(sel[1]);if(!reduceMotion){cx.beginPath();cx.arc(x,y,(8+12*pulseT)*dp,0,7);cx.strokeStyle=`rgba(53,255,140,${(1-pulseT)*.55})`;cx.lineWidth=1.3*dp;cx.stroke()}cx.strokeStyle=c('--fg');cx.lineWidth=2*dp;cx.beginPath();cx.arc(x,y,8*dp,0,7);cx.moveTo(x-14*dp,y);cx.lineTo(x+14*dp,y);cx.moveTo(x,y-14*dp);cx.lineTo(x,y+14*dp);cx.stroke()}}
+function pick(e){const r=cv.getBoundingClientRect(),w=cv.width,k=w/360*V0.z,x=(e.clientX-r.left)*dp,y=(e.clientY-r.top)*dp;return[(x-w/2)/k+V0.lo,V0.la-(y-cv.height/2)/k,x,y,e.clientX-r.left,e.clientY-r.top]}
+let dr=null;const tipEl=$('#tip'),hudPos=$('#hud-pos');
+cv.addEventListener('pointerdown',e=>{camAnim=null;dr={x:e.clientX,y:e.clientY,lo:V0.lo,la:V0.la,m:0};cv.setPointerCapture(e.pointerId)});
+cv.addEventListener('pointermove',e=>{
+  const[o,a,px,py,lx,ly]=pick(e);
+  if(dr){
+    const dx=e.clientX-dr.x,dy=e.clientY-dr.y;
+    dr.m=Math.max(dr.m,Math.hypot(dx,dy));
+    if(dr.m>4){const k=cv.width/360*V0.z;V0.lo=dr.lo-dx*dp/k;V0.la=dr.la+dy*dp/k;tipEl.style.display='none';draw();return}
+  }
+  if(Math.abs(a)<=90&&Math.abs(o)<=180){
+    const ci=cAt(o,a);
+    hudPos.textContent=`${Math.abs(a).toFixed(1)}°${a<0?'S':'N'} ${Math.abs(o).toFixed(1)}°${o<0?'O':'E'}${ci>=0?' · '+CO[ci].n:''}`;
+    const hit=hitTest(px,py);
+    if(hit!==LIVE.hoverEv){LIVE.hoverEv=hit;draw()}
+    if(hit){
+      cv.style.cursor='pointer';
+      const m=CAT_META[hit.cat]||CAT_META.eq;
+      tipEl.innerHTML=`<span class="tm"><i class="dot ${m.dot}"></i>${esc(m.label)} · ${esc(ago(hit.time))}</span><b>${esc(hit.title)}</b><div>${esc(hit.detail||'Tocá para inspeccionar')}</div>`;
+      tipEl.style.display='block';
+      const maxX=cv.clientWidth-260;
+      tipEl.style.left=Math.max(8,Math.min(maxX,lx+14))+'px';
+      tipEl.style.top=Math.max(8,ly-10)+'px';
+    }else{
+      cv.style.cursor='crosshair';
+      tipEl.style.display='none';
+    }
+  }
+});
+cv.addEventListener('pointerleave',()=>{tipEl.style.display='none';if(LIVE.hoverEv){LIVE.hoverEv=null;draw()}});
+cv.addEventListener('pointerup',e=>{
+  if(dr&&dr.m<=4){
+    const[o,a,px,py]=pick(e);
+    if(Math.abs(a)<=90&&Math.abs(o)<=180){
+      const hit=hitTest(px,py);
+      if(LIVE.cmpMode){
+        const ci=cAt(o,a);
+        const nm=hit?hit.title:(ci>=0?CO[ci].n:`${a.toFixed(1)}°, ${o.toFixed(1)}°`);
+        const pt={lon:hit?hit.lon:o,lat:hit?hit.lat:a,name:nm,short:nm.slice(0,14)};
+        if(!LIVE.cmpA)LIVE.cmpA=pt;else LIVE.cmpB=pt;
+        beep(LIVE.cmpB?820:600,.05);
+        updateLiveBar();draw();renderComparePanel();
+      }else if(hit){
+        focusLiveEvent(hit.id);
+      }else{
+        LIVE.selectedEv=null;sel=[o,a];cs=cAt(o,a);cm=0;beep(540,.04);draw();panel();
+      }
+    }
+  }
+  dr=null;
+});
+function zoom(f,e){camAnim=null;const b=e?pick(e):null;V0.z=Math.max(1,Math.min(14,V0.z*f));if(b){const a=pick(e);V0.lo+=b[0]-a[0];V0.la+=b[1]-a[1]}draw()}
 cv.addEventListener('wheel',e=>{e.preventDefault();zoom(e.deltaY<0?1.25:.8,e)},{passive:false});$('#zi').onclick=()=>zoom(1.5);$('#zo').onclick=()=>zoom(1/1.5);
 const fp=p=>p<1e-9?'≈ 0':(p>=.01?(p*100).toFixed(p>=.1?0:1):(p*100).toPrecision(2))+' %',fn=p=>p<1e-9?'—':Math.round(1/p).toLocaleString('es-AR'),f50=p=>fp(1-Math.pow(1-p,50));
 const RW=[['eq','Sismo M≥6 a menos de 100 km'],['eq7','Sismo M≥7 a menos de 100 km'],['ts','Tsunami dañino'],['cy','Ciclón tropical (&lt;150 km)'],['vo','Erupción volcánica cercana'],['fl','Inundación grave'],['fi','Incendio forestal grave'],['to','Tornado'],['me','Meteorito tipo Tunguska'],['cf','Combates o ataques armados en la zona'],['nu','Detonación nuclear (&lt;~40 km)']];
-function panel(){const p=$('#p');if(cm&&cs>=0)return panelC();if(!sel){p.innerHTML='<h2>Elegí un lugar</h2><p class="mu">Tocá cualquier punto del mapa o elegí una ciudad:</p>'+cities();return}
-const[o,a,nm]=sel,e=eqL(o,a,0,70),v={eq:1-Math.exp(-.5*e),eq7:1-Math.exp(-.5*e/9),me:6e-8};for(const k of['ts','cy','vo','fl','fi','to','nu','cf'])v[k]=H[k](o,a);
-const all=1-['eq','cy','vo','fl','fi','to'].reduce((q,k)=>q*(1-v[k]),1),pos=`${Math.abs(a).toFixed(1)}° ${a<0?'S':'N'}, ${Math.abs(o).toFixed(1)}° ${o<0?'O':'E'}`;
-p.innerHTML=`<h2>${nm||'Punto elegido'}</h2><div class="mu" style="margin-bottom:8px">${pos}${cs>=0?' · '+CO[cs].n:''}</div><div class="mu" style="font-size:12px">Probabilidad anual de al menos un evento natural grave</div><div class="big">${fp(all)}</div>
-<table><tr><th></th><th>Por año</th><th>1 en…</th><th>50 años</th></tr>${RW.map(([k,n])=>`<tr><td>${n}<div class="tb"><i style="width:${Math.max(0,Math.min(100,(Math.log10(Math.max(v[k],1e-12))+7)/7*100))}%"></i></div></td><td>${fp(v[k])}</td><td>${fn(v[k])}</td><td>${f50(v[k])}</td></tr>`).join('')}</table>${near(o,a)}${cs>=0?`<p style="margin:10px 0 0"><button class="lk" data-c="${cs}">Resumen de ${CO[cs].n} →</button></p>`:''}<p style="margin:10px 0 6px" class="mu">Ir a otra ciudad:</p>${cities()}`}
+function panel(){
+  const p=$('#p');
+  if(LIVE.cmpMode)return renderComparePanel();
+  if(cm&&cs>=0)return panelC();
+  if(!sel){p.innerHTML='<h2>Elegí un lugar</h2><p class="mu">Tocá cualquier punto o marcador pulsante del radar, o elegí una ciudad:</p>'+cities()+'<p class="nt" style="margin-top:10px">Tip: usá <b>⚡ Mayor evento</b> para saltar al evento real más intenso activo ahora, o <b>⇄ Comparar</b> para contrastar dos puntos.</p>';return}
+  const[o,a,nm]=sel,v=calcRisks(o,a),pos=`${Math.abs(a).toFixed(1)}° ${a<0?'S':'N'}, ${Math.abs(o).toFixed(1)}° ${o<0?'O':'E'}`;
+  const ev=LIVE.selectedEv;
+  const evHtml=ev?`<div class="ev-card"><div class="cf-meta" style="color:${(CAT_META[ev.cat]||CAT_META.eq).color}">${esc((CAT_META[ev.cat]||CAT_META.eq).label)} · ${esc(ago(ev.time))}</div><b>${esc(ev.title)}</b><div class="nt" style="margin:3px 0">${esc(ev.detail||'')}</div>${ev.url?`<a href="${esc(ev.url)}" target="_blank" rel="noopener">Ver reporte oficial (${esc(ev.src)}) ↗</a>`:''}</div>`:'';
+  const wxKey=a.toFixed(1)+','+o.toFixed(1);
+  const wx=LIVE.wxCache.get(wxKey);
+  p.innerHTML=`${evHtml}<h2>${esc(nm||'Punto elegido')}</h2><div class="mu" style="margin-bottom:8px">${pos}${cs>=0?' · '+CO[cs].n:''}</div><div class="mu" style="font-size:12px">Probabilidad anual de al menos un evento natural grave</div><div class="big">${fp(v.all)}</div>
+  <div id="wx-slot">${renderWxHtml(wx)}</div>
+  <table><tr><th></th><th>Por año</th><th>1 en…</th><th>50 años</th></tr>${RW.map(([k,n])=>`<tr><td>${n}<div class="tb"><i style="width:${Math.max(0,Math.min(100,(Math.log10(Math.max(v[k],1e-12))+7)/7*100))}%"></i></div></td><td>${fp(v[k])}</td><td>${fn(v[k])}</td><td>${f50(v[k])}</td></tr>`).join('')}</table>${nearLive(o,a)}${near(o,a)}<div class="act-row" style="margin-top:10px">${cs>=0?`<button class="lk" data-c="${cs}">Resumen de ${CO[cs].n} →</button>`:''}<button class="lk" id="cmp-from-pt" type="button">⇄ Comparar este punto</button></div><p style="margin:10px 0 6px" class="mu">Ir a otra ciudad:</p>${cities()}`;
+  if(!wx){
+    const targetSel=sel;
+    fetchTelemetry(o,a).then(res=>{
+      if(sel===targetSel&&!cm&&!LIVE.cmpMode){
+        const slot=$('#wx-slot');
+        if(slot)slot.innerHTML=renderWxHtml(res);
+      }
+    });
+  }
+}
 const CI=[['Buenos Aires',-58.4,-34.6],['Santiago',-70.7,-33.4],['Lima',-77,-12],['Ciudad de México',-99.1,19.4],['Los Ángeles',-118.2,34],['Nueva York',-74,40.7],['Washington D. C.',-77,38.9],['Reikiavik',-21.9,64.1],['Londres',-.1,51.5],['Madrid',-3.7,40.4],['Roma',12.5,41.9],['Estambul',29,41],['Moscú',37.6,55.8],['El Cairo',31.2,30],['Lagos',3.4,6.5],['Nueva Delhi',77.2,28.6],['Pekín',116.4,39.9],['Tokio',139.7,35.7],['Manila',121,14.6],['Yakarta',106.8,-6.2],['Sídney',151.2,-33.9]];
 const cities=()=>'<select id="ci"><option value="">Ciudad…</option>'+CI.map((c,i)=>`<option value="${i}">${c[0]}</option>`).join('')+'</select>';
-document.addEventListener('change',e=>{if(e.target.id==='ci'&&e.target.value!==''){const c=CI[e.target.value];sel=[c[1],c[2],c[0]];cs=cAt(c[1],c[2]);cm=0;if(V0.z>1){V0.lo=c[1];V0.la=c[2]}draw();panel()}});
+document.addEventListener('change',e=>{if(e.target.id==='ci'&&e.target.value!==''){const c=CI[e.target.value];LIVE.selectedEv=null;sel=[c[1],c[2],c[0]];cs=cAt(c[1],c[2]);cm=0;flyTo(c[1],c[2],Math.max(V0.z,3.2));beep(600,.045);panel()}});
+document.addEventListener('click',e=>{
+  const lc=e.target.closest('[data-lcat]');
+  if(lc){LIVE.on=true;LIVE.cat=lc.dataset.lcat;$('#btn-live').classList.add('on');beep(680,.035);updateLiveBar();renderLiveFeed();draw();return}
+  const ew=e.target.closest('[data-eqw]');
+  if(ew&&ew.dataset.eqw!==LIVE.eqWin){LIVE.eqWin=ew.dataset.eqw;beep(700,.04);fetchLiveAPIs();return}
+  if(e.target.closest('#lv-ref')){beep(740,.04);fetchLiveAPIs();return}
+  if(e.target.closest('#btn-live')){LIVE.on=!LIVE.on;$('#btn-live').classList.toggle('on',LIVE.on);beep(LIVE.on?720:420,.04);updateLiveBar();renderLiveFeed();draw();return}
+  if(e.target.closest('#btn-snd')){LIVE.sound=!LIVE.sound;const b=$('#btn-snd');b.classList.toggle('on',LIVE.sound);b.textContent=LIVE.sound?'🔊 Sonido':'🔇 Sonido';if(LIVE.sound)beep(820,.06);return}
+  if(e.target.closest('#btn-jump')){
+    const list=visibleLiveEvents();
+    if(!list.length){fetchLiveAPIs();return}
+    const ev=list[LIVE.jumpIdx%list.length];LIVE.jumpIdx++;
+    focusLiveEvent(ev.id);return;
+  }
+  if(e.target.closest('#btn-cmp')){
+    LIVE.cmpMode=!LIVE.cmpMode;
+    $('#btn-cmp').classList.toggle('on',LIVE.cmpMode);
+    if(LIVE.cmpMode){
+      LIVE.cmpA=sel?{lon:sel[0],lat:sel[1],name:sel[2]||(cs>=0?CO[cs].n:'Punto A'),short:(sel[2]||(cs>=0?CO[cs].n:'Punto A')).slice(0,14)}:null;
+      LIVE.cmpB=null;
+    }else{LIVE.cmpA=null;LIVE.cmpB=null}
+    beep(LIVE.cmpMode?760:440,.05);updateLiveBar();draw();panel();return;
+  }
+  if(e.target.closest('#cmp-from-pt')&&sel){
+    LIVE.cmpMode=true;$('#btn-cmp').classList.add('on');
+    const nm=sel[2]||(cs>=0?CO[cs].n:'Punto A');
+    LIVE.cmpA={lon:sel[0],lat:sel[1],name:nm,short:nm.slice(0,14)};
+    LIVE.cmpB=null;beep(760,.05);updateLiveBar();draw();renderComparePanel();return;
+  }
+  if(e.target.closest('#cmp-exit')){
+    LIVE.cmpMode=false;LIVE.cmpA=null;LIVE.cmpB=null;$('#btn-cmp').classList.remove('on');
+    updateLiveBar();draw();panel();return;
+  }
+  const lev=e.target.closest('[data-lev]');
+  if(lev){focusLiveEvent(lev.dataset.lev);return}
+});
+document.addEventListener('keydown',e=>{
+  if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName||''))return;
+  if(e.key==='+'||e.key==='='){zoom(1.4)}
+  else if(e.key==='-'){zoom(1/1.4)}
+  else if(e.key==='r'||e.key==='R'){setG(0)}
+  else if(e.key==='l'||e.key==='L'){$('#btn-live').click()}
+  else if(e.key==='c'||e.key==='C'){$('#btn-cmp').click()}
+  else if(e.key==='Escape'){LIVE.cmpMode=false;LIVE.cmpA=null;LIVE.cmpB=null;LIVE.selectedEv=null;sel=null;cm=0;$('#btn-cmp').classList.remove('on');updateLiveBar();draw();panel()}
+});
 function leg(){const m=MN[cur];$('#l0').textContent=`menos de 1 en ${Math.round(10**-m).toLocaleString('es-AR')} por año`;$('#l1').textContent='casi seguro cada año'}
 $('#tabs').innerHTML=LB.map(([k,n])=>`<button data-k="${k}"${k===cur?' class="on"':''}>${n}</button>`).join('');
-$('#tabs').onclick=e=>{const k=e.target.dataset.k;if(!k)return;cur=k;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));leg();draw();rank()};
-function sl(){S.pl=$('#pl').value/100;S.pf=$('#pf').value/100;$('#vl').textContent=(S.pl*100).toFixed(1).replace('.',',')+' % anual';$('#vf').textContent=(S.pf*100).toFixed(2).replace('.',',')+' % anual';delete cache.nu;delete VC.nu;RC={};if(cur==='nu')draw();if(sel||cm)panel();if(cur==='nu'&&started)rank()}
-$('#pl').oninput=$('#pf').oninput=sl;sl();leg();panel();addEventListener('resize',fit);fit();cargarDatos();setTimeout(rank,400);const tk=()=>$('#utc').textContent=new Date().toISOString().slice(11,19);tk();setInterval(tk,1000);
+$('#tabs').onclick=e=>{const k=e.target.dataset.k;if(!k)return;cur=k;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));beep(580,.035);leg();draw();rank()};
+function sl(){S.pl=$('#pl').value/100;S.pf=$('#pf').value/100;$('#vl').textContent=(S.pl*100).toFixed(1).replace('.',',')+' % anual';$('#vf').textContent=(S.pf*100).toFixed(2).replace('.',',')+' % anual';delete cache.nu;delete VC.nu;RC={};if(cur==='nu')draw();if(sel||cm||LIVE.cmpMode)panel();if(cur==='nu'&&started)rank()}
+$('#pl').oninput=$('#pf').oninput=sl;sl();leg();updateLiveBar();panel();addEventListener('resize',fit);fit();cargarDatos();fetchLiveAPIs();setInterval(fetchLiveAPIs,300000);requestAnimationFrame(animLoop);setTimeout(rank,400);const tk=()=>$('#utc').textContent=new Date().toISOString().slice(11,19);tk();setInterval(tk,1000);
 </script></body></html>

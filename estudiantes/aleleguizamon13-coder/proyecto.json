@@ -1,4 +1,4 @@
 {
   "titulo": "Atlas de riesgos del mundo",
-  "descripcion": "Mapa interactivo de riesgos naturales, nucleares y conflictos armados activos con base en datos.json, buscador, filtros, ordenamiento, métricas dinámicas y edición en memoria."
+  "descripcion": "Mapa interactivo de riesgos naturales, nucleares y conflictos (datos.json) con radar en vivo de USGS, NASA EONET, Open-Meteo y NOAA, comparador A/B y telemetría."
 }
