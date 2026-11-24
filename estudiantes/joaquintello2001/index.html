@@ -1,0 +1,1242 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Reporte de Ventas Â· JoaquÃ­n Tello</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <style>
+    :root{
+      --bg:#f3f5f7; --surface:#ffffff; --surface-2:#eef1f4; --line:#dde2e8; --grid:#e8ecf0;
+      --ink:#0f1a24; --ink-2:#47535f; --ink-3:#6b7783;
+      --s-nov:#2a78d6; --s-oct:#eb6834; --s-ly:#1baf7a;
+      --good:#17753f; --good-bright:#16a34a; --bad:#b93433;
+      --good-bg:#e2f3e9; --good-row:#dcf5e6; --good-border:#22a85f;
+      --bad-bg:#fbe7e6; --neu-bg:#e7ecf1;
+      --font:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+      --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+    }
+    @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+      --bg:#0e141a; --surface:#161e26; --surface-2:#1d2731; --line:#2b3641; --grid:#222d37;
+      --ink:#eef2f5; --ink-2:#b4bec8; --ink-3:#8a96a2;
+      --s-nov:#3987e5; --s-oct:#d95926; --s-ly:#199e70;
+      --good:#4cc085; --good-bright:#22c55e; --bad:#f07b79;
+      --good-bg:#16342a; --good-row:#133827; --good-border:#28a968;
+      --bad-bg:#3b2020; --neu-bg:#222d37; color-scheme:dark;
+    }}
+    :root[data-theme="dark"]{
+      --bg:#0e141a; --surface:#161e26; --surface-2:#1d2731; --line:#2b3641; --grid:#222d37;
+      --ink:#eef2f5; --ink-2:#b4bec8; --ink-3:#8a96a2;
+      --s-nov:#3987e5; --s-oct:#d95926; --s-ly:#199e70;
+      --good:#4cc085; --good-bright:#22c55e; --bad:#f07b79;
+      --good-bg:#16342a; --good-row:#133827; --good-border:#28a968;
+      --bad-bg:#3b2020; --neu-bg:#222d37; color-scheme:dark;
+    }
+    *{box-sizing:border-box}
+    body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;line-height:1.45;margin:0}
+    .wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+    header{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30}
+    .head{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between;padding-block:12px 6px}
+    .head-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    h1{font-size:19px;font-weight:600;margin:0;letter-spacing:-.01em}
+    .sub{color:var(--ink-3);font-size:12.5px}
+    nav{display:flex;gap:4px;overflow-x:auto}
+    nav button{font:inherit;font-weight:500;background:none;border:0;border-bottom:3px solid transparent;color:var(--ink-2);padding:9px 14px;cursor:pointer;white-space:nowrap}
+    nav button[aria-selected="true"]{color:var(--ink);border-color:var(--s-nov)}
+    nav button:hover{color:var(--ink)}
+    .btn{font:inherit;font-size:12.5px;font-weight:500;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:6px 11px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+    .btn:hover{border-color:var(--ink-3)}
+    .btn.primary{background:var(--s-nov);color:#fff;border-color:var(--s-nov)}
+    .btn.good{background:var(--good-bg);color:var(--good);border-color:var(--good-border)}
+    .btn.sm{padding:4px 8px;font-size:12px}
+    .pill-progress{background:var(--good-bg);color:var(--good);border:1px solid var(--good-border);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+    .pill-progress:hover{filter:brightness(.97)}
+    :focus-visible{outline:2px solid var(--s-nov);outline-offset:2px}
+
+    main{padding-block:18px 48px;display:flex;flex-direction:column;gap:18px}
+    .panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px 18px;min-width:0}
+    h2{font-size:14.5px;font-weight:600;margin:0 0 2px}
+    .hint{color:var(--ink-3);font-size:12.5px;margin:0 0 12px}
+    .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+    .tile{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px;min-width:0}
+    .tile .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3)}
+    .tile .v{font-family:var(--mono);font-size:25px;font-weight:500;letter-spacing:-.02em;margin:4px 0 8px}
+    .tile .r{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--ink-2);padding-top:3px}
+    .d{font-family:var(--mono);font-size:12px;font-weight:500;white-space:nowrap}
+    .d.up{color:var(--good)}.d.dn{color:var(--bad)}.d.na{color:var(--ink-3)}
+    .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:18px}
+    .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+
+    /* Progress tracker */
+    .progress-box{background:linear-gradient(135deg,var(--good-bg),var(--surface));border:1px solid var(--good-border);border-radius:8px;padding:14px 16px}
+    .progress-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+    .progress-stats{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--ink-2)}
+    .progress-stats strong{font-family:var(--mono);color:var(--good)}
+    .p-track{height:12px;background:var(--surface-2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+    .p-fill{height:100%;background:var(--good-bright);width:0%;transition:width .25s ease}
+
+    /* Tables & clickable rows */
+    .tscroll{overflow-x:auto}
+    table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+    th,td{padding:8px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--grid)}
+    th{font-size:11.5px;font-weight:500;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;background:var(--surface);position:sticky;top:0;z-index:2}
+    th:first-child,td:first-child{text-align:left}
+    td.num{font-family:var(--mono);font-size:13px}
+    tbody tr{transition:background .12s}
+    tbody tr:hover td{background:var(--surface-2)}
+    tbody tr.clickable{cursor:pointer}
+    tbody tr.is-marked td{background:var(--good-row)!important;border-bottom-color:rgba(34,168,95,.25)}
+    tbody tr.is-marked td:first-child{box-shadow:inset 4px 0 0 var(--good-bright)}
+    tbody tr.is-marked:hover td{filter:brightness(.97)}
+    tfoot td{font-weight:600;border-top:2px solid var(--line);border-bottom:0}
+    .kpi td:first-child{color:var(--ink)}
+    .kpi .grp td{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);padding-top:14px;border-bottom:1px solid var(--line)}
+
+    /* Pending list items */
+    .pending-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:8px;max-height:420px;overflow-y:auto;padding:2px}
+    .p-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;border:1px solid var(--line);border-radius:7px;background:var(--surface);cursor:pointer;text-align:left;transition:all .14s;user-select:none}
+    .p-item:hover{border-color:var(--s-nov);background:var(--surface-2)}
+    .p-item.marked{background:var(--good-row);border-color:var(--good-border);box-shadow:inset 4px 0 0 var(--good-bright)}
+    .p-item .p-left{display:flex;align-items:center;gap:9px;min-width:0;flex:1}
+    .chk-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--ink-3);display:grid;place-items:center;flex:0 0 20px;font-size:12px;font-weight:700;color:#fff;transition:all .14s}
+    .p-item.marked .chk-dot, .row-chk.marked{background:var(--good-bright);border-color:var(--good-bright);color:#fff}
+    .row-chk{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:4px;border:1.8px solid var(--ink-3);margin-right:7px;font-size:11px;font-weight:700;vertical-align:-3px;color:transparent}
+    .p-name{font-weight:500;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .p-meta{font-size:11.5px;color:var(--ink-3)}
+    .p-val{font-family:var(--mono);font-size:12.5px;text-align:right;white-space:nowrap}
+
+    /* Charts */
+    .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--ink-2);margin-bottom:12px}
+    .sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+    .c-nov{background:var(--s-nov)}.c-oct{background:var(--s-oct)}.c-ly{background:var(--s-ly)}.c-good{background:var(--good-bright)}
+    .bars{display:flex;flex-direction:column;gap:12px}
+    .brow{display:grid;grid-template-columns:minmax(110px,175px) 1fr;gap:12px;align-items:center;padding:2px 4px;border-radius:5px}
+    .brow.clickable:hover{background:var(--surface-2);cursor:pointer}
+    .brow .lab{font-size:12.5px;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .bset{display:flex;flex-direction:column;gap:3px;min-width:0}
+    .b{display:flex;align-items:center;gap:8px;height:9px}
+    .b i{display:block;height:9px;border-radius:0 4px 4px 0}
+    .b span{font-family:var(--mono);font-size:11px;color:var(--ink-2);white-space:nowrap;line-height:1}
+    .pbar{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center;margin:9px 0;font-size:12.5px;color:var(--ink-2)}
+    .pt{position:relative;height:22px;background:var(--surface-2);border-radius:4px}
+    .pt i{position:absolute;left:0;top:0;height:100%;border-radius:0 4px 4px 0}
+    .pt .proj{background:repeating-linear-gradient(135deg,var(--s-nov) 0 2px,transparent 2px 6px);opacity:.45;border-radius:0 4px 4px 0}
+    .pt b{position:absolute;right:8px;top:2px;font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink)}
+    .pt .lbl{position:absolute;top:2px;font-family:var(--mono);font-size:12px;color:var(--ink);padding-left:8px;white-space:nowrap}
+
+    /* Controls & chips */
+    .ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+    .ctl input,.ctl select{font:inherit;font-size:13px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:7px 10px}
+    .ctl input{min-width:190px;flex:1 1 190px}
+    .pills{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+    .fpill{font:inherit;font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink-2);cursor:pointer}
+    .fpill.active{background:var(--s-nov);color:#fff;border-color:var(--s-nov)}
+    .fpill.good-active{background:var(--good-bright);color:#fff;border-color:var(--good-bright)}
+    .chip{display:inline-block;font-size:10.5px;font-weight:500;padding:1px 7px;border-radius:9px;margin-left:6px;background:var(--neu-bg);color:var(--ink-2);vertical-align:1px}
+    .chip.new{background:var(--good-bg);color:var(--good)}.chip.out{background:var(--bad-bg);color:var(--bad)}.chip.done{background:var(--good-bright);color:#fff}
+    .tmax{max-height:560px;overflow:auto;border:1px solid var(--line);border-radius:6px}
+    th.sort{cursor:pointer;user-select:none}
+    th.sort:hover{color:var(--ink)}
+    th.sort[data-dir="1"]::after{content:" â–²"}th.sort[data-dir="-1"]::after{content:" â–¼"}
+    td.nm{max-width:300px;overflow:hidden;text-overflow:ellipsis}
+    .note{font-size:12px;color:var(--ink-3);line-height:1.5}
+    ol.rank{list-style:none;margin:0;padding:0}
+    ol.rank li{display:flex;justify-content:space-between;gap:10px;padding:7px 4px;border-bottom:1px solid var(--grid);font-size:13px;border-radius:4px}
+    ol.rank li.clickable:hover{background:var(--surface-2);cursor:pointer}
+    ol.rank li:last-child{border:0}
+    ol.rank .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+    ol.rank .vv{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+
+    /* Interactive forecast toggles */
+    .sim-toggles{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+    .sim-toggles label{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;background:var(--surface-2);padding:5px 10px;border-radius:6px;cursor:pointer;border:1px solid var(--line)}
+
+    /* Map & manual address editor */
+    .addr-panel{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:12px 14px;margin-bottom:12px}
+    .addr-grid{display:grid;grid-template-columns:1.2fr 1.4fr .9fr auto;gap:8px;align-items:end}
+    .addr-field label{display:block;font-size:11px;font-weight:600;color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+    .addr-field input,.addr-field select{width:100%;font:inherit;font-size:13px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:7px 9px}
+    .addr-actions{display:flex;flex-wrap:wrap;gap:6px}
+    .addr-msg{font-size:12px;margin-top:8px;color:var(--ink-2)}
+    .addr-msg.ok{color:var(--good)}
+    .addr-msg.err{color:var(--bad)}
+    .map-layout{display:grid;grid-template-columns:1fr 340px;gap:14px;align-items:stretch}
+    #map-canvas{height:540px;border-radius:8px;border:1px solid var(--line);background:var(--surface-2);position:relative;overflow:hidden;z-index:1}
+    .map-side{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:8px;overflow:hidden;height:540px;background:var(--surface)}
+    .map-side-head{padding:10px 12px;border-bottom:1px solid var(--line);font-size:12.5px;font-weight:600;background:var(--surface-2);display:flex;justify-content:space-between;align-items:center}
+    .map-side-list{overflow-y:auto;flex:1;padding:6px;display:flex;flex-direction:column;gap:5px}
+    .m-card{padding:8px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12.5px}
+    .m-card:hover{background:var(--surface-2)}
+    .m-card.marked{background:var(--good-row);border-color:var(--good-border)}
+    .relocate-banner{background:var(--good-bg);color:var(--good);border:1px solid var(--good-border);padding:8px 12px;border-radius:6px;font-size:12.5px;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(10,16,24,.55);display:none;place-items:center;z-index:60;padding:16px}
+    .modal-backdrop.open{display:grid}
+    .modal{background:var(--surface);border:1px solid var(--line);border-radius:10px;max-width:520px;width:100%;padding:18px 20px;box-shadow:0 16px 40px rgba(0,0,0,.25);max-height:90vh;overflow-y:auto}
+    .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px}
+    .modal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+    .mstat{background:var(--surface-2);border-radius:6px;padding:9px 10px}
+    .mstat .k{font-size:11px;color:var(--ink-3);text-transform:uppercase}
+    .mstat .v{font-family:var(--mono);font-size:15px;font-weight:600;margin-top:2px}
+    .modal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:flex-end}
+
+    #tip{position:fixed;z-index:50;pointer-events:none;background:var(--ink);color:var(--bg);font-size:12px;padding:7px 10px;border-radius:6px;max-width:260px;display:none;line-height:1.5}
+    .empty-state{text-align:center;padding:40px 20px;color:var(--ink-2)}
+    @media(max-width:960px){.addr-grid{grid-template-columns:1fr 1fr}.map-layout{grid-template-columns:1fr}.map-side{height:320px}#map-canvas{height:400px}}
+    @media(max-width:560px){.addr-grid{grid-template-columns:1fr}.tile .v{font-size:21px}.brow{grid-template-columns:90px 1fr}.modal-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="head">
+    <div>
+      <h1>Reporte de ventas Â· JoaquÃ­n Tello</h1>
+      <div class="sub" id="sub">Cargando datosâ€¦</div>
+    </div>
+    <div class="head-actions">
+      <button type="button" class="pill-progress" id="head-prog" title="Ver avance de clientes sin compra en noviembre">Avance: 0 / 0</button>
+      <button type="button" class="btn sm" id="theme-btn" title="Cambiar tema claro/oscuro">ðŸŒ™ Oscuro</button>
+    </div>
+  </div>
+  <nav role="tablist" id="tabs">
+    <button role="tab" aria-selected="true" data-t="res">Resumen</button>
+    <button role="tab" aria-selected="false" data-t="map">Mapa de clientes</button>
+    <button role="tab" aria-selected="false" data-t="lit">Clientes Â· Litros</button>
+    <button role="tab" aria-selected="false" data-t="uni">Clientes Â· Unidades</button>
+  </nav>
+</div></header>
+
+<main class="wrap" id="main"><div class="panel empty-state">Cargando <code>datos.json</code>â€¦</div></main>
+<div id="tip"></div>
+
+<div class="modal-backdrop" id="modal-bg" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal" id="modal-box"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const DAYS = { nov: 21, oct: 31, ly: 30 }, MONTH_DAYS = 30;
+const PER = [
+  ['nov', 'Nov-26 (parcial al 21)', 'c-nov'],
+  ['oct', 'Oct-26 (completo)', 'c-oct'],
+  ['ly',  'Nov-25 (completo, AgustÃ­n D)', 'c-ly']
+];
+const FIXED = ['15081', '34113', '60582', '57584'];
+const ST = {
+  rec: 'ComprÃ³ en octubre y noviembre',
+  new: 'No comprÃ³ en octubre',
+  out: 'ComprÃ³ en octubre, aÃºn no en noviembre',
+  ly:  'Solo comprÃ³ en Nov-25'
+};
+
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const nf = (n, d = 0) => n.toLocaleString('es-AR', { minimumFractionDigits: d, maximumFractionDigits: d });
+const fL = n => nf(n, 0) + ' L';
+const fU = n => nf(n, 0) + ' u';
+const pctv = (a, b) => b > 0 ? a / b - 1 : null;
+const dh = p => p == null ? '<span class="d na">s/d</span>' : `<span class="d ${p >= 0 ? 'up' : 'dn'}">${p >= 0 ? 'â–²' : 'â–¼'} ${p >= 0 ? '+' : ''}${nf(p * 100, 1)}%</span>`;
+
+let CL = [];
+let C = new Map();
+let TOT = {};
+let ZONES = [];
+
+// Estado en memoria (el proyecto corre aislado en sandbox sin localStorage)
+const markedIds = new Set();
+const simState = { fix4: true, fixCirculo: false, addMarked: true };
+const view = {
+  tab: 'res',
+  pendQ: '', pendFilter: 'all', pendSort: 'oct',
+  lit: { q: '', st: 'all', markFilter: 'all', sort: 'nov', dir: -1 },
+  uni: { q: '', st: 'all', markFilter: 'all', sort: 'nov', dir: -1 },
+  map: {
+    q: '', st: 'all', zone: 'all', markFilter: 'all', addrFilter: 'all',
+    relocateId: null, editId: '', editAddr: '', editZone: '', editLat: '', editLng: '', addrMsg: '', addrMsgKind: ''
+  }
+};
+
+function computePeriodTotals(rows, k) {
+  let l = 0, u = 0;
+  for (const c of rows) { l += c[k].l; u += c[k].u; }
+  return { l, u };
+}
+
+function hydrateData(records) {
+  CL = records.map(r => {
+    const nov = { l: Number(r.nov_l) || 0, u: Number(r.nov_u) || 0 };
+    const oct = { l: Number(r.oct_l) || 0, u: Number(r.oct_u) || 0 };
+    const ly  = { l: Number(r.ly_l)  || 0, u: Number(r.ly_u)  || 0, activo: r.ly_activo !== false && (Number(r.ly_l) || 0) > 0 };
+    const st = nov.l > 0 ? (oct.l > 0 ? 'rec' : 'new') : (oct.l > 0 ? 'out' : 'ly');
+    return {
+      id: String(r.id),
+      n: String(r.nombre || ''),
+      direccion: String(r.direccion || ''),
+      zona: String(r.zona || 'CABA (zona a confirmar)'),
+      lat: Number(r.lat) || -34.6037,
+      lng: Number(r.lng) || -58.3816,
+      ubicacion_estimada: r.ubicacion_estimada !== false,
+      nov, oct, ly, st
+    };
+  });
+  C = new Map(CL.map(c => [c.id, c]));
+  TOT = {
+    nov: computePeriodTotals(CL, 'nov'),
+    oct: computePeriodTotals(CL, 'oct'),
+    ly:  computePeriodTotals(CL, 'ly')
+  };
+  ZONES = [...new Set(CL.map(c => c.zona))].sort((a, b) => a.localeCompare(b, 'es'));
+  if (!view.map.editId && CL.length) selectClientForAddress(CL[0].id, false);
+}
+
+const act = k => CL.filter(c => k === 'ly' ? c.ly.activo : c[k].l > 0);
+const T = k => TOT[k];
+const pendingClients = () => CL.filter(c => c.st === 'out');
+const canMark = c => c.nov.l <= 0;
+
+function toggleMark(id) {
+  const c = C.get(id);
+  if (!c || !canMark(c)) return;
+  if (markedIds.has(id)) markedIds.delete(id);
+  else markedIds.add(id);
+  updateHeaderProgress();
+}
+
+function progressStats() {
+  const pend = pendingClients();
+  const markedOut = pend.filter(c => markedIds.has(c.id));
+  const extraLy = CL.filter(c => c.st === 'ly' && markedIds.has(c.id));
+  const totL = pend.reduce((s, c) => s + c.oct.l, 0);
+  const totU = pend.reduce((s, c) => s + c.oct.u, 0);
+  const mkL = markedOut.reduce((s, c) => s + c.oct.l, 0);
+  const mkU = markedOut.reduce((s, c) => s + c.oct.u, 0);
+  const pctCount = pend.length ? (markedOut.length / pend.length) * 100 : 0;
+  const pctLit = totL ? (mkL / totL) * 100 : 0;
+  return { pendCount: pend.length, markedOutCount: markedOut.length, extraLyCount: extraLy.length, totL, totU, mkL, mkU, pctCount, pctLit };
+}
+
+function updateHeaderProgress() {
+  const p = progressStats();
+  const btn = document.getElementById('head-prog');
+  btn.textContent = `Avance: ${p.markedOutCount} / ${p.pendCount} (${nf(p.pctCount, 0)}%)`;
+}
+
+function renderProgressBanner(compact = false) {
+  const p = progressStats();
+  return `<div class="progress-box">
+    <div class="progress-top">
+      <div>
+        <strong>Avance de recuperaciÃ³n del mes</strong>
+        <span class="note" style="margin-left:8px">HacÃ© clic en cualquier cliente sin compra en noviembre para marcarlo en verde.</span>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${(p.markedOutCount + p.extraLyCount) > 0 ? `<button type="button" class="btn sm" data-action="clear-marks">Limpiar marcados (${p.markedOutCount + p.extraLyCount})</button>` : ''}
+        ${!compact ? `<button type="button" class="btn sm good" data-action="go-map-pending">Ver pendientes en el mapa</button>` : ''}
+      </div>
+    </div>
+    <div class="p-track" aria-label="Progreso de clientes marcados"><div class="p-fill" style="width:${p.pctCount.toFixed(1)}%"></div></div>
+    <div class="progress-stats" style="margin-top:8px">
+      <span>Clientes Oct pendientes marcados: <strong>${p.markedOutCount} / ${p.pendCount}</strong> (${nf(p.pctCount, 1)}%)</span>
+      <span>Litros Oct recuperables marcados: <strong>${fL(p.mkL)}</strong> de ${fL(p.totL)} (${nf(p.pctLit, 1)}%)</span>
+      <span>Unidades Oct marcadas: <strong>${fU(p.mkU)}</strong> de ${fU(p.totU)}</span>
+      ${p.extraLyCount > 0 ? `<span>+ <strong>${p.extraLyCount}</strong> clientes de Nov-25 marcados</span>` : ''}
+    </div>
+    <p class="note" style="margin:6px 0 0">Los marcados en verde se guardan en memoria mientras la pÃ¡gina estÃ¡ abierta (al recargar se reinician).</p>
+  </div>`;
+}
+
+// ---- proyecciones interactivas (en litros y unidades)
+function calcProjection(m) {
+  const fixedList = [];
+  if (simState.fix4) fixedList.push(...FIXED);
+  if (simState.fixCirculo) fixedList.push('54177');
+  const fx = fixedList.reduce((s, id) => s + Math.max(0, (C.get(id)?.nov[m] || 0)), 0);
+  const tot = T('nov')[m];
+  const baseProj = fx + (tot - fx) / DAYS.nov * MONTH_DAYS;
+  const markedBonus = simState.addMarked
+    ? pendingClients().filter(c => markedIds.has(c.id)).reduce((s, c) => s + Math.max(0, c.oct[m]), 0)
+    : 0;
+  return { baseProj, markedBonus, totalProj: baseProj + markedBonus, fx };
+}
+
+function periodBars(metric) {
+  const g = k => T(k)[metric];
+  const pr = calcProjection(metric);
+  const max = Math.max(g('nov'), g('oct'), g('ly'), pr.totalProj);
+  const f = metric === 'l' ? fL : fU;
+  const w = x => (max > 0 ? (x / max * 100) : 0).toFixed(2) + '%';
+  return `<div class="pbar"><span>Nov-26</span><div class="pt" data-tip="Nov-26 al 21: ${f(g('nov'))}<br>ProyecciÃ³n base: ${f(pr.baseProj)}${pr.markedBonus > 0 ? `<br>+ Marcados en verde (ref. Oct): ${f(pr.markedBonus)}` : ''}">
+    <i class="proj" style="width:${w(pr.totalProj)}"></i>
+    <i class="c-nov" style="width:${w(g('nov'))}"></i>
+    <span class="lbl" style="left:${w(g('nov'))}">${f(g('nov'))}${pr.totalProj > g('nov') ? ` â†’ ${f(pr.totalProj)}` : ''}</span>
+  </div></div>
+  <div class="pbar"><span>Oct-26</span><div class="pt"><i class="c-oct" style="width:${w(g('oct'))}"></i><b>${f(g('oct'))}</b></div></div>
+  <div class="pbar"><span>Nov-25</span><div class="pt"><i class="c-ly" style="width:${w(g('ly'))}"></i><b>${f(g('ly'))}</b></div></div>`;
+}
+
+// ---- tooltip
+const tip = document.getElementById('tip');
+document.addEventListener('mousemove', e => {
+  const t = e.target.closest && e.target.closest('[data-tip]');
+  if (!t) { tip.style.display = 'none'; return; }
+  tip.innerHTML = t.dataset.tip;
+  tip.style.display = 'block';
+  tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + 'px';
+  tip.style.top = Math.min(e.clientY + 14, innerHeight - tip.offsetHeight - 8) + 'px';
+});
+
+// ---- render Resumen (sin montos $)
+function renderRes() {
+  const n = T('nov'), o = T('oct'), l = T('ly');
+  const an = act('nov').length, ao = act('oct').length, al = act('ly').length;
+  const tile = (k, val, a, b) => `<div class="tile"><div class="k">${k}</div><div class="v">${val}</div>
+    <div class="r"><span>vs Oct-26 (completo)</span>${a}</div><div class="r"><span>vs Nov-25 (completo)</span>${b}</div></div>`;
+
+  const topShareL = (k, cnt) => {
+    const a = CL.filter(c => c[k].l > 0).sort((x, y) => y[k].l - x[k].l);
+    return a.slice(0, cnt).reduce((s, r) => s + r[k].l, 0) / T(k).l;
+  };
+  const mk = (k, a) => {
+    const t = T(k);
+    return { l: t.l, u: t.u, days: DAYS[k], ld: t.l / DAYS[k], ud: t.u / DAYS[k], a, la: t.l / a, ua: t.u / a, t5: topShareL(k, 5), t10: topShareL(k, 10), lu: t.l / t.u };
+  };
+  const X = { nov: mk('nov', an), oct: mk('oct', ao), ly: mk('ly', al) };
+  const rowsK = [
+    ['grp', 'Volumen'],
+    ['Litros totales', x => fL(x.l), 'l'],
+    ['Unidades totales', x => fU(x.u), 'u'],
+    ['Litros por dÃ­a', x => nf(x.ld, 0) + ' L', 'ld'],
+    ['Unidades por dÃ­a', x => nf(x.ud, 0) + ' u', 'ud'],
+    ['Litros por unidad', x => nf(x.lu, 2) + ' L', 'lu'],
+    ['grp', 'Cartera'],
+    ['Clientes activos', x => nf(x.a), 'a'],
+    ['Litros por cliente', x => nf(x.la, 0) + ' L', 'la'],
+    ['Unidades por cliente', x => nf(x.ua, 0) + ' u', 'ua'],
+    ['ConcentraciÃ³n top 5 clientes (litros)', x => nf(x.t5 * 100, 1) + '%', 't5', true],
+    ['ConcentraciÃ³n top 10 clientes (litros)', x => nf(x.t10 * 100, 1) + '%', 't10', true],
+  ];
+  const dcell = (a, b, pp) => pp ? `<span class="d na">${a - b >= 0 ? '+' : 'âˆ’'}${nf(Math.abs(a - b) * 100, 1)} pp</span>` : dh(b > 0 ? a / b - 1 : null);
+  const kpi = rowsK.map(r => {
+    if (r[0] === 'grp') return `<tr class="grp"><td colspan="6">${r[1]}</td></tr>`;
+    const [lab, f, key, pp] = r;
+    return `<tr><td>${lab}</td><td class="num">${f(X.nov)}</td><td class="num">${f(X.oct)}</td><td>${dcell(X.nov[key], X.oct[key], pp)}</td><td class="num">${f(X.ly)}</td><td>${dcell(X.nov[key], X.ly[key], pp)}</td></tr>`;
+  }).join('');
+
+  const prL = calcProjection('l'), prU = calcProjection('u');
+  const remDays = MONTH_DAYS - DAYS.nov;
+  const needL = Math.max(0, o.l - n.l), needU = Math.max(0, o.u - n.u);
+
+  const both = CL.filter(c => c.nov.l > 0 && c.oct.l > 0).map(c => ({ c, dl: c.nov.l - c.oct.l }));
+  const up = [...both].sort((a, b) => b.dl - a.dl).slice(0, 5);
+  const dn = [...both].sort((a, b) => a.dl - b.dl).slice(0, 5);
+  const newC = CL.filter(c => c.st === 'new').sort((a, b) => b.nov.l - a.nov.l);
+  const li = (c, txt) => `<li class="clickable" data-open-id="${esc(c.id)}"><span class="nm" title="${esc(c.n)}">${esc(c.n)}</span><span class="vv">${txt}</span></li>`;
+
+  const top10 = CL.filter(c => c.nov.l > 0).sort((a, b) => b.nov.l - a.nov.l).slice(0, 10);
+  const maxs = top10[0]?.nov.l || 1;
+  const conc = top10.map(r => `<div class="brow clickable" data-open-id="${esc(r.id)}" data-tip="Clic para ver detalle de ${esc(r.n)}<br>${fL(r.nov.l)} Â· ${nf(r.nov.l / n.l * 100, 1)}% del volumen"><div class="lab" title="${esc(r.n)}">${esc(r.n)}</div><div class="b"><i class="c-nov" style="width:${(r.nov.l / maxs * 72).toFixed(1)}%"></i><span>${nf(r.nov.l / n.l * 100, 1)}% (${fL(r.nov.l)})</span></div></div>`).join('');
+
+  return `
+  <div class="tiles">
+    ${tile('Litros Nov-26 parcial', fL(n.l), dh(pctv(n.l, o.l)), dh(pctv(n.l, l.l)))}
+    ${tile('Unidades Nov-26 parcial', fU(n.u), dh(pctv(n.u, o.u)), dh(pctv(n.u, l.u)))}
+    ${tile('Clientes activos', nf(an), dh(pctv(an, ao)), dh(pctv(an, al)))}
+    ${tile('Litros por cliente', fL(n.l / an), dh(pctv(n.l / an, o.l / ao)), dh(pctv(n.l / an, l.l / al)))}
+  </div>
+  <p class="note" style="margin:-6px 0 0">Noviembre 2026 estÃ¡ al dÃ­a 21 de 30 (70% del mes). Los montos en pesos fueron ocultados para publicar de forma segura en GitHub; todas las mÃ©tricas se siguen por volumen, unidades y actividad de clientes.</p>
+
+  <section class="panel" id="sec-pendientes">
+    <h2>Clientes de octubre que todavÃ­a no compraron en noviembre</h2>
+    <p class="hint">HacÃ© clic sobre un cliente para marcarlo o desmarcarlo en verde y seguir tu avance de gestiÃ³n.</p>
+    ${renderProgressBanner()}
+    <div class="ctl" style="margin-top:12px">
+      <input type="search" id="pend-q" placeholder="Buscar cliente pendiente, direcciÃ³n o zonaâ€¦" value="${esc(view.pendQ)}" aria-label="Buscar cliente pendiente">
+      <select id="pend-sort" aria-label="Ordenar pendientes">
+        <option value="lit" ${view.pendSort === 'lit' ? 'selected' : ''}>Mayor litros Oct</option>
+        <option value="uni" ${view.pendSort === 'uni' ? 'selected' : ''}>Mayor unidades Oct</option>
+        <option value="nom" ${view.pendSort === 'nom' ? 'selected' : ''}>Nombre A-Z</option>
+      </select>
+      <div class="pills" style="margin:0">
+        <button type="button" class="fpill ${view.pendFilter === 'all' ? 'active' : ''}" data-pf="all">Todos</button>
+        <button type="button" class="fpill ${view.pendFilter === 'unmarked' ? 'active' : ''}" data-pf="unmarked">Sin marcar</button>
+        <button type="button" class="fpill ${view.pendFilter === 'marked' ? 'good-active' : ''}" data-pf="marked">Marcados en verde</button>
+      </div>
+    </div>
+    <div class="pending-list" id="pend-grid"></div>
+  </section>
+
+  <div class="grid2">
+    <section class="panel"><h2>Litros por perÃ­odo</h2><p class="hint">Total de la cartera.</p>${periodBars('l')}</section>
+    <section class="panel"><h2>Unidades por perÃ­odo</h2><p class="hint">Total de la cartera.</p>${periodBars('u')}</section>
+  </div>
+
+  <div class="grid2">
+    <section class="panel">
+      <h2>Simulador de cierre de noviembre</h2>
+      <p class="hint">ActivÃ¡ o desactivÃ¡ supuestos para ver cÃ³mo cambia la proyecciÃ³n a 30 dÃ­as en litros y unidades.</p>
+      <div class="sim-toggles">
+        <label><input type="checkbox" id="sim-fix4" ${simState.fix4 ? 'checked' : ''}> Dejar fijos los 4 puntuales</label>
+        <label><input type="checkbox" id="sim-circ" ${simState.fixCirculo ? 'checked' : ''}> Dejar fijo CÃ­rculo Univ.</label>
+        <label><input type="checkbox" id="sim-mk" ${simState.addMarked ? 'checked' : ''}> Sumar marcados en verde (volumen Oct)</label>
+      </div>
+      <div class="tscroll"><table>
+        <thead><tr><th></th><th>Litros</th><th>Unidades</th></tr></thead>
+        <tbody>
+          <tr><td>Acumulado al 21</td><td class="num">${fL(n.l)}</td><td class="num">${fU(n.u)}</td></tr>
+          <tr><td>Ritmo diario ajustado</td><td class="num">${fL((n.l - prL.fx) / DAYS.nov)}</td><td class="num">${fU((n.u - prU.fx) / DAYS.nov)}</td></tr>
+          <tr><td>ProyecciÃ³n base a 30 dÃ­as</td><td class="num">${fL(prL.baseProj)}</td><td class="num">${fU(prU.baseProj)}</td></tr>
+          <tr><td>+ Clientes marcados en verde</td><td class="num" style="color:var(--good)">+${fL(prL.markedBonus)}</td><td class="num" style="color:var(--good)">+${fU(prU.markedBonus)}</td></tr>
+          <tr><td><strong>ProyecciÃ³n total simulada</strong></td><td class="num"><strong>${fL(prL.totalProj)}</strong></td><td class="num"><strong>${fU(prU.totalProj)}</strong></td></tr>
+          <tr><td>ProyecciÃ³n vs Oct-26</td><td>${dh(pctv(prL.totalProj, o.l))}</td><td>${dh(pctv(prU.totalProj, o.u))}</td></tr>
+          <tr><td>Falta para igualar octubre (${remDays} dÃ­as)</td><td class="num">${fL(needL)} (${fL(needL / remDays)}/dÃ­a)</td><td class="num">${fU(needU)} (${fU(needU / remDays)}/dÃ­a)</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="panel"><h2>Top 10 clientes de noviembre</h2><p class="hint">ParticipaciÃ³n sobre los litros del mes. HacÃ© clic en un cliente para ver su detalle.</p><div class="bars">${conc}</div></section>
+  </div>
+
+  <section class="panel"><h2>Indicadores generales</h2><p class="hint">ComparaciÃ³n de mÃ©tricas clave entre los tres perÃ­odos.</p>
+    <div class="tscroll"><table class="kpi"><thead><tr><th></th><th>Nov-26 parcial</th><th>Oct-26</th><th>Î” vs Oct</th><th>Nov-25</th><th>Î” vs Nov-25</th></tr></thead><tbody>${kpi}</tbody></table></div>
+  </section>
+
+  <div class="grid3">
+    <section class="panel"><h2>MÃ¡s crecieron (litros)</h2><p class="hint">Nov-26 al 21 vs Oct-26 completo.</p><ol class="rank">${up.map(x => li(x.c, '+' + fL(x.dl))).join('')}</ol></section>
+    <section class="panel"><h2>MÃ¡s diferencia vs Oct (litros)</h2><p class="hint">Nov-26 al 21 vs Oct-26 completo.</p><ol class="rank">${dn.map(x => li(x.c, 'âˆ’' + fL(Math.abs(x.dl)))).join('')}</ol></section>
+    <section class="panel"><h2>Nuevos en noviembre</h2><p class="hint">${newC.length} clientes sin compra en octubre.</p><ol class="rank">${newC.slice(0, 6).map(c => li(c, fL(c.nov.l))).join('')}</ol></section>
+  </div>`;
+}
+
+function fillPendingGrid() {
+  const grid = document.getElementById('pend-grid');
+  if (!grid) return;
+  const q = view.pendQ.trim().toLowerCase();
+  let list = pendingClients().filter(c => {
+    if (view.pendFilter === 'marked' && !markedIds.has(c.id)) return false;
+    if (view.pendFilter === 'unmarked' && markedIds.has(c.id)) return false;
+    if (q && !c.n.toLowerCase().includes(q) && !c.zona.toLowerCase().includes(q) && !c.direccion.toLowerCase().includes(q) && !c.id.includes(q)) return false;
+    return true;
+  });
+  list.sort((a, b) => {
+    if (view.pendSort === 'uni') return b.oct.u - a.oct.u;
+    if (view.pendSort === 'nom') return a.n.localeCompare(b.n, 'es');
+    return b.oct.l - a.oct.l;
+  });
+  if (!list.length) {
+    grid.innerHTML = `<div class="note" style="padding:12px">No hay clientes pendientes que coincidan con el filtro.</div>`;
+    return;
+  }
+  grid.innerHTML = list.map(c => {
+    const mk = markedIds.has(c.id);
+    return `<div class="p-item ${mk ? 'marked' : ''}" data-toggle-mark="${esc(c.id)}" role="button" tabindex="0" aria-pressed="${mk}">
+      <div class="p-left">
+        <span class="chk-dot">${mk ? 'âœ“' : ''}</span>
+        <div style="min-width:0">
+          <div class="p-name" title="${esc(c.n)}">${esc(c.n)}</div>
+          <div class="p-meta">${esc(c.direccion ? c.direccion + ' Â· ' + c.zona : c.zona)} Â· ID ${esc(c.id)}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div class="p-val"><div>${fL(c.oct.l)}</div><div class="p-meta">${fU(c.oct.u)}</div></div>
+        <button type="button" class="btn sm" data-open-id="${esc(c.id)}" title="Ver detalle del cliente" onclick="event.stopPropagation()">â„¹</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function bindRes() {
+  fillPendingGrid();
+  const pq = document.getElementById('pend-q');
+  const ps = document.getElementById('pend-sort');
+  if (pq) pq.addEventListener('input', e => { view.pendQ = e.target.value; fillPendingGrid(); });
+  if (ps) ps.addEventListener('change', e => { view.pendSort = e.target.value; fillPendingGrid(); });
+  document.querySelectorAll('[data-pf]').forEach(b => b.addEventListener('click', () => {
+    view.pendFilter = b.dataset.pf;
+    show('res', false);
+  }));
+  ['sim-fix4', 'sim-circ', 'sim-mk'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('change', () => {
+      simState.fix4 = document.getElementById('sim-fix4').checked;
+      simState.fixCirculo = document.getElementById('sim-circ').checked;
+      simState.addMarked = document.getElementById('sim-mk').checked;
+      show('res', false);
+    });
+  });
+}
+
+// ---- render Clientes (Litros / Unidades)
+function renderCli(t) {
+  const m = t === 'lit' ? 'l' : 'u';
+  const f = m === 'l' ? fL : fU;
+  const name = m === 'l' ? 'Litros' : 'Unidades';
+  const tot = { nov: T('nov')[m], oct: T('oct')[m], ly: T('ly')[m] };
+  const top = [...CL].sort((a, b) => Math.max(b.nov[m], b.oct[m], b.ly[m]) - Math.max(a.nov[m], a.oct[m], a.ly[m])).slice(0, 12);
+  const max = Math.max(...top.map(c => Math.max(c.nov[m], c.oct[m], c.ly[m])));
+  const bar = (c, k, cls) => {
+    const x = Math.max(0, c[k][m]);
+    return `<div class="b"><i class="${cls}" style="width:${x > 0 ? (x / max * 78).toFixed(1) : 0}%;min-width:${x > 0 ? 2 : 0}px"></i><span>${x > 0 ? f(x) : 'â€”'}</span></div>`;
+  };
+  const chart = top.map(c => `<div class="brow clickable" data-open-id="${esc(c.id)}" data-tip="<b>${esc(c.n)}</b><br>Nov-26: ${f(c.nov[m])}<br>Oct-26: ${f(c.oct[m])}<br>Nov-25: ${f(c.ly[m])}<br>Clic para ver detalle"><div class="lab" title="${esc(c.n)}">${esc(c.n)}</div><div class="bset">${bar(c, 'nov', 'c-nov')}${bar(c, 'oct', 'c-oct')}${bar(c, 'ly', 'c-ly')}</div></div>`).join('');
+  const lg = PER.map(p => `<span><i class="sw ${p[2]}"></i>${p[1]}</span>`).join('');
+  const heads = [['nov', 'Nov-26 parcial'], ['oct', 'Oct-26'], ['dOct', 'Î” vs Oct'], ['ly', 'Nov-25'], ['dLy', 'Î” vs Nov-25'], ['act', 'Detalle']];
+
+  return `
+  ${renderProgressBanner(true)}
+  <div class="tiles">
+    <div class="tile"><div class="k">${name} Nov-26 parcial</div><div class="v">${f(tot.nov)}</div><div class="r"><span>vs Oct-26</span>${dh(pctv(tot.nov, tot.oct))}</div><div class="r"><span>vs Nov-25</span>${dh(pctv(tot.nov, tot.ly))}</div></div>
+    <div class="tile"><div class="k">${name} Oct-26</div><div class="v">${f(tot.oct)}</div><div class="r"><span>Clientes activos</span><span class="d">${act('oct').length}</span></div></div>
+    <div class="tile"><div class="k">${name} Nov-25</div><div class="v">${f(tot.ly)}</div><div class="r"><span>Clientes activos</span><span class="d">${act('ly').length}</span></div></div>
+  </div>
+  <section class="panel"><h2>Los 12 clientes mÃ¡s grandes en ${name.toLowerCase()}</h2><p class="hint">Ordenados por su mejor perÃ­odo. HacÃ© clic en una fila para ver su detalle.</p>
+    <div class="legend">${lg}</div><div class="bars">${chart}</div>
+  </section>
+  <section class="panel">
+    <h2>Todos los clientes</h2>
+    <p class="hint">HacÃ© clic sobre los clientes <strong>sin compra en noviembre</strong> para marcarlos en verde. En el resto podÃ©s hacer clic para ver su detalle.</p>
+    <div class="pills">
+      <button type="button" class="fpill ${view[t].st === 'all' && view[t].markFilter === 'all' ? 'active' : ''}" data-qst="all" data-qmk="all">Todos</button>
+      <button type="button" class="fpill ${view[t].st === 'out' && view[t].markFilter === 'all' ? 'active' : ''}" data-qst="out" data-qmk="all">Sin compra Nov (pendientes)</button>
+      <button type="button" class="fpill ${view[t].markFilter === 'marked' ? 'good-active' : ''}" data-qst="all" data-qmk="marked">Marcados en verde</button>
+      <button type="button" class="fpill ${view[t].st === 'out' && view[t].markFilter === 'unmarked' ? 'active' : ''}" data-qst="out" data-qmk="unmarked">Pendientes sin marcar</button>
+    </div>
+    <div class="ctl">
+      <input type="search" id="q-${t}" placeholder="Buscar cliente, direcciÃ³n, zona o IDâ€¦" value="${esc(view[t].q)}" aria-label="Buscar cliente">
+      <select id="st-${t}" aria-label="Filtrar por estado">
+        <option value="all">Todos los estados</option>
+        ${Object.entries(ST).map(([k, v]) => `<option value="${k}" ${view[t].st === k ? 'selected' : ''}>${v}</option>`).join('')}
+      </select>
+      <select id="mk-${t}" aria-label="Filtrar por marca verde">
+        <option value="all" ${view[t].markFilter === 'all' ? 'selected' : ''}>Todas las marcas</option>
+        <option value="marked" ${view[t].markFilter === 'marked' ? 'selected' : ''}>Solo marcados en verde</option>
+        <option value="unmarked" ${view[t].markFilter === 'unmarked' ? 'selected' : ''}>Solo sin marcar</option>
+      </select>
+      <span class="note" id="cnt-${t}"></span>
+    </div>
+    <div class="tmax"><table><thead><tr><th class="sort" data-s="n">Cliente</th>${heads.map(h => h[0] === 'act' ? `<th>${h[1]}</th>` : `<th class="sort" data-s="${h[0]}">${h[1]}</th>`).join('')}</tr></thead><tbody id="tb-${t}"></tbody><tfoot id="tf-${t}"></tfoot></table></div>
+  </section>`;
+}
+
+function fillTable(t) {
+  const m = t === 'lit' ? 'l' : 'u', f = m === 'l' ? fL : fU, V = view[t];
+  const val = (c, k) => {
+    switch (k) {
+      case 'n': return c.n.toLowerCase();
+      case 'nov': case 'oct': case 'ly': return c[k][m];
+      case 'dOct': { const p = pctv(c.nov[m], c.oct[m]); return p == null ? -Infinity : p; }
+      case 'dLy': { const p = pctv(c.nov[m], c.ly[m]); return p == null ? -Infinity : p; }
+    }
+  };
+  const q = V.q.trim().toLowerCase();
+  const rows = CL.filter(c => {
+    if (V.st !== 'all' && c.st !== V.st) return false;
+    if (V.markFilter === 'marked' && !markedIds.has(c.id)) return false;
+    if (V.markFilter === 'unmarked' && markedIds.has(c.id)) return false;
+    if (q && !c.n.toLowerCase().includes(q) && !c.zona.toLowerCase().includes(q) && !c.direccion.toLowerCase().includes(q) && !c.id.includes(q)) return false;
+    return true;
+  });
+  rows.sort((a, b) => { const x = val(a, V.sort), y = val(b, V.sort); return (x < y ? -1 : x > y ? 1 : 0) * V.dir; });
+
+  const chip = c => {
+    if (markedIds.has(c.id)) return '<span class="chip done">âœ“ marcado</span>';
+    if (c.st === 'new') return '<span class="chip new">nuevo vs oct</span>';
+    if (c.st === 'out') return '<span class="chip out">sin compra nov</span>';
+    if (c.st === 'ly') return '<span class="chip">solo Nov-25</span>';
+    return '';
+  };
+  const cell = x => x > 0 ? `<td class="num">${f(x)}</td>` : '<td class="num" style="color:var(--ink-3)">â€”</td>';
+  const body = rows.map(c => {
+    const pend = canMark(c);
+    const mk = markedIds.has(c.id);
+    const chk = pend ? `<span class="row-chk ${mk ? 'marked' : ''}">${mk ? 'âœ“' : ''}</span>` : '';
+    const rowAttr = pend ? `class="clickable ${mk ? 'is-marked' : ''}" data-toggle-mark="${esc(c.id)}" title="Clic para marcar o desmarcar en verde"` : `class="clickable" data-open-id="${esc(c.id)}"`;
+    return `<tr ${rowAttr}><td class="nm">${chk}${esc(c.n)}${chip(c)}</td>${cell(c.nov[m])}${cell(c.oct[m])}<td>${dh(pctv(c.nov[m], c.oct[m]))}</td>${cell(c.ly[m])}<td>${dh(pctv(c.nov[m], c.ly[m]))}</td><td><button type="button" class="btn sm" data-open-id="${esc(c.id)}" onclick="event.stopPropagation()">Ver</button></td></tr>`;
+  }).join('');
+
+  document.getElementById('tb-' + t).innerHTML = body || '<tr><td colspan="7" style="color:var(--ink-3)">NingÃºn cliente coincide con el filtro.</td></tr>';
+  const s = k => rows.reduce((a, c) => a + Math.max(0, c[k][m]), 0);
+  const filtered = V.st !== 'all' || V.markFilter !== 'all' || q;
+  const tn = filtered ? s('nov') : T('nov')[m], to = filtered ? s('oct') : T('oct')[m], tl = filtered ? s('ly') : T('ly')[m];
+  document.getElementById('tf-' + t).innerHTML = `<tr><td>${filtered ? 'Total del filtro' : 'Total'}</td><td class="num">${f(tn)}</td><td class="num">${f(to)}</td><td>${dh(pctv(tn, to))}</td><td class="num">${f(tl)}</td><td>${dh(pctv(tn, tl))}</td><td></td></tr>`;
+  document.getElementById('cnt-' + t).textContent = rows.length + ' clientes';
+  document.querySelectorAll('#main th.sort').forEach(th => { th.dataset.dir = th.dataset.s === V.sort ? V.dir : ''; });
+}
+
+function bindCli(t) {
+  const V = view[t];
+  document.getElementById('q-' + t).addEventListener('input', e => { V.q = e.target.value; fillTable(t); });
+  document.getElementById('st-' + t).addEventListener('change', e => { V.st = e.target.value; fillTable(t); });
+  document.getElementById('mk-' + t).addEventListener('change', e => { V.markFilter = e.target.value; fillTable(t); });
+  document.querySelectorAll('[data-qst]').forEach(b => b.addEventListener('click', () => {
+    V.st = b.dataset.qst; V.markFilter = b.dataset.qmk;
+    show(t, false);
+  }));
+  document.querySelectorAll('#main th.sort').forEach(th => th.addEventListener('click', () => {
+    const k = th.dataset.s;
+    if (V.sort === k) V.dir *= -1; else { V.sort = k; V.dir = k === 'n' ? 1 : -1; }
+    fillTable(t);
+  }));
+  fillTable(t);
+}
+
+// ---- Mapa interactivo y carga manual de direcciones
+let leafMap = null, leafLayer = null, markerMap = new Map();
+
+function selectClientForAddress(id, redraw = true) {
+  const c = C.get(id);
+  if (!c) return;
+  view.map.editId = c.id;
+  view.map.editAddr = c.direccion || '';
+  view.map.editZone = c.zona || '';
+  view.map.editLat = String(c.lat);
+  view.map.editLng = String(c.lng);
+  view.map.addrMsg = '';
+  view.map.addrMsgKind = '';
+  if (redraw && view.tab === 'map') {
+    const prevScroll = document.getElementById('map-list')?.scrollTop || 0;
+    show('map', false);
+    setTimeout(() => {
+      const ml = document.getElementById('map-list');
+      if (ml) ml.scrollTop = prevScroll;
+      const mk = markerMap.get(c.id);
+      if (mk && leafMap) { leafMap.setView([c.lat, c.lng], Math.max(leafMap.getZoom(), 13)); mk.openPopup(); }
+    }, 50);
+  }
+}
+
+function pinColor(c) {
+  if (markedIds.has(c.id)) return '#16a34a';
+  if (c.st === 'out') return '#eb6834';
+  if (c.nov.l > 0) return '#2a78d6';
+  return '#6b7783';
+}
+
+function filteredMapClients() {
+  const V = view.map, q = V.q.trim().toLowerCase();
+  return CL.filter(c => {
+    if (V.st !== 'all' && c.st !== V.st) return false;
+    if (V.zone !== 'all' && c.zona !== V.zone) return false;
+    if (V.markFilter === 'marked' && !markedIds.has(c.id)) return false;
+    if (V.markFilter === 'unmarked' && markedIds.has(c.id)) return false;
+    if (V.addrFilter === 'with' && !c.direccion.trim()) return false;
+    if (V.addrFilter === 'without' && c.direccion.trim()) return false;
+    if (q && !c.n.toLowerCase().includes(q) && !c.zona.toLowerCase().includes(q) && !c.direccion.toLowerCase().includes(q) && !c.id.includes(q)) return false;
+    return true;
+  }).sort((a, b) => Math.max(b.nov.l, b.oct.l) - Math.max(a.nov.l, a.oct.l));
+}
+
+function renderMapView() {
+  const addrCount = CL.filter(c => c.direccion.trim()).length;
+  const sortedForSelect = [...CL].sort((a, b) => a.n.localeCompare(b.n, 'es'));
+  const vm = view.map;
+  return `
+  ${renderProgressBanner(true)}
+  <section class="panel">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px">
+      <div>
+        <h2>Mapa interactivo de clientes</h2>
+        <p class="hint" style="margin:0">CargÃ¡ direcciones de forma manual, ubicalas en el mapa o marcÃ¡ en verde los clientes pendientes.</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span class="chip" style="margin:0;padding:4px 10px;font-size:12px">Direcciones cargadas: <strong>${addrCount} / ${CL.length}</strong></span>
+        <button type="button" class="btn sm" id="btn-fit-map">Centrar mapa</button>
+        <button type="button" class="btn sm primary" id="btn-export-json" title="Descargar datos.json con las direcciones y coordenadas cargadas">Descargar datos.json</button>
+      </div>
+    </div>
+
+    <div class="addr-panel">
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px">Cargar direcciÃ³n manual</div>
+      <div class="addr-grid">
+        <div class="addr-field">
+          <label for="addr-cli">Cliente</label>
+          <select id="addr-cli">
+            ${sortedForSelect.map(c => `<option value="${esc(c.id)}" ${vm.editId === c.id ? 'selected' : ''}>${esc(c.n)}${c.direccion ? ' âœ“' : ''}</option>`).join('')}
+          </select>
+        </div>
+        <div class="addr-field">
+          <label for="addr-input">DirecciÃ³n (calle, altura, localidad)</label>
+          <input type="text" id="addr-input" placeholder="Ej: Av. Santa Fe 3250, CABA" value="${esc(vm.editAddr)}">
+        </div>
+        <div class="addr-field">
+          <label for="addr-zone">Zona / Barrio</label>
+          <input type="text" id="addr-zone" list="zones-dl" placeholder="Ej: Palermo" value="${esc(vm.editZone)}">
+          <datalist id="zones-dl">${ZONES.map(z => `<option value="${esc(z)}">`).join('')}</datalist>
+        </div>
+        <div class="addr-actions">
+          <button type="button" class="btn primary sm" id="btn-save-addr">Guardar direcciÃ³n</button>
+          <button type="button" class="btn sm" id="btn-geo-addr" title="Buscar coordenadas aproximadas de la direcciÃ³n escrita">ðŸ”Ž Buscar en mapa</button>
+          <button type="button" class="btn sm good" id="btn-pick-map" title="Hacer clic en el mapa para fijar la ubicaciÃ³n exacta">ðŸ“ Elegir punto en mapa</button>
+        </div>
+      </div>
+      ${vm.addrMsg ? `<div class="addr-msg ${vm.addrMsgKind}" id="addr-msg">${esc(vm.addrMsg)}</div>` : `<div class="addr-msg" id="addr-msg">Tip: escribÃ­ la direcciÃ³n y tocÃ¡ "ðŸ”Ž Buscar en mapa" o elegÃ­ el punto haciendo clic directo en el mapa. DespuÃ©s podÃ©s bajar el nuevo <code>datos.json</code>.</div>`}
+    </div>
+
+    <div class="legend">
+      <span><i class="sw c-good"></i>Marcado en verde (pendiente gestionado)</span>
+      <span><i class="sw c-oct"></i>Sin compra en Nov-26 (pendiente)</span>
+      <span><i class="sw c-nov"></i>Ya comprÃ³ en Nov-26</span>
+      <span><i class="sw" style="background:#6b7783"></i>Solo Nov-25</span>
+    </div>
+    ${vm.relocateId ? `<div class="relocate-banner">
+      <span>Modo ubicaciÃ³n manual: hacÃ© clic en el mapa para fijar la ubicaciÃ³n de <strong>${esc(C.get(vm.relocateId)?.n || '')}</strong>.</span>
+      <button type="button" class="btn sm" id="cancel-relocate">Cancelar</button>
+    </div>` : ''}
+    <div class="ctl">
+      <input type="search" id="map-q" placeholder="Buscar cliente, direcciÃ³n o zona en el mapaâ€¦" value="${esc(vm.q)}" aria-label="Buscar cliente en mapa">
+      <select id="map-st" aria-label="Filtrar estado en mapa">
+        <option value="all" ${vm.st === 'all' ? 'selected' : ''}>Todos los estados</option>
+        <option value="out" ${vm.st === 'out' ? 'selected' : ''}>Sin compra Nov (pendientes)</option>
+        <option value="rec" ${vm.st === 'rec' ? 'selected' : ''}>ComprÃ³ Oct y Nov</option>
+        <option value="new" ${vm.st === 'new' ? 'selected' : ''}>Nuevos en Nov</option>
+        <option value="ly"  ${vm.st === 'ly'  ? 'selected' : ''}>Solo Nov-25</option>
+      </select>
+      <select id="map-zone" aria-label="Filtrar por zona">
+        <option value="all">Todas las zonas (${ZONES.length})</option>
+        ${ZONES.map(z => `<option value="${esc(z)}" ${vm.zone === z ? 'selected' : ''}>${esc(z)}</option>`).join('')}
+      </select>
+      <select id="map-addr-filter" aria-label="Filtrar por direcciÃ³n cargada">
+        <option value="all" ${vm.addrFilter === 'all' ? 'selected' : ''}>Con y sin direcciÃ³n</option>
+        <option value="with" ${vm.addrFilter === 'with' ? 'selected' : ''}>Solo con direcciÃ³n cargada</option>
+        <option value="without" ${vm.addrFilter === 'without' ? 'selected' : ''}>Solo sin direcciÃ³n</option>
+      </select>
+      <select id="map-mk" aria-label="Filtrar marcados en mapa">
+        <option value="all" ${vm.markFilter === 'all' ? 'selected' : ''}>Todas las marcas</option>
+        <option value="marked" ${vm.markFilter === 'marked' ? 'selected' : ''}>Solo marcados en verde</option>
+        <option value="unmarked" ${vm.markFilter === 'unmarked' ? 'selected' : ''}>Solo sin marcar</option>
+      </select>
+    </div>
+    <div class="map-layout">
+      <div id="map-canvas"></div>
+      <aside class="map-side">
+        <div class="map-side-head"><span>Clientes visibles</span><span id="map-cnt" class="note">0</span></div>
+        <div class="map-side-list" id="map-list"></div>
+      </aside>
+    </div>
+  </section>`;
+}
+
+function popupHtml(c) {
+  const pend = canMark(c), mk = markedIds.has(c.id);
+  return `<div style="min-width:225px;font-family:var(--font);font-size:13px;line-height:1.45">
+    <div style="font-weight:600;margin-bottom:2px">${esc(c.n)}</div>
+    <div style="font-size:11.5px;color:#445;margin-bottom:4px">${c.direccion ? `<strong>${esc(c.direccion)}</strong> Â· ` : ''}${esc(c.zona)}${c.ubicacion_estimada ? ' Â· <i>ubicaciÃ³n estimada</i>' : ' Â· ubicaciÃ³n confirmada'}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:12px;margin-bottom:8px">
+      <span>Nov-26:</span><strong style="text-align:right">${c.nov.l > 0 ? fL(c.nov.l) : 'â€”'}</strong>
+      <span>Oct-26:</span><strong style="text-align:right">${c.oct.l > 0 ? fL(c.oct.l) : 'â€”'}</strong>
+      <span>Unid. Oct:</span><strong style="text-align:right">${c.oct.u > 0 ? fU(c.oct.u) : 'â€”'}</strong>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      ${pend ? `<button type="button" class="btn sm ${mk ? '' : 'good'}" onclick="window.__toggleFromMap('${esc(c.id)}')">${mk ? 'Quitar verde' : 'âœ“ Marcar en verde'}</button>` : ''}
+      <button type="button" class="btn sm" onclick="window.__editAddress('${esc(c.id)}')">âœï¸ Cargar direcciÃ³n</button>
+      <button type="button" class="btn sm" onclick="window.__relocate('${esc(c.id)}')">ðŸ“ Mover pin</button>
+      <button type="button" class="btn sm" onclick="window.__openModal('${esc(c.id)}')">Detalle</button>
+    </div>
+  </div>`;
+}
+
+function renderSvgFallback(list) {
+  const box = document.getElementById('map-canvas');
+  const minLat = -34.82, maxLat = -34.20, minLng = -59.55, maxLng = -58.18;
+  const W = 760, H = 540;
+  const px = lng => ((lng - minLng) / (maxLng - minLng)) * (W - 60) + 30;
+  const py = lat => H - (((lat - minLat) / (maxLat - minLat)) * (H - 60) + 30);
+  const pts = list.map(c => {
+    const x = px(c.lng), y = py(c.lat), col = pinColor(c), r = markedIds.has(c.id) ? 8 : 5.5;
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${col}" stroke="#fff" stroke-width="1.5" style="cursor:pointer" data-svg-id="${esc(c.id)}"><title>${esc(c.n)} (${esc(c.zona)})</title></circle>`;
+  }).join('');
+  box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:100%;display:block;background:var(--surface-2)">
+    <text x="16" y="24" fill="var(--ink-3)" font-size="12">Mapa esquemÃ¡tico por coordenadas Â· HacÃ© clic en un punto</text>
+    ${pts}
+  </svg>`;
+  box.querySelectorAll('[data-svg-id]').forEach(el => el.addEventListener('click', () => {
+    const c = C.get(el.dataset.svgId);
+    if (!c) return;
+    if (canMark(c)) { toggleMark(c.id); refreshMapMarkers(); }
+    else openClientModal(c.id);
+  }));
+}
+
+function refreshMapMarkers() {
+  const list = filteredMapClients();
+  const cnt = document.getElementById('map-cnt');
+  const side = document.getElementById('map-list');
+  if (cnt) cnt.textContent = `${list.length} clientes`;
+  if (side) {
+    side.innerHTML = list.slice(0, 140).map(c => {
+      const mk = markedIds.has(c.id), pend = canMark(c);
+      return `<div class="m-card ${mk ? 'marked' : ''}" data-focus-pin="${esc(c.id)}">
+        <div style="min-width:0;flex:1">
+          <div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.n)}</div>
+          <div class="p-meta">${esc(c.direccion ? c.direccion + ' Â· ' + c.zona : c.zona)} Â· ${c.nov.l > 0 ? 'Nov ' + fL(c.nov.l) : 'Oct ' + fL(c.oct.l)}</div>
+        </div>
+        <div style="display:flex;gap:4px;align-items:center">
+          <button type="button" class="btn sm" data-edit-addr="${esc(c.id)}" title="Cargar o editar direcciÃ³n" onclick="event.stopPropagation()">âœï¸</button>
+          ${pend ? `<button type="button" class="btn sm ${mk ? 'good' : ''}" data-toggle-mark="${esc(c.id)}" onclick="event.stopPropagation()">${mk ? 'âœ“' : 'Marcar'}</button>` : '<span class="chip">Nov</span>'}
+        </div>
+      </div>`;
+    }).join('') || '<div class="note" style="padding:10px">NingÃºn cliente coincide con el filtro.</div>';
+  }
+
+  if (typeof window.L === 'undefined') { renderSvgFallback(list); return; }
+  if (!leafLayer) return;
+  leafLayer.clearLayers();
+  markerMap.clear();
+  for (const c of list) {
+    const vol = Math.max(c.nov.l, c.oct.l, c.ly.l);
+    const radius = Math.max(6, Math.min(14, 5 + Math.sqrt(vol / 80) * 1.6));
+    const col = pinColor(c);
+    const m = L.circleMarker([c.lat, c.lng], {
+      radius: markedIds.has(c.id) ? radius + 2 : radius,
+      color: c.direccion ? '#0f1a24' : '#ffffff',
+      weight: markedIds.has(c.id) ? 2.5 : (c.direccion ? 2 : 1.5),
+      fillColor: col,
+      fillOpacity: 0.9
+    });
+    m.bindPopup(() => popupHtml(c));
+    m.bindTooltip(`${esc(c.n)}${c.direccion ? ' Â· ' + esc(c.direccion) : ' (' + esc(c.zona) + ')'}`, { direction: 'top', offset: [0, -6] });
+    m.addTo(leafLayer);
+    markerMap.set(c.id, m);
+  }
+}
+
+function initLeafletMap() {
+  const el = document.getElementById('map-canvas');
+  if (!el) return;
+  if (typeof window.L === 'undefined') { refreshMapMarkers(); return; }
+  if (leafMap) { leafMap.remove(); leafMap = null; }
+  leafMap = L.map(el).setView([-34.6037, -58.425], 11);
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri',
+    maxZoom: 19
+  }).addTo(leafMap);
+  leafLayer = L.layerGroup().addTo(leafMap);
+  leafMap.on('click', e => {
+    if (!view.map.relocateId) return;
+    const c = C.get(view.map.relocateId);
+    if (c) {
+      const addrInput = document.getElementById('addr-input');
+      const zoneInput = document.getElementById('addr-zone');
+      if (addrInput && view.map.editId === c.id && addrInput.value.trim()) {
+        c.direccion = addrInput.value.trim();
+        view.map.editAddr = c.direccion;
+      }
+      if (zoneInput && view.map.editId === c.id && zoneInput.value.trim()) {
+        c.zona = zoneInput.value.trim();
+        view.map.editZone = c.zona;
+        if (!ZONES.includes(c.zona)) ZONES = [...new Set(CL.map(x => x.zona))].sort((a, b) => a.localeCompare(b, 'es'));
+      }
+      c.lat = Number(e.latlng.lat.toFixed(5));
+      c.lng = Number(e.latlng.lng.toFixed(5));
+      c.ubicacion_estimada = false;
+      view.map.editLat = String(c.lat);
+      view.map.editLng = String(c.lng);
+      view.map.addrMsg = `UbicaciÃ³n fijada para ${c.n} (${c.lat}, ${c.lng}).`;
+      view.map.addrMsgKind = 'ok';
+      view.map.relocateId = null;
+      show('map', false);
+      setTimeout(() => {
+        const mk = markerMap.get(c.id);
+        if (mk && leafMap) { leafMap.setView([c.lat, c.lng], 14); mk.openPopup(); }
+      }, 60);
+    }
+  });
+  refreshMapMarkers();
+}
+
+async function geocodeAddress() {
+  const vm = view.map;
+  const c = C.get(vm.editId);
+  const addr = document.getElementById('addr-input')?.value.trim() || '';
+  const zone = document.getElementById('addr-zone')?.value.trim() || '';
+  vm.editAddr = addr;
+  vm.editZone = zone;
+  if (!c) return;
+  if (!addr) {
+    vm.addrMsg = 'EscribÃ­ primero una direcciÃ³n para buscarla en el mapa.';
+    vm.addrMsgKind = 'err';
+    show('map', false);
+    return;
+  }
+  const msgEl = document.getElementById('addr-msg');
+  if (msgEl) { msgEl.className = 'addr-msg'; msgEl.textContent = 'Buscando direcciÃ³nâ€¦'; }
+  try {
+    const query = encodeURIComponent(`${addr}, Buenos Aires, Argentina`);
+    const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${query}`);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (!Array.isArray(data) || !data.length) {
+      vm.addrMsg = 'No encontrÃ© esa direcciÃ³n automÃ¡ticamente. TocÃ¡ "ðŸ“ Elegir punto en mapa" para ubicarlo con un clic.';
+      vm.addrMsgKind = 'err';
+      show('map', false);
+      return;
+    }
+    c.direccion = addr;
+    if (zone) {
+      c.zona = zone;
+      if (!ZONES.includes(zone)) ZONES = [...new Set(CL.map(x => x.zona))].sort((a, b) => a.localeCompare(b, 'es'));
+    }
+    c.lat = Number(parseFloat(data[0].lat).toFixed(5));
+    c.lng = Number(parseFloat(data[0].lon).toFixed(5));
+    c.ubicacion_estimada = false;
+    vm.editLat = String(c.lat);
+    vm.editLng = String(c.lng);
+    vm.addrMsg = `DirecciÃ³n guardada y ubicada en el mapa para ${c.n}.`;
+    vm.addrMsgKind = 'ok';
+    show('map', false);
+    setTimeout(() => {
+      const mk = markerMap.get(c.id);
+      if (mk && leafMap) { leafMap.setView([c.lat, c.lng], 15); mk.openPopup(); }
+    }, 60);
+  } catch {
+    vm.addrMsg = 'No se pudo consultar el buscador de direcciones desde el navegador. GuardÃ¡ la direcciÃ³n y usÃ¡ "ðŸ“ Elegir punto en mapa".';
+    vm.addrMsgKind = 'err';
+    show('map', false);
+  }
+}
+
+function bindMap() {
+  initLeafletMap();
+  const vm = view.map;
+  document.getElementById('addr-cli').addEventListener('change', e => selectClientForAddress(e.target.value, true));
+  document.getElementById('addr-input').addEventListener('input', e => { vm.editAddr = e.target.value; });
+  document.getElementById('addr-zone').addEventListener('input', e => { vm.editZone = e.target.value; });
+
+  document.getElementById('btn-save-addr').addEventListener('click', () => {
+    const c = C.get(vm.editId);
+    if (!c) return;
+    c.direccion = document.getElementById('addr-input').value.trim();
+    const zn = document.getElementById('addr-zone').value.trim();
+    if (zn) c.zona = zn;
+    vm.editAddr = c.direccion;
+    vm.editZone = c.zona;
+    ZONES = [...new Set(CL.map(x => x.zona))].sort((a, b) => a.localeCompare(b, 'es'));
+    vm.addrMsg = c.direccion
+      ? `DirecciÃ³n "${c.direccion}" guardada en memoria para ${c.n}.`
+      : `Se limpiÃ³ la direcciÃ³n de ${c.n}.`;
+    vm.addrMsgKind = 'ok';
+    show('map', false);
+    setTimeout(() => {
+      const mk = markerMap.get(c.id);
+      if (mk && leafMap) { leafMap.setView([c.lat, c.lng], Math.max(leafMap.getZoom(), 13)); mk.openPopup(); }
+    }, 50);
+  });
+
+  document.getElementById('btn-geo-addr').addEventListener('click', geocodeAddress);
+  document.getElementById('btn-pick-map').addEventListener('click', () => {
+    vm.editAddr = document.getElementById('addr-input').value.trim();
+    vm.editZone = document.getElementById('addr-zone').value.trim();
+    vm.relocateId = vm.editId;
+    show('map', false);
+  });
+
+  document.getElementById('map-q').addEventListener('input', e => { vm.q = e.target.value; refreshMapMarkers(); });
+  document.getElementById('map-st').addEventListener('change', e => { vm.st = e.target.value; refreshMapMarkers(); });
+  document.getElementById('map-zone').addEventListener('change', e => { vm.zone = e.target.value; refreshMapMarkers(); });
+  document.getElementById('map-addr-filter').addEventListener('change', e => { vm.addrFilter = e.target.value; refreshMapMarkers(); });
+  document.getElementById('map-mk').addEventListener('change', e => { vm.markFilter = e.target.value; refreshMapMarkers(); });
+
+  document.getElementById('btn-fit-map').addEventListener('click', () => {
+    const list = filteredMapClients();
+    if (leafMap && list.length) {
+      const bounds = L.latLngBounds(list.map(c => [c.lat, c.lng]));
+      leafMap.fitBounds(bounds.pad(0.1));
+    }
+  });
+  document.getElementById('btn-export-json').addEventListener('click', () => {
+    const payload = CL.map(c => ({
+      id: c.id, nombre: c.n, direccion: c.direccion, zona: c.zona,
+      lat: c.lat, lng: c.lng, ubicacion_estimada: c.ubicacion_estimada,
+      nov_l: c.nov.l, nov_u: c.nov.u,
+      oct_l: c.oct.l, oct_u: c.oct.u,
+      ly_l: c.ly.l, ly_u: c.ly.u, ly_activo: c.ly.activo
+    }));
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'datos.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  const cancelRel = document.getElementById('cancel-relocate');
+  if (cancelRel) cancelRel.addEventListener('click', () => { vm.relocateId = null; show('map', false); });
+}
+
+window.__toggleFromMap = id => {
+  toggleMark(id);
+  show('map', false);
+  setTimeout(() => {
+    const mk = markerMap.get(id);
+    if (mk && leafMap) mk.openPopup();
+  }, 40);
+};
+window.__relocate = id => {
+  selectClientForAddress(id, false);
+  view.map.relocateId = id;
+  show('map', false);
+};
+window.__editAddress = id => {
+  selectClientForAddress(id, true);
+  setTimeout(() => document.getElementById('addr-input')?.focus(), 70);
+};
+window.__openModal = id => openClientModal(id);
+
+// ---- Modal detalle cliente
+const modalBg = document.getElementById('modal-bg');
+const modalBox = document.getElementById('modal-box');
+
+function openClientModal(id) {
+  const c = C.get(id);
+  if (!c) return;
+  const pend = canMark(c), mk = markedIds.has(c.id);
+  modalBox.innerHTML = `
+    <div class="modal-head">
+      <div>
+        <h2 id="modal-title" style="font-size:17px">${esc(c.n)}</h2>
+        <div class="note">ID ${esc(c.id)} Â· ${c.direccion ? `<strong>${esc(c.direccion)}</strong> Â· ` : ''}${esc(c.zona)} Â· ${ST[c.st]}</div>
+      </div>
+      <button type="button" class="btn sm" id="modal-close">âœ•</button>
+    </div>
+    <div class="modal-grid">
+      <div class="mstat"><div class="k">Nov-26 (al 21)</div><div class="v">${c.nov.l > 0 ? fL(c.nov.l) : 'â€”'}</div><div class="note">${nf(c.nov.u)} unidades</div></div>
+      <div class="mstat"><div class="k">Oct-26 (completo)</div><div class="v">${c.oct.l > 0 ? fL(c.oct.l) : 'â€”'}</div><div class="note">${nf(c.oct.u)} unidades</div></div>
+      <div class="mstat"><div class="k">Nov-25</div><div class="v">${c.ly.l > 0 ? fL(c.ly.l) : 'â€”'}</div><div class="note">${nf(c.ly.u)} unidades</div></div>
+    </div>
+    <div class="modal-actions">
+      ${pend ? `<button type="button" class="btn ${mk ? '' : 'good'}" id="modal-mark">${mk ? 'Quitar marca verde' : 'âœ“ Marcar en verde (gestionado)'}</button>` : ''}
+      <button type="button" class="btn" id="modal-addr">âœï¸ Cargar direcciÃ³n</button>
+      <button type="button" class="btn primary" id="modal-gomap">Ver en el mapa</button>
+    </div>`;
+  modalBg.classList.add('open');
+  document.getElementById('modal-close').onclick = () => modalBg.classList.remove('open');
+  const mm = document.getElementById('modal-mark');
+  if (mm) mm.onclick = () => { toggleMark(c.id); modalBg.classList.remove('open'); show(view.tab, false); };
+  document.getElementById('modal-addr').onclick = () => {
+    modalBg.classList.remove('open');
+    selectClientForAddress(c.id, false);
+    show('map');
+    setTimeout(() => document.getElementById('addr-input')?.focus(), 80);
+  };
+  document.getElementById('modal-gomap').onclick = () => {
+    modalBg.classList.remove('open');
+    view.map.q = c.n;
+    show('map');
+    setTimeout(() => {
+      const mkPin = markerMap.get(c.id);
+      if (mkPin && leafMap) { leafMap.setView([c.lat, c.lng], 14); mkPin.openPopup(); }
+    }, 80);
+  };
+}
+modalBg.addEventListener('click', e => { if (e.target === modalBg) modalBg.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') modalBg.classList.remove('open'); });
+
+// ---- DelegaciÃ³n global de clics
+const main = document.getElementById('main');
+main.addEventListener('click', e => {
+  const actBtn = e.target.closest('[data-action]');
+  if (actBtn) {
+    if (actBtn.dataset.action === 'clear-marks') {
+      markedIds.clear();
+      updateHeaderProgress();
+      show(view.tab, false);
+    } else if (actBtn.dataset.action === 'go-map-pending') {
+      view.map.st = 'out';
+      view.map.markFilter = 'all';
+      show('map');
+    }
+    return;
+  }
+  const editAddrEl = e.target.closest('[data-edit-addr]');
+  if (editAddrEl) {
+    selectClientForAddress(editAddrEl.dataset.editAddr, true);
+    setTimeout(() => document.getElementById('addr-input')?.focus(), 70);
+    return;
+  }
+  const focusEl = e.target.closest('[data-focus-pin]');
+  if (focusEl) {
+    const id = focusEl.dataset.focusPin;
+    const c = C.get(id), mk = markerMap.get(id);
+    selectClientForAddress(id, false);
+    const sel = document.getElementById('addr-cli');
+    const ai = document.getElementById('addr-input');
+    const az = document.getElementById('addr-zone');
+    if (sel) sel.value = c.id;
+    if (ai) ai.value = c.direccion || '';
+    if (az) az.value = c.zona || '';
+    if (c && mk && leafMap) { leafMap.setView([c.lat, c.lng], 14); mk.openPopup(); }
+    return;
+  }
+  const toggleEl = e.target.closest('[data-toggle-mark]');
+  if (toggleEl) {
+    toggleMark(toggleEl.dataset.toggleMark);
+    show(view.tab, false);
+    return;
+  }
+  const openEl = e.target.closest('[data-open-id]');
+  if (openEl) {
+    openClientModal(openEl.dataset.openId);
+  }
+});
+
+main.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[data-toggle-mark]')) {
+    e.preventDefault();
+    e.target.click();
+  }
+});
+
+// ---- NavegaciÃ³n y tema
+function show(t, scrollTop = true) {
+  const prevPendScroll = document.getElementById('pend-grid')?.scrollTop || 0;
+  const prevTableScroll = document.querySelector('.tmax')?.scrollTop || 0;
+  view.tab = t;
+  document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.t === t));
+  if (t === 'res') { main.innerHTML = renderRes(); bindRes(); }
+  else if (t === 'map') { main.innerHTML = renderMapView(); bindMap(); }
+  else { main.innerHTML = renderCli(t); bindCli(t); }
+  if (!scrollTop) {
+    const pg = document.getElementById('pend-grid');
+    if (pg) pg.scrollTop = prevPendScroll;
+    const tm = document.querySelector('.tmax');
+    if (tm) tm.scrollTop = prevTableScroll;
+  }
+  try { history.replaceState(null, '', '#' + t); } catch (e) {}
+  if (scrollTop) scrollTo(0, 0);
+}
+
+document.getElementById('tabs').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (b) show(b.dataset.t);
+});
+
+document.getElementById('head-prog').addEventListener('click', () => {
+  show('res');
+  setTimeout(() => document.getElementById('sec-pendientes')?.scrollIntoView({ behavior: 'smooth' }), 40);
+});
+
+const themeBtn = document.getElementById('theme-btn');
+themeBtn.addEventListener('click', () => {
+  const cur = document.documentElement.dataset.theme;
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  themeBtn.textContent = next === 'dark' ? 'â˜€ï¸ Claro' : 'ðŸŒ™ Oscuro';
+});
+
+// ---- Carga desde datos.json
+fetch('datos.json')
+  .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+  .then(json => {
+    hydrateData(json);
+    updateHeaderProgress();
+    document.getElementById('sub').textContent = `Ventas al 21/11/2026 Â· ${CL.length} clientes cargados desde datos.json (montos ocultos)`;
+    const h = location.hash.slice(1);
+    show(['res', 'map', 'lit', 'uni'].includes(h) ? h : 'res');
+  })
+  .catch(() => {
+    document.getElementById('sub').textContent = 'No se pudo cargar datos.json';
+    main.innerHTML = `<div class="panel empty-state"><h2>No pude cargar <code>datos.json</code></h2><p>Si abriste <code>index.html</code> con doble clic (<code>file://</code>), probÃ¡ verlo desde el lab o con un servidor local.</p></div>`;
+  });
+</script>
+</body>
+</html>
