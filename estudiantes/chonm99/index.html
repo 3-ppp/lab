@@ -118,6 +118,7 @@ button, input { font: inherit; }
 .study-card h2 { margin: 0 0 5px; color: var(--wine); font-size: 22px; font-variant: small-caps; letter-spacing: .06em; }
 .study-note { margin: 0 0 13px; color: var(--muted); font-size: 13px; }
 .upload-label, .counter-button, .remove-file { display: inline-block; padding: 8px 12px; border: 1px solid #aa9875; border-radius: 0; color: var(--ink); background: #f7f0e1; cursor: pointer; font: inherit; font-variant: small-caps; }
+.session-button, .pdf-link { display: inline-block; padding: 7px 10px; border: 1px solid #aa9875; color: var(--wine); background: #f7f0e1; cursor: pointer; font: inherit; font-size: 13px; text-decoration: none; }
 .upload-label { color: #fff5df; background: var(--wine); }
 .upload-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .upload-label.secondary { color: var(--wine); background: #f7f0e1; }
@@ -128,11 +129,14 @@ button, input { font: inherit; }
 .file-item summary { color: var(--wine); cursor: pointer; overflow-wrap: anywhere; }
 .file-item pre { max-height: 260px; overflow: auto; margin: 10px 0; padding: 10px; border: 1px solid var(--line); background: #f7f0e1; white-space: pre-wrap; overflow-wrap: anywhere; font: 13px/1.5 Georgia, serif; }
 .pdf-preview { width: 100%; height: min(560px, 70vh); margin: 10px 0; border: 1px solid var(--line); background: white; }
+.pdf-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
 .remove-file { padding: 5px 9px; color: var(--wine); font-size: 13px; }
 .counter { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
 .counter strong { min-width: 56px; color: var(--wine); font-size: 42px; line-height: 1; text-align: center; }
 .counter-button { min-width: 42px; font-size: 21px; }
 .counter-caption { margin-top: 12px; color: var(--muted); font-size: 13px; }
+.session-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.session-status { min-height: 1.4em; margin: 8px 0 0; color: var(--muted); font-size: 12px; }
 .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 15px; border-bottom: 1px solid var(--line); background: #e9dfc9; }
 .tabs { display: flex; gap: 0; }
 .tab, .clear {
@@ -220,10 +224,10 @@ button, input { font: inherit; }
 <div class="progress" role="progressbar" aria-label="Avance de lecturas" aria-valuemin="0" aria-valuemax="100"><span id="bar"></span></div>
 <section class="study-tools" aria-label="Herramientas para preparar el final">
   <div class="study-card"><h2>Mis resúmenes</h2><p class="study-note">Elegí archivos .txt, .md o .pdf, o una carpeta entera. Podés leerlos acá mientras la página esté abierta.</p><div class="upload-actions"><input class="file-input" id="summaryFiles" type="file" accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf" multiple aria-label="Elegir archivos de resumen"><label class="upload-label" for="summaryFiles">＋ Adjuntar archivos</label><input class="file-input" id="summaryFolder" type="file" accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf" webkitdirectory directory multiple aria-label="Elegir una carpeta de resúmenes"><label class="upload-label secondary" for="summaryFolder">＋ Adjuntar carpeta</label></div><div class="file-list" id="fileList" aria-live="polite"><span class="study-note">Todavía no adjuntaste resúmenes.</span></div></div>
-  <div class="study-card"><h2>Contador de puchos</h2><p class="study-note">Un registro para acompañar tus horas de estudio.</p><div class="counter"><button class="counter-button" id="smokeLess" type="button" aria-label="Restar un pucho">−</button><strong id="smokeCount" aria-live="polite">0</strong><button class="counter-button" id="smokeMore" type="button" aria-label="Sumar un pucho">＋</button></div><div class="counter-caption">fumados mientras preparás el final · solo por esta sesión</div></div>
+  <div class="study-card"><h2>Contador de puchos</h2><p class="study-note">Un registro para acompañar tus horas de estudio.</p><div class="counter"><button class="counter-button" id="smokeLess" type="button" aria-label="Restar un pucho">−</button><strong id="smokeCount" aria-live="polite">0</strong><button class="counter-button" id="smokeMore" type="button" aria-label="Sumar un pucho">＋</button></div><div class="counter-caption">fumados mientras preparás el final</div><div class="session-actions"><button class="session-button" id="saveSmoke" type="button">Guardar contador en mi PC</button><input class="file-input" id="loadSmoke" type="file" accept=".json,application/json" aria-label="Cargar contador guardado"><label class="session-button" for="loadSmoke">Cargar contador</label></div><p class="session-status" id="smokeStatus" aria-live="polite">Descargá un archivo para conservar el contador entre sesiones.</p></div>
 </section>
 <section class="panel"><div class="tools"><div class="tabs"><button class="tab active" data-filter="all" type="button">Todos</button><button class="tab" data-filter="read" type="button">Leídos</button><button class="tab" data-filter="todo" type="button">Pendientes</button></div><input class="search" id="search" placeholder="Buscar por autor o título…" aria-label="Buscar lecturas"><button class="clear" id="reset" type="button">Desmarcar todo</button></div><div id="list" aria-live="polite"></div></section>
-<p class="foot">Las marcas, los resúmenes adjuntos y el contador se guardan solo mientras esta página está abierta. Al recargar, se reinician. Los archivos quedan en tu navegador y no se envían al sitio.</p>
+<p class="foot">Los resúmenes adjuntos duran hasta que cierres o recargues la página; volvé a seleccionarlos en la próxima sesión. Para conservar el contador, guardalo en tu PC y cargalo al volver. Los archivos quedan en tu navegador y no se envían al sitio.</p>
 <script>
 let items = [];
 let done = {};
@@ -248,10 +252,20 @@ function drawSummaries() {
     title.textContent = summary.name;
     let content;
     if (summary.type === 'application/pdf') {
-      content = document.createElement('iframe');
-      content.className = 'pdf-preview';
-      content.src = summary.url;
-      content.title = 'Vista previa: ' + summary.name;
+      content = document.createElement('div');
+      content.className = 'pdf-actions';
+      const open = document.createElement('a');
+      open.className = 'pdf-link';
+      open.href = summary.url;
+      open.target = '_blank';
+      open.rel = 'noopener';
+      open.textContent = 'Abrir PDF en otra pestaña';
+      const download = document.createElement('a');
+      download.className = 'pdf-link';
+      download.href = summary.url;
+      download.download = summary.name.split('/').pop();
+      download.textContent = 'Descargar PDF';
+      content.append(open, download);
     } else {
       content = document.createElement('pre');
       content.textContent = summary.content;
@@ -298,6 +312,31 @@ document.querySelector('#summaryFolder').addEventListener('change', event => {
 });
 document.querySelector('#smokeMore').addEventListener('click', () => { smokeCount += 1; document.querySelector('#smokeCount').textContent = smokeCount; });
 document.querySelector('#smokeLess').addEventListener('click', () => { smokeCount = Math.max(0, smokeCount - 1); document.querySelector('#smokeCount').textContent = smokeCount; });
+document.querySelector('#saveSmoke').addEventListener('click', () => {
+  const record = { version: 1, savedAt: new Date().toISOString(), smokeCount };
+  const url = URL.createObjectURL(new Blob([JSON.stringify(record, null, 2)], { type: 'application/json' }));
+  const download = document.createElement('a');
+  download.href = url;
+  download.download = 'contador-puchos-sesion.json';
+  download.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  document.querySelector('#smokeStatus').textContent = 'Contador descargado en tu PC. Cargá ese archivo al volver.';
+});
+document.querySelector('#loadSmoke').addEventListener('change', async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    if (file.size > 20 * 1024) throw new Error('El archivo supera 20 KB.');
+    const record = JSON.parse(await file.text());
+    if (!Number.isSafeInteger(record.smokeCount) || record.smokeCount < 0) throw new Error('El archivo no contiene un contador válido.');
+    smokeCount = record.smokeCount;
+    document.querySelector('#smokeCount').textContent = smokeCount;
+    document.querySelector('#smokeStatus').textContent = 'Contador cargado desde ' + file.name + '.';
+  } catch (error) {
+    document.querySelector('#smokeStatus').textContent = 'No se pudo cargar el contador: ' + error.message;
+  }
+  event.target.value = '';
+});
 function update() {
   const total = items.length;
   const read = items.filter(item => done[item.id]).length;
