@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monitor Bursátil AR — Cotizaciones Argentina e Internacional</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Barra superior de estado e informativo -->
+  <div class="news-strip">
+    <div class="news-left">
+      <span id="liveDot" class="live-dot"></span>
+      <strong id="marketStatus">Mercado en vivo (simulación activa)</strong>
+      <span id="apiStatus" class="col-muted">· Base cargada desde <code>datos.json</code></span>
+    </div>
+    <div class="news-left">
+      <button id="btnLiveApi" class="btn btn-soft" type="button" title="Consulta cotizaciones públicas en vivo de TradingView, DolarAPI y Binance">↻ Actualizar en vivo (TV · Dólar · Cripto)</button>
+      <button id="btnToggleSim" class="btn" type="button">⏸ Pausar ticks</button>
+    </div>
+  </div>
+
+  <!-- Tira de Dólares e Índices clave -->
+  <div id="fxStrip" class="fx-strip" aria-label="Cotizaciones de referencia"></div>
+
+  <!-- Encabezado principal -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">AR</div>
+      <div>
+        <span class="brand-title">Monitor Bursátil AR</span>
+        <span class="brand-sub">BYMA · A3 Mercados · CEDEARs · Opciones · Commodities · Mercados Globales</span>
+      </div>
+    </div>
+
+    <div class="topbar-actions">
+      <button id="btnConverter" class="btn" type="button">⇄ Conversor ARS/USD</button>
+      <button id="btnPortfolio" class="btn" type="button">💼 Mi Cartera <span id="portfolioCount" class="badge-count">0</span></button>
+      <button id="btnAddAsset" class="btn btn-primary" type="button">+ Nuevo activo</button>
+      <button id="btnTheme" class="btn" type="button" title="Cambiar modo claro u oscuro">🌙 Oscuro</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <!-- Pestañas de productos + Buscador -->
+      <div class="tabs-header">
+        <div id="categoryTabs" class="category-tabs" role="tablist" aria-label="Categorías de activos"></div>
+
+        <div class="search-controls">
+          <div class="search-box">
+            <input id="searchInput" type="search" placeholder="Buscar por nombre o símbolo…" aria-label="Buscar por nombre o símbolo">
+            <span class="search-icon">⌕</span>
+          </div>
+          <label class="switch-label">
+            Mostrar filtros
+            <input id="toggleFilters" class="switch-input" type="checkbox" checked>
+            <span class="switch"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Barra de filtros (Panel, Moneda, Liquidación, Ocultar sin precios) -->
+      <div id="filtersBar" class="filters-bar">
+        <div class="filter-group">
+          <span class="filter-title">Panel:</span>
+          <div id="panelPills" class="filter-group"></div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-title">Moneda:</span>
+          <div id="currencyPills" class="filter-group">
+            <button class="pill active" data-currency="ORIG" type="button">Original</button>
+            <button class="pill" data-currency="ARS" type="button">Pesos</button>
+            <button class="pill" data-currency="MEP" type="button">Dólares (MEP)</button>
+            <button class="pill" data-currency="CCL" type="button">Dólares Cable</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <span class="filter-title">Liquidación:</span>
+          <div id="plazoPills" class="filter-group">
+            <button class="pill active" data-plazo="24hs" type="button">24hs</button>
+            <button class="pill" data-plazo="CI" type="button">CI</button>
+          </div>
+        </div>
+
+        <label class="switch-label">
+          Ocultar sin precios
+          <input id="hideNoPrice" class="switch-input" type="checkbox" checked>
+          <span class="switch"></span>
+        </label>
+      </div>
+
+      <!-- Resumen del panel actual -->
+      <div class="stats-bar">
+        <div id="panelStats" class="stats-items">Cargando cotizaciones…</div>
+        <div>Hacé clic en cualquier activo para ver su <strong>gráfico e indicadores</strong>.</div>
+      </div>
+
+      <!-- Tabla de Cotizaciones -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-sort="simbolo">Símbolo</th>
+              <th data-sort="ultimo">Último Precio</th>
+              <th data-sort="variacion">Variación Diaria</th>
+              <th data-sort="cierre">Precio Cierre</th>
+              <th data-sort="cantCompra">Cantidad Compra</th>
+              <th data-sort="precioCompra">Precio Compra</th>
+              <th data-sort="precioVenta">Precio Venta</th>
+              <th data-sort="cantVenta">Cantidad Venta</th>
+              <th data-sort="maximo">Precio Mín. - Máx.</th>
+              <th data-sort="volumen">Volumen Nominal</th>
+              <th data-sort="monto">Monto</th>
+              <th data-sort="operaciones">Operaciones</th>
+              <th data-sort="hora">Hora</th>
+            </tr>
+          </thead>
+          <tbody id="quotesBody"></tbody>
+        </table>
+      </div>
+      <div id="emptyState" class="empty-state" style="display:none;">
+        No hay instrumentos que coincidan con tu búsqueda o filtros.
+      </div>
+    </section>
+
+    <div class="footer-note">
+      <div>
+        <strong>Nota del lab:</strong> los activos se cargan desde <code>datos.json</code>. Los favoritos, cartera y nuevos activos viven en memoria mientras la página está abierta.
+      </div>
+      <div id="lastUpdateText">Última actualización: --:--:--</div>
+    </div>
+  </main>
+
+  <!-- Modal Detalle + Gráfico del Activo -->
+  <div id="detailModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-head">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span id="dBadge" class="ticker-badge"></span>
+            <h2 id="dTitle" style="margin:0;font-size:19px;"></h2>
+            <span id="dVar" class="var-pill"></span>
+          </div>
+          <div id="dMeta" class="col-muted" style="font-size:12.5px;margin-top:4px;"></div>
+        </div>
+        <button class="modal-close" data-close="detailModal" type="button" aria-label="Cerrar">×</button>
+      </div>
+
+      <div class="modal-grid" id="dKpis"></div>
+
+      <div class="chart-box">
+        <div class="chart-head">
+          <div>
+            <strong>Evolución de precio</strong>
+            <span id="chartHoverInfo" class="col-muted" style="margin-left:8px;font-size:12px;">Pasá el cursor sobre el gráfico</span>
+          </div>
+          <div class="filter-group" id="timeframePills">
+            <button class="pill active" data-tf="1D" type="button">1D</button>
+            <button class="pill" data-tf="1S" type="button">1S</button>
+            <button class="pill" data-tf="1M" type="button">1M</button>
+            <button class="pill" data-tf="6M" type="button">6M</button>
+            <button class="pill" data-tf="1A" type="button">1A</button>
+          </div>
+        </div>
+        <svg id="chartSvg" class="chart-svg" viewBox="0 0 700 220" preserveAspectRatio="none"></svg>
+        <div id="techIndicators" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:12px;" class="col-muted"></div>
+      </div>
+
+      <div class="trade-box">
+        <div class="field">
+          <label for="tradeQty">Simular operación en Mi Cartera (cantidad de nominales)</label>
+          <input id="tradeQty" type="number" min="1" step="1" value="10">
+        </div>
+        <button id="btnBuySim" class="btn btn-primary" type="button">Comprar (simulado)</button>
+        <button id="btnStarDetail" class="btn" type="button">☆ Seguir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Conversor ARS / USD -->
+  <div id="converterModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:480px;">
+      <div class="modal-head">
+        <h2 style="margin:0;font-size:18px;">Conversor Rápido ARS ↔ USD</h2>
+        <button class="modal-close" data-close="converterModal" type="button" aria-label="Cerrar">×</button>
+      </div>
+      <div class="form-grid" style="grid-template-columns:1fr;">
+        <div class="field">
+          <label for="convAmount">Monto</label>
+          <input id="convAmount" type="number" value="100000" min="0" step="any">
+        </div>
+        <div class="field">
+          <label for="convDir">Conversión</label>
+          <select id="convDir">
+            <option value="ARS_TO_USD">Pesos (ARS) → Dólares (USD)</option>
+            <option value="USD_TO_ARS">Dólares (USD) → Pesos (ARS)</option>
+          </select>
+        </div>
+      </div>
+      <div id="convResults" class="modal-grid" style="grid-template-columns:1fr 1fr;"></div>
+    </div>
+  </div>
+
+  <!-- Modal Mi Cartera (en memoria) -->
+  <div id="portfolioModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:640px;">
+      <div class="modal-head">
+        <div>
+          <h2 style="margin:0;font-size:18px;">Mi Cartera Simulada</h2>
+          <div class="col-muted" style="font-size:12px;">Se guarda solo en memoria mientras la pestaña está abierta.</div>
+        </div>
+        <button class="modal-close" data-close="portfolioModal" type="button" aria-label="Cerrar">×</button>
+      </div>
+      <div id="portfolioSummary" class="modal-grid"></div>
+      <div id="portfolioList"></div>
+    </div>
+  </div>
+
+  <!-- Modal Agregar Activo (en memoria) -->
+  <div id="addModal" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:560px;">
+      <div class="modal-head">
+        <div>
+          <h2 style="margin:0;font-size:18px;">Agregar instrumento (en memoria)</h2>
+          <div class="col-muted" style="font-size:12px;">Para guardarlo de forma permanente, agregalo también a <code>datos.json</code>.</div>
+        </div>
+        <button class="modal-close" data-close="addModal" type="button" aria-label="Cerrar">×</button>
+      </div>
+      <form id="addForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="newSym">Símbolo *</label>
+            <input id="newSym" required placeholder="Ej: BHIP" maxlength="14">
+          </div>
+          <div class="field">
+            <label for="newName">Nombre *</label>
+            <input id="newName" required placeholder="Ej: BANCO HIPOTECARIO" maxlength="50">
+          </div>
+          <div class="field">
+            <label for="newCat">Categoría</label>
+            <select id="newCat">
+              <option>Acciones</option>
+              <option>CEDEARs</option>
+              <option>Bonos</option>
+              <option>Letras</option>
+              <option>Opciones</option>
+              <option>Futuros A3</option>
+              <option>Commodities</option>
+              <option>Fondos</option>
+              <option>Cauciones</option>
+              <option>Oblig. Negociables</option>
+              <option>Internacional</option>
+              <option>Crypto</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="newPanel">Panel</label>
+            <input id="newPanel" value="Merval" placeholder="Ej: Merval, ETF, Tecnología">
+          </div>
+          <div class="field">
+            <label for="newMoneda">Moneda</label>
+            <select id="newMoneda">
+              <option value="ARS">ARS (Pesos)</option>
+              <option value="USD">USD (Dólares)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="newPrecio">Último Precio *</label>
+            <input id="newPrecio" type="number" step="any" min="0.01" required placeholder="Ej: 480">
+          </div>
+          <div class="field">
+            <label for="newVar">Variación Diaria (%)</label>
+            <input id="newVar" type="number" step="0.01" value="0">
+          </div>
+          <div class="field">
+            <label for="newSector">Sector</label>
+            <input id="newSector" placeholder="Ej: Bancos, Tecnología">
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+          <button class="btn" data-close="addModal" type="button">Cancelar</button>
+          <button class="btn btn-primary" type="submit">Agregar al monitor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
