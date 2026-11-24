@@ -1,0 +1,1406 @@
+[
+  {
+    "id": 1,
+    "titulo": "Combate de Quilmes y toma de Buenos Aires",
+    "fecha": "25 al 27 de junio de 1806",
+    "anio": 1806,
+    "periodo": "Invasiones Inglesas",
+    "periodoId": "invasiones",
+    "lugar": "Costas de Quilmes y Puente de Gálvez (Riachuelo)",
+    "provincia": "Buenos Aires",
+    "lat": -34.7167,
+    "lng": -58.2333,
+    "fuerzas": "Milicias virreinales del Río de la Plata vs. Expedición británica (71.º Regimiento Highlanders y marinos)",
+    "lideres": {
+      "bando1": "Pedro de Arce y Virrey Rafael de Sobremonte (Virreinato del Río de la Plata)",
+      "bando2": "William Carr Beresford y Home Riggs Popham (Imperio Británico)"
+    },
+    "muertos": {
+      "bando1": "Virreinato: ~15 muertos y heridos (retirada rápida de las milicias)",
+      "bando2": "Británicos: 1 muerto y 12 heridos",
+      "totalEstimado": 16
+    },
+    "razones": "En el marco de las Guerras Napoleónicas, Gran Bretaña buscaba abrir mercados comerciales en Sudamérica y debilitar a España, aliada de Francia.",
+    "consecuencias": "Ocupación británica de Buenos Aires por 46 días, huida del virrey Sobremonte a Córdoba con el tesoro y profundo desprestigio de la autoridad colonial.",
+    "resultado": "Victoria británica",
+    "fuente": "Wikipedia (Invasiones Inglesas)"
+  },
+  {
+    "id": 2,
+    "titulo": "Combate de Perdriel",
+    "fecha": "1 de agosto de 1806",
+    "anio": 1806,
+    "periodo": "Invasiones Inglesas",
+    "periodoId": "invasiones",
+    "lugar": "Chacra de Perdriel (actual Villa Ballester / San Martín)",
+    "provincia": "Buenos Aires",
+    "lat": -34.5528,
+    "lng": -58.5567,
+    "fuerzas": "Voluntarios criollos y milicianos de la campaña vs. Columna del 71.º Regimiento británico",
+    "lideres": {
+      "bando1": "Juan Martín de Pueyrredón y Antonio de Olavarría (Milicias criollas)",
+      "bando2": "William Carr Beresford y Denis Pack (Imperio Británico)"
+    },
+    "muertos": {
+      "bando1": "Criollos: ~10 muertos y heridos, dispersión de la fuerza",
+      "bando2": "Británicos: ~5 muertos y varios heridos",
+      "totalEstimado": 15
+    },
+    "razones": "Primer intento armado organizado por vecinos y hacendados bonaerenses para hostigar a los ocupantes británicos mientras llegaban refuerzos desde Montevideo.",
+    "consecuencias": "Aunque fueron derrotados, la resistencia demostró voluntad popular de lucha y muchos de sus integrantes se sumaron días después a la Reconquista.",
+    "resultado": "Victoria británica",
+    "fuente": "Wikipedia (Combate de Perdriel)"
+  },
+  {
+    "id": 3,
+    "titulo": "Reconquista de Buenos Aires",
+    "fecha": "12 de agosto de 1806",
+    "anio": 1806,
+    "periodo": "Invasiones Inglesas",
+    "periodoId": "invasiones",
+    "lugar": "Retiro, Plaza Mayor y Fuerte de Buenos Aires",
+    "provincia": "Ciudad de Buenos Aires",
+    "lat": -34.6083,
+    "lng": -58.3712,
+    "fuerzas": "Fuerzas expedicionarias de Montevideo y vecinos porteños vs. Guarnición británica en Buenos Aires",
+    "lideres": {
+      "bando1": "Santiago de Liniers, Martín de Álzaga y Juan Martín de Pueyrredón (Hispano-criollos)",
+      "bando2": "William Carr Beresford (Imperio Británico)"
+    },
+    "muertos": {
+      "bando1": "Hispano-criollos: ~60 muertos (150–180 bajas totales entre muertos y heridos)",
+      "bando2": "Británicos: ~165 muertos (400–500 bajas totales y ~1.200–1.600 prisioneros)",
+      "totalEstimado": 225
+    },
+    "razones": "Expulsar a las tropas británicas que habían ocupado la capital del Virreinato del Río de la Plata.",
+    "consecuencias": "Rendición incondicional de Beresford, creación de milicias urbanas voluntarias (Patricios, Arribeños, etc.) y primera experiencia de poder político-militar criollo.",
+    "resultado": "Victoria hispano-criolla",
+    "fuente": "Wikipedia (Invasiones Inglesas / Reconquista)"
+  },
+  {
+    "id": 4,
+    "titulo": "Defensa de Buenos Aires (Segunda Invasión Inglesa)",
+    "fecha": "5 al 7 de julio de 1807",
+    "anio": 1807,
+    "periodo": "Invasiones Inglesas",
+    "periodoId": "invasiones",
+    "lugar": "Calles céntricas, Retiro, Santo Domingo y Plaza Mayor",
+    "provincia": "Ciudad de Buenos Aires",
+    "lat": -34.6119,
+    "lng": -58.3733,
+    "fuerzas": "Milicias urbanas porteñas y población civil vs. Ejército expedicionario británico",
+    "lideres": {
+      "bando1": "Santiago de Liniers, Martín de Álzaga y Cornelio Saavedra (Defensa de Buenos Aires)",
+      "bando2": "John Whitelocke, Robert Craufurd y Samuel Auchmuty (Imperio Británico)"
+    },
+    "muertos": {
+      "bando1": "Defensores: ~300 muertos y más de 500 heridos",
+      "bando2": "Británicos: ~400 muertos, ~650 heridos y más de 1.600 prisioneros",
+      "totalEstimado": 700
+    },
+    "razones": "Gran Bretaña envió una segunda expedición masiva (más de 10.000 hombres) para reconquistar el Río de la Plata tras la captura de Montevideo.",
+    "consecuencias": "Capitulación total de Whitelocke y evacuación británica de todo el Río de la Plata. Consolidó a las milicias criollas, antesala directa de la Revolución de Mayo de 1810.",
+    "resultado": "Victoria hispano-criolla",
+    "fuente": "Wikipedia (Segunda Invasión Inglesa)"
+  },
+  {
+    "id": 5,
+    "titulo": "Batalla de Suipacha",
+    "fecha": "7 de noviembre de 1810",
+    "anio": 1810,
+    "periodo": "Independencia",
+    "periodoId": "independencia",
+    "lugar": "Suipacha (Alto Perú, actual Potosí, Bolivia)",
+    "provincia": "Campaña del Alto Perú (Exterior)",
+    "lat": -21.5667,
+    "lng": -65.6000,
+    "fuerzas": "Ejército Auxiliar del Norte (Primera Junta) vs. Ejército Realista del Perú",
+    "lideres": {
+      "bando1": "Antonio González Balcarce, Juan José Castelli y Martín Miguel de Güemes (Patriotas)",
+      "bando2": "José de Córdoba y Rojas y Vicente Nieto (Realistas)"
+    },
+    "muertos": {
+      "bando1": "Patriotas: 1 muerto y 12 heridos",
+      "bando2": "Realistas: ~40 muertos y ~150 prisioneros",
+      "totalEstimado": 41
+    },
+    "razones": "La Primera Junta de Buenos Aires envió tropas al Alto Perú para expandir la Revolución de Mayo y derrotar los focos contrarrevolucionarios realistas.",
+    "consecuencias": "Primera victoria militar de las armas patriotas; permitió ocupar temporalmente Potosí y el Alto Perú y demostró que el movimiento revolucionario podía sostenerse en combate.",
+    "resultado": "Victoria patriota",
+    "fuente": "Wikipedia (Batalla de Suipacha)"
+  },
+  {
+    "id": 6,
+    "titulo": "Batalla de Tucumán",
+    "fecha": "24 y 25 de septiembre de 1812",
+    "anio": 1812,
+    "periodo": "Independencia",
+    "periodoId": "independencia",
+    "lugar": "Campo de las Carreras, San Miguel de Tucumán",
+    "provincia": "Tucumán",
+    "lat": -26.8350,
+    "lng": -65.2180,
+    "fuerzas": "Ejército del Norte y milicias tucumanas vs. Ejército Realista del Alto Perú",
+    "lideres": {
+      "bando1": "Manuel Belgrano y Eustoquio Díaz Vélez (Provincias Unidas)",
+      "bando2": "Juan Pío de Tristán (Imperio Español)"
+    },
+    "muertos": {
+      "bando1": "Patriotas: ~65–80 muertos y ~200 heridos",
+      "bando2": "Realistas: ~450 muertos y ~650 prisioneros",
+      "totalEstimado": 520
+    },
+    "razones": "Tras el Éxodo Jujeño, el Primer Triunvirato ordenó a Belgrano replegarse hasta Córdoba, pero los vecinos tucumanos lo convencieron de desobedecer y presentar batalla para frenar el avance realista.",
+    "consecuencias": "Frenó la invasión española desde el norte, provocó la caída del Primer Triunvirato en Buenos Aires y salvó la continuidad de la Revolución de Mayo.",
+    "resultado": "Victoria patriota decisiva",
+    "fuente": "Wikipedia (Batalla de Tucumán)"
+  },
+  {
+    "id": 7,
+    "titulo": "Combate de San Lorenzo",
+    "fecha": "3 de febrero de 1813",
+    "anio": 1813,
+    "periodo": "Independencia",
+    "periodoId": "independencia",
+    "lugar": "Convento de San Carlos Borromeo, San Lorenzo",
+    "provincia": "Santa Fe",
+    "lat": -32.7469,
+    "lng": -60.7311,
+    "fuerzas": "Regimiento de Granaderos a Caballo vs. Desembarco realista de la escuadra de Montevideo",
+    "lideres": {
+      "bando1": "José de San Martín y Justo Bermúdez (Provincias Unidas)",
+      "bando2": "Antonio Zabala (Realistas de Montevideo)"
+    },
+    "muertos": {
+      "bando1": "Patriotas: 14–15 muertos (entre ellos Juan Bautista Cabral y Justo Bermúdez)",
+      "bando2": "Realistas: ~40 muertos, heridos y prisioneros",
+      "totalEstimado": 55
+    },
+    "razones": "La flota realista de Montevideo remontaba el río Paraná saqueando poblaciones costeras para abastecerse y hostigar a las Provincias Unidas.",
+    "consecuencias": "Bautismo de fuego de los Granaderos a Caballo y única batalla de San Martín en territorio argentino actual; frenó las incursiones realistas sobre el Paraná.",
+    "resultado": "Victoria patriota",
+    "fuente": "Wikipedia (Combate de San Lorenzo)"
+  },
+  {
+    "id": 8,
+    "titulo": "Batalla de Salta",
+    "fecha": "20 de febrero de 1813",
+    "anio": 1813,
+    "periodo": "Independencia",
+    "periodoId": "independencia",
+    "lugar": "Campo Castañares, Ciudad de Salta",
+    "provincia": "Salta",
+    "lat": -24.7567,
+    "lng": -65.4094,
+    "fuerzas": "Ejército del Norte vs. Ejército Realista atrincherado en Salta",
+    "lideres": {
+      "bando1": "Manuel Belgrano y Eustoquio Díaz Vélez (Provincias Unidas)",
+      "bando2": "Juan Pío de Tristán (Imperio Español)"
+    },
+    "muertos": {
+      "bando1": "Patriotas: 103 muertos y 433 heridos",
+      "bando2": "Realistas: ~480 muertos, 114 heridos y ~2.776 prisioneros rendidos",
+      "totalEstimado": 583
+    },
+    "razones": "Belgrano persiguió al ejército realista derrotado en Tucumán para asegurar definitivamente el noroeste y jurar la nueva bandera celeste y blanca en batalla.",
+    "consecuencias": "Rendición incondicional de todo un ejército realista por primera vez en Sudamérica; aseguró la frontera norte y permitió la segunda expedición al Alto Perú.",
+    "resultado": "Victoria patriota decisiva",
+    "fuente": "Wikipedia (Batalla de Salta)"
+  },
+  {
+    "id": 9,
+    "titulo": "Guerra Gaucha: Defensa de Salta y Jujuy",
+    "fecha": "Abril–mayo de 1817 (Invasión de La Serna)",
+    "anio": 1817,
+    "periodo": "Independencia",
+    "periodoId": "independencia",
+    "lugar": "Quebrada de Humahuaca, Jujuy y Valles de Salta",
+    "provincia": "Salta",
+    "lat": -24.1858,
+    "lng": -65.2995,
+    "fuerzas": "División Infernal de Gauchos de Línea y milicias locales vs. Ejército Realista de ocupación",
+    "lideres": {
+      "bando1": "Martín Miguel de Güemes, Manuel Eduardo Arias y Luis Burela (Patriotas)",
+      "bando2": "José de la Serna y Pedro Antonio Olañeta (Imperio Español)"
+    },
+    "muertos": {
+      "bando1": "Gauchos patriotas: decenas de muertos en escaramuzas y hostigamientos continuos",
+      "bando2": "Realistas: cientos de bajas por emboscadas, desgaste y deserción (retirada forzosa)",
+      "totalEstimado": 350
+    },
+    "razones": "Los ejércitos realistas intentaron invadir repetidamente el territorio argentino desde el Alto Perú para aplastar la independencia declarada en 1816.",
+    "consecuencias": "La guerra de guerrillas de Güemes desgastó e impidió el avance realista al sur, cubriendo las espaldas del Cruce de los Andes de San Martín.",
+    "resultado": "Victoria estratégica patriota",
+    "fuente": "Wikipedia (Guerra Gaucha)"
+  },
+  {
+    "id": 10,
+    "titulo": "Batalla de Chacabuco",
+    "fecha": "12 de febrero de 1817",
+    "anio": 1817,
+    "periodo": "Independencia",
+    "periodoId": "independencia",
+    "lugar": "Cuesta de Chacabuco, Región Metropolitana (Chile)",
+    "provincia": "Campaña de los Andes (Exterior)",
+    "lat": -32.9936,
+    "lng": -70.6844,
+    "fuerzas": "Ejército de los Andes (argentinos y chilenos) vs. Ejército Realista de Chile",
+    "lideres": {
+      "bando1": "José de San Martín, Bernardo O'Higgins y Miguel Estanislao Soler (Ejército de los Andes)",
+      "bando2": "Rafael Maroto (Imperio Español)"
+    },
+    "muertos": {
+      "bando1": "Patriotas: ~12–130 muertos y ~120 heridos según distintos partes",
+      "bando2": "Realistas: ~500 muertos, 600 heridos y 600 prisioneros",
+      "totalEstimado": 560
+    },
+    "razones": "Plan continental de San Martín para cruzar la Cordillera de los Andes desde Mendoza, liberar Chile y atacar luego el centro realista de Lima por mar.",
+    "consecuencias": "Liberación de Santiago de Chile, fin de la Reconquista española y consolidación de la alianza emancipadora argentino-chilena.",
+    "resultado": "Victoria patriota decisiva",
+    "fuente": "Wikipedia (Batalla de Chacabuco)"
+  },
+  {
+    "id": 11,
+    "titulo": "Batalla de Maipú",
+    "fecha": "5 de abril de 1818",
+    "anio": 1818,
+    "periodo": "Independencia",
+    "periodoId": "independencia",
+    "lugar": "Llanos de Maipú, cercanías de Santiago (Chile)",
+    "provincia": "Campaña de los Andes (Exterior)",
+    "lat": -33.5103,
+    "lng": -70.7644,
+    "fuerzas": "Ejército Unido Libertador (Provincias Unidas y Chile) vs. Ejército Realista de Mariano Osorio",
+    "lideres": {
+      "bando1": "José de San Martín, Juan Gregorio Las Heras y Antonio González Balcarce (Patriotas)",
+      "bando2": "Mariano Osorio y José Ordóñez (Imperio Español)"
+    },
+    "muertos": {
+      "bando1": "Patriotas: ~800–1.000 bajas entre muertos y heridos",
+      "bando2": "Realistas: ~1.000–1.500 muertos y más de 2.000 prisioneros",
+      "totalEstimado": 1700
+    },
+    "razones": "Tras el desastre patriota de Cancha Rayada, las fuerzas realistas avanzaron sobre Santiago para restaurar el dominio español en Chile.",
+    "consecuencias": "Aseguró definitivamente la independencia de Chile, eliminó la amenaza realista desde el oeste sobre Cuyo y habilitó la Expedición Libertadora al Perú.",
+    "resultado": "Victoria patriota decisiva",
+    "fuente": "Wikipedia (Batalla de Maipú)"
+  },
+  {
+    "id": 12,
+    "titulo": "Primera Batalla de Cepeda",
+    "fecha": "1 de febrero de 1820",
+    "anio": 1820,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Cañada de Cepeda, límite Santa Fe / Buenos Aires",
+    "provincia": "Santa Fe",
+    "lat": -33.4283,
+    "lng": -60.5944,
+    "fuerzas": "Ejército Federal del Litoral (Santa Fe y Entre Ríos) vs. Ejército Directorial de Buenos Aires",
+    "lideres": {
+      "bando1": "Estanislao López y Francisco Ramírez (Federales)",
+      "bando2": "José Rondeau y Juan Ramón Balcarce (Directorio / Centralistas)"
+    },
+    "muertos": {
+      "bando1": "Federales: ~40 bajas entre muertos y heridos",
+      "bando2": "Directoriales: ~300 muertos y pérdida del tren de guerra",
+      "totalEstimado": 325
+    },
+    "razones": "Rechazo de las provincias del Litoral a la Constitución centralista de 1819 y al monopolio aduanero y político de Buenos Aires.",
+    "consecuencias": "Disolución del Directorio y del Congreso Nacional, firma del Tratado del Pilar e inicio de la era de las autonomías provinciales.",
+    "resultado": "Victoria federal",
+    "fuente": "Wikipedia (Batalla de Cepeda de 1820)"
+  },
+  {
+    "id": 13,
+    "titulo": "Batalla de Ituzaingó",
+    "fecha": "20 de febrero de 1827",
+    "anio": 1827,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Paso del Rosario, Río Grande del Sur (Brasil)",
+    "provincia": "Guerra del Brasil (Exterior)",
+    "lat": -30.2442,
+    "lng": -54.8736,
+    "fuerzas": "Ejército Republicano de las Provincias Unidas vs. Ejército del Imperio del Brasil",
+    "lideres": {
+      "bando1": "Carlos María de Alvear, Juan Antonio Lavalleja y José María Paz (Provincias Unidas)",
+      "bando2": "Marqués de Barbacena y José de Abreu (Imperio del Brasil)"
+    },
+    "muertos": {
+      "bando1": "Provincias Unidas: ~147–200 muertos (incl. Federico Brandsen) y ~250 heridos",
+      "bando2": "Imperio del Brasil: ~170–200 muertos y cuantiosas pérdidas de artillería",
+      "totalEstimado": 360
+    },
+    "razones": "Disputa territorial por la Banda Oriental (actual Uruguay), anexada por el Imperio del Brasil como Provincia Cisplatina.",
+    "consecuencias": "Gran victoria táctica argentina, pero la crisis económica y el bloqueo naval forzaron la Convención Preliminar de Paz de 1828 y la independencia del Uruguay.",
+    "resultado": "Victoria táctica de las Provincias Unidas",
+    "fuente": "Wikipedia (Batalla de Ituzaingó)"
+  },
+  {
+    "id": 14,
+    "titulo": "Batalla de Puente de Márquez",
+    "fecha": "26 de abril de 1829",
+    "anio": 1829,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Puente de Márquez sobre el río Reconquista (Moreno / Ituzaingó)",
+    "provincia": "Buenos Aires",
+    "lat": -34.6295,
+    "lng": -58.7115,
+    "fuerzas": "Ejército Federal de Santa Fe y campaña bonaerense vs. Ejército Unitario de Buenos Aires",
+    "lideres": {
+      "bando1": "Estanislao López y Juan Manuel de Rosas (Federales)",
+      "bando2": "Juan Lavalle (Unitarios)"
+    },
+    "muertos": {
+      "bando1": "Federales: bajas moderadas en choques de caballería",
+      "bando2": "Unitarios: decenas de muertos y pérdida de caballada, retirada forzada",
+      "totalEstimado": 90
+    },
+    "razones": "Tras el golpe militar de Lavalle y el fusilamiento del gobernador federal Manuel Dorrego en Navarro (1828), estalló una guerra civil en Buenos Aires y el Litoral.",
+    "consecuencias": "Debilitó definitivamente a Lavalle, obligándolo a firmar el Pacto de Cañuelas y abriendo el camino al primer gobierno de Juan Manuel de Rosas.",
+    "resultado": "Victoria federal",
+    "fuente": "Wikipedia (Batalla de Puente de Márquez)"
+  },
+  {
+    "id": 15,
+    "titulo": "Batalla de La Tablada (Córdoba)",
+    "fecha": "22 y 23 de junio de 1829",
+    "anio": 1829,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Altos de La Tablada, cercanías de la ciudad de Córdoba",
+    "provincia": "Córdoba",
+    "lat": -31.3680,
+    "lng": -64.2360,
+    "fuerzas": "Ejército Unitario veterano de la Guerra del Brasil vs. Caballería federal riojana y cuyana",
+    "lideres": {
+      "bando1": "José María Paz y Gregorio Aráoz de Lamadrid (Unitarios)",
+      "bando2": "Juan Facundo Quiroga y Juan Bautista Bustos (Federales)"
+    },
+    "muertos": {
+      "bando1": "Unitarios: ~200 muertos y heridos",
+      "bando2": "Federales: ~1.000 muertos y ~500 prisioneros",
+      "totalEstimado": 1100
+    },
+    "razones": "Paz derrocó al gobernador federal de Córdoba (Bustos) buscando organizar la Liga del Interior; Quiroga invadió Córdoba para restaurar el poder federal.",
+    "consecuencias": "Consolidó a José María Paz en Córdoba y fracturó temporalmente la hegemonía federal en el interior del país.",
+    "resultado": "Victoria unitaria",
+    "fuente": "Wikipedia (Batalla de La Tablada)"
+  },
+  {
+    "id": 16,
+    "titulo": "Batalla de Oncativo (Laguna Larga)",
+    "fecha": "25 de febrero de 1830",
+    "anio": 1830,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Laguna Larga / Oncativo",
+    "provincia": "Córdoba",
+    "lat": -31.7800,
+    "lng": -63.7900,
+    "fuerzas": "Ejército de la Liga Unitaria del Interior vs. Ejército Federal del Interior",
+    "lideres": {
+      "bando1": "José María Paz (Unitarios)",
+      "bando2": "Juan Facundo Quiroga y José Félix Aldao (Federales)"
+    },
+    "muertos": {
+      "bando1": "Unitarios: bajas reducidas (~100 entre muertos y heridos)",
+      "bando2": "Federales: ~1.000 muertos y 500–1.200 prisioneros",
+      "totalEstimado": 1050
+    },
+    "razones": "Segundo intento de Facundo Quiroga por derrotar a José María Paz y evitar que el proyecto unitario se extendiera por todas las provincias del interior.",
+    "consecuencias": "Nueve provincias pasaron a integrar la Liga Unitaria bajo Paz, obligando a Buenos Aires, Santa Fe y Entre Ríos a firmar el Pacto Federal de 1831.",
+    "resultado": "Victoria unitaria decisiva",
+    "fuente": "Wikipedia (Batalla de Oncativo)"
+  },
+  {
+    "id": 17,
+    "titulo": "Batalla de La Ciudadela",
+    "fecha": "4 de noviembre de 1831",
+    "anio": 1831,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Campo de la Ciudadela, San Miguel de Tucumán",
+    "provincia": "Tucumán",
+    "lat": -26.8375,
+    "lng": -65.2111,
+    "fuerzas": "Ejército Federal del Pacto Federal vs. Restos del Ejército de la Liga Unitaria",
+    "lideres": {
+      "bando1": "Juan Facundo Quiroga (Federales)",
+      "bando2": "Gregorio Aráoz de Lamadrid (Unitarios)"
+    },
+    "muertos": {
+      "bando1": "Federales: ~43 muertos y ~90 heridos",
+      "bando2": "Unitarios: ~200 muertos, más de 500 prisioneros y fusilamientos posteriores",
+      "totalEstimado": 260
+    },
+    "razones": "Tras la captura fortuita del general Paz por tropas santafesinas, Quiroga lanzó una ofensiva general para recuperar Cuyo y el Noroeste.",
+    "consecuencias": "Disolución definitiva de la Liga Unitaria; todas las provincias adhirieron al Pacto Federal, dando nacimiento a la Confederación Argentina.",
+    "resultado": "Victoria federal decisiva",
+    "fuente": "Wikipedia (Batalla de La Ciudadela)"
+  },
+  {
+    "id": 18,
+    "titulo": "Batalla de Pago Largo",
+    "fecha": "31 de marzo de 1839",
+    "anio": 1839,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Arroyo Pago Largo, cerca de Curuzú Cuatiá",
+    "provincia": "Corrientes",
+    "lat": -29.8333,
+    "lng": -58.1333,
+    "fuerzas": "Ejército Federal de Entre Ríos (Confederación) vs. Ejército de Corrientes",
+    "lideres": {
+      "bando1": "Pascual Echagüe y Justo José de Urquiza (Confederación / Federales)",
+      "bando2": "Genaro Berón de Astrada (Corrientes / Antirrosistas)"
+    },
+    "muertos": {
+      "bando1": "Entrerrianos/Federales: ~55 muertos y 95 heridos",
+      "bando2": "Correntinos: ~1.900–2.000 muertos (incl. el gobernador Berón de Astrada) y ~450 prisioneros",
+      "totalEstimado": 2000
+    },
+    "razones": "Corrientes declaró la guerra a Rosas reclamando libre navegación de los ríos, organización constitucional y alianza con Fructuoso Rivera en Uruguay.",
+    "consecuencias": "Aplastante derrota correntina que recrudeció la violencia política en el Litoral e inauguró una década de guerras civiles contra el rosismo.",
+    "resultado": "Victoria federal",
+    "fuente": "Wikipedia (Batalla de Pago Largo)"
+  },
+  {
+    "id": 19,
+    "titulo": "Batalla de Quebracho Herrado",
+    "fecha": "28 de noviembre de 1840",
+    "anio": 1840,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Quebracho Herrado, este de Córdoba (cerca de San Francisco)",
+    "provincia": "Córdoba",
+    "lat": -31.5667,
+    "lng": -62.0833,
+    "fuerzas": "Ejército de la Confederación Argentina vs. Ejército Libertador unitario",
+    "lideres": {
+      "bando1": "Manuel Oribe y Ángel Pacheco (Confederación Argentina)",
+      "bando2": "Juan Lavalle (Unitarios / Coalición del Norte)"
+    },
+    "muertos": {
+      "bando1": "Confederación: 36 muertos y 50 heridos",
+      "bando2": "Unitarios: ~1.500 muertos y ~500 prisioneros",
+      "totalEstimado": 1536
+    },
+    "razones": "Lavalle se retiraba de Buenos Aires hacia Córdoba para unirse a la Coalición del Norte contra Juan Manuel de Rosas, cuando fue interceptado por Oribe.",
+    "consecuencias": "Desarticuló el ejército libertador de Lavalle y permitió a las fuerzas rosistas avanzar sistemáticamente sobre todas las provincias del norte.",
+    "resultado": "Victoria federal decisiva",
+    "fuente": "Wikipedia (Batalla de Quebracho Herrado)"
+  },
+  {
+    "id": 20,
+    "titulo": "Batalla de Famaillá (Monte Grande)",
+    "fecha": "19 de septiembre de 1841",
+    "anio": 1841,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Famaillá, provincia de Tucumán",
+    "provincia": "Tucumán",
+    "lat": -27.0539,
+    "lng": -65.4033,
+    "fuerzas": "Ejército de la Confederación Argentina vs. Coalición del Norte",
+    "lideres": {
+      "bando1": "Manuel Oribe y Mariano Maza (Confederación Argentina)",
+      "bando2": "Juan Lavalle y Marco Avellaneda (Coalición del Norte)"
+    },
+    "muertos": {
+      "bando1": "Confederación: bajas leves",
+      "bando2": "Unitarios: ~600 muertos y ~480 prisioneros (ejecución posterior de Marco Avellaneda)",
+      "totalEstimado": 650
+    },
+    "razones": "Último intento organizado de la Coalición del Norte por resistir el avance del ejército federal sobre Tucumán y Salta.",
+    "consecuencias": "Fin de la Coalición del Norte; Lavalle huyó hacia Jujuy donde murió semanas después, quedando el interior bajo hegemonía rosista.",
+    "resultado": "Victoria federal decisiva",
+    "fuente": "Wikipedia (Batalla de Famaillá)"
+  },
+  {
+    "id": 21,
+    "titulo": "Batalla de Arroyo Grande",
+    "fecha": "6 de diciembre de 1842",
+    "anio": 1842,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Arroyo Grande, cercanías de Concordia",
+    "provincia": "Entre Ríos",
+    "lat": -31.5000,
+    "lng": -58.2500,
+    "fuerzas": "Ejército Unido de la Confederación y blancos orientales vs. Coalición de Rivera, Corrientes y unitarios",
+    "lideres": {
+      "bando1": "Manuel Oribe y Justo José de Urquiza (Confederación Argentina / Blancos)",
+      "bando2": "Fructuoso Rivera y Pedro Ferré (Colorados / Corrientes / Unitarios)"
+    },
+    "muertos": {
+      "bando1": "Federales: ~300 bajas entre muertos y heridos",
+      "bando2": "Coalición de Rivera: ~2.000 muertos y ~1.400 prisioneros",
+      "totalEstimado": 2150
+    },
+    "razones": "En el marco de la Guerra Grande, Rivera cruzó a Entre Ríos buscando derrocar al poder federal del Litoral aliado de Rosas.",
+    "consecuencias": "Mayor batalla campal de las guerras civiles hasta esa fecha; dio inicio al Sitio Grande de Montevideo y consolidó el liderazgo militar de Urquiza.",
+    "resultado": "Victoria federal decisiva",
+    "fuente": "Wikipedia (Batalla de Arroyo Grande)"
+  },
+  {
+    "id": 22,
+    "titulo": "Batalla de la Vuelta de Obligado",
+    "fecha": "20 de noviembre de 1845",
+    "anio": 1845,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Paraje Vuelta de Obligado, Río Paraná (San Pedro)",
+    "provincia": "Buenos Aires",
+    "lat": -33.5936,
+    "lng": -59.8111,
+    "fuerzas": "Confederación Argentina (baterías costeras y cadenas) vs. Flota combinada de Gran Bretaña y Francia",
+    "lideres": {
+      "bando1": "Lucio Norberto Mansilla y Juan Manuel de Rosas (Confederación Argentina)",
+      "bando2": "Samuel Inglefield (Gran Bretaña) y François Thomas Tréhouart (Francia)"
+    },
+    "muertos": {
+      "bando1": "Confederación Argentina: ~150–250 muertos y ~300–400 heridos",
+      "bando2": "Anglofranceses: ~28–40 muertos y ~95–160 heridos, buques severamente dañados",
+      "totalEstimado": 235
+    },
+    "razones": "Gran Bretaña y Francia bloquearon Buenos Aires e intentaron forzar por las armas la libre navegación del río Paraná para comerciar directamente sin pagar aduana.",
+    "consecuencias": "Aunque la flota logró pasar tras 7 horas de combate, el costo militar y comercial llevó a las potencias a firmar los tratados Arana-Southern y Arana-Lepredour reconociendo la soberanía fluvial argentina. Hoy se conmemora el Día de la Soberanía Nacional.",
+    "resultado": "Victoria táctica anglofrancesa / Victoria diplomática argentina",
+    "fuente": "Wikipedia (Batalla de la Vuelta de Obligado)"
+  },
+  {
+    "id": 23,
+    "titulo": "Batalla de Caseros",
+    "fecha": "3 de febrero de 1852",
+    "anio": 1852,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Estancia de Caseros (actual El Palomar / Tres de Febrero)",
+    "provincia": "Buenos Aires",
+    "lat": -34.6022,
+    "lng": -58.5947,
+    "fuerzas": "Ejército Grande (Entre Ríos, Corrientes, Brasil, Uruguay y unitarios) vs. Ejército de la Confederación Argentina",
+    "lideres": {
+      "bando1": "Justo José de Urquiza, Bartolomé Mitre y Domingo F. Sarmiento (Ejército Grande)",
+      "bando2": "Juan Manuel de Rosas y Martiniano Chilavert (Confederación Argentina)"
+    },
+    "muertos": {
+      "bando1": "Ejército Grande: ~300–400 bajas entre muertos y heridos",
+      "bando2": "Confederación: varios cientos de muertos en combate y fusilamientos posteriores (incl. Chilavert)",
+      "totalEstimado": 900
+    },
+    "razones": "Tras el Pronunciamiento de Urquiza (1851), Entre Ríos exigió dictar una Constitución Nacional, abrir la navegación de los ríos y terminar con la hegemonía porteña de Rosas.",
+    "consecuencias": "Caída y exilio definitivo de Rosas en Inglaterra, firma del Acuerdo de San Nicolás y sanción de la Constitución Nacional de 1853.",
+    "resultado": "Victoria del Ejército Grande",
+    "fuente": "Wikipedia (Batalla de Caseros)"
+  },
+  {
+    "id": 24,
+    "titulo": "Segunda Batalla de Cepeda",
+    "fecha": "23 de octubre de 1859",
+    "anio": 1859,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Cañada de Cepeda, sur de Santa Fe",
+    "provincia": "Santa Fe",
+    "lat": -33.4350,
+    "lng": -60.5850,
+    "fuerzas": "Ejército de la Confederación Argentina vs. Ejército del Estado de Buenos Aires",
+    "lideres": {
+      "bando1": "Justo José de Urquiza (Confederación Argentina)",
+      "bando2": "Bartolomé Mitre (Estado de Buenos Aires)"
+    },
+    "muertos": {
+      "bando1": "Confederación: ~100 bajas entre muertos y heridos",
+      "bando2": "Buenos Aires: ~300 bajas entre muertos y heridos, pérdida de artillería y ~2.000 prisioneros",
+      "totalEstimado": 250
+    },
+    "razones": "Buenos Aires se había separado de la Confederación desde 1852 negándose a aceptar la Constitución de 1853 y a nacionalizar las rentas de su aduana.",
+    "consecuencias": "Firma del Pacto de San José de Flores, por el cual Buenos Aires aceptó reincorporarse a la República Argentina tras la reforma constitucional de 1860.",
+    "resultado": "Victoria de la Confederación",
+    "fuente": "Wikipedia (Batalla de Cepeda de 1859)"
+  },
+  {
+    "id": 25,
+    "titulo": "Batalla de Pavón",
+    "fecha": "17 de septiembre de 1861",
+    "anio": 1861,
+    "periodo": "Unitarios y Federales",
+    "periodoId": "civiles",
+    "lugar": "Arroyo Pavón, sur de Santa Fe",
+    "provincia": "Santa Fe",
+    "lat": -33.2417,
+    "lng": -60.3889,
+    "fuerzas": "Estado de Buenos Aires vs. Confederación Argentina",
+    "lideres": {
+      "bando1": "Bartolomé Mitre (Estado de Buenos Aires)",
+      "bando2": "Justo José de Urquiza y Benjamín Virasoro (Confederación Argentina)"
+    },
+    "muertos": {
+      "bando1": "Buenos Aires: ~230 muertos y ~500 heridos",
+      "bando2": "Confederación: ~1.200–1.300 bajas entre muertos y heridos y ~1.700 prisioneros",
+      "totalEstimado": 800
+    },
+    "razones": "Rechazo de los diputados porteños en el Congreso de Paraná y disputa final por quién lideraría la organización del Estado nacional unificado.",
+    "consecuencias": "Retirada de Urquiza, disolución del gobierno de Paraná y triunfo del proyecto liberal porteño encabezado por Mitre, quien asumió la presidencia unificada en 1862.",
+    "resultado": "Victoria de Buenos Aires",
+    "fuente": "Wikipedia (Batalla de Pavón)"
+  },
+  {
+    "id": 26,
+    "titulo": "Batalla de Tuyutí",
+    "fecha": "24 de mayo de 1866",
+    "anio": 1866,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Esteros de Tuyutí, Ñeembucú (Paraguay, frontera con Corrientes)",
+    "provincia": "Guerra de la Triple Alianza (Exterior)",
+    "lat": -27.2050,
+    "lng": -58.5450,
+    "fuerzas": "Triple Alianza (Argentina, Brasil y Uruguay) vs. República del Paraguay",
+    "lideres": {
+      "bando1": "Bartolomé Mitre, Manuel Luís Osorio y Venancio Flores (Triple Alianza)",
+      "bando2": "Francisco Solano López y Vicente Barrios (Paraguay)"
+    },
+    "muertos": {
+      "bando1": "Aliados: ~1.000 muertos y ~3.000 heridos (incl. fuertes bajas argentinas)",
+      "bando2": "Paraguay: ~6.000 muertos y ~7.000 heridos",
+      "totalEstimado": 7000
+    },
+    "razones": "En la Guerra de la Triple Alianza, Solano López lanzó un ataque sorpresa masivo contra el campamento aliado recién instalado en territorio paraguayo.",
+    "consecuencias": "La batalla campal más grande y sangrienta de Sudamérica; destruyó la capacidad ofensiva paraguaya, pero el desgaste estancó el frente durante meses.",
+    "resultado": "Victoria aliada",
+    "fuente": "Wikipedia (Batalla de Tuyutí)"
+  },
+  {
+    "id": 27,
+    "titulo": "Batalla de Curupaytí",
+    "fecha": "22 de septiembre de 1866",
+    "anio": 1866,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Fuerte de Curupaytí, Río Paraguay (frontera norte)",
+    "provincia": "Guerra de la Triple Alianza (Exterior)",
+    "lat": -27.1389,
+    "lng": -58.5986,
+    "fuerzas": "Ejército Argentino y Brasileño vs. Guarnición paraguaya fortificada",
+    "lideres": {
+      "bando1": "Bartolomé Mitre y Marqués de Tamandaré (Triple Alianza)",
+      "bando2": "José Eduvigis Díaz (Paraguay)"
+    },
+    "muertos": {
+      "bando1": "Aliados: ~4.000–5.000 muertos y ~4.000 heridos (incl. Dominguito Sarmiento)",
+      "bando2": "Paraguay: ~50–100 bajas entre muertos y heridos",
+      "totalEstimado": 4200
+    },
+    "razones": "Asalto frontal de la infantería argentina y brasileña contra las trincheras y artillería paraguayas tras un bombardeo naval ineficaz.",
+    "consecuencias": "Peor derrota militar de la historia argentina; paralizó la guerra por más de un año y generó una enorme impopularidad interna contra la guerra y el gobierno de Mitre.",
+    "resultado": "Victoria paraguaya decisiva",
+    "fuente": "Wikipedia (Batalla de Curupaytí)"
+  },
+  {
+    "id": 28,
+    "titulo": "Batalla de Pozo de Vargas",
+    "fecha": "10 de abril de 1867",
+    "anio": 1867,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Pozo de Vargas, afueras de la ciudad de La Rioja",
+    "provincia": "La Rioja",
+    "lat": -29.3931,
+    "lng": -66.8542,
+    "fuerzas": "Montoneras federales del Noroeste y Cuyo vs. Ejército Nacional (División Norte)",
+    "lideres": {
+      "bando1": "Antonino Taboada (Ejército Nacional)",
+      "bando2": "Felipe Varela (Montoneras Federales)"
+    },
+    "muertos": {
+      "bando1": "Ejército Nacional: ~50 muertos y heridos",
+      "bando2": "Federales: ~200 muertos, ~200 heridos y cientos de prisioneros",
+      "totalEstimado": 250
+    },
+    "razones": "Levantamiento federal (Revolución de los Colorados) contra la impopular Guerra del Paraguay, las levas forzosas y el centralismo del gobierno nacional de Mitre.",
+    "consecuencias": "Sofocó la última gran insurrección federal montonera del interior y afianzó el monopolio militar del Estado nacional sobre las provincias.",
+    "resultado": "Victoria del Ejército Nacional",
+    "fuente": "Wikipedia (Batalla de Pozo de Vargas)"
+  },
+  {
+    "id": 29,
+    "titulo": "Batalla de San Carlos de Bolívar",
+    "fecha": "8 de marzo de 1872",
+    "anio": 1872,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Fuerte San Carlos / Pichi Carhué (actual partido de Bolívar)",
+    "provincia": "Buenos Aires",
+    "lat": -36.2333,
+    "lng": -61.1167,
+    "fuerzas": "Ejército Argentino e indígenas aliados vs. Gran Confederación Indígena de las Salinas Grandes",
+    "lideres": {
+      "bando1": "Ignacio Rivas y Cipriano Catriel (Ejército Argentino y aliados)",
+      "bando2": "Juan Calfucurá, Manuel Namuncurá y Reuquecurá (Confederación de Salinas Grandes)"
+    },
+    "muertos": {
+      "bando1": "Ejército Nacional y aliados: ~35 muertos y 20 heridos",
+      "bando2": "Coalición indígena: ~200 muertos y ~300 heridos/prisioneros",
+      "totalEstimado": 235
+    },
+    "razones": "Tras un gigantesco malón de represalia sobre pueblos bonaerenses, el Ejército Nacional buscó quebrar el poder militar de Calfucurá en la frontera sur.",
+    "consecuencias": "Marcó el declive definitivo de la Confederación de Salinas Grandes (Calfucurá murió al año siguiente) y preparó el terreno para la Conquista del Desierto.",
+    "resultado": "Victoria del Ejército Argentino",
+    "fuente": "Wikipedia (Batalla de San Carlos de Bolívar)"
+  },
+  {
+    "id": 30,
+    "titulo": "Batalla de La Verde (Revolución de 1874)",
+    "fecha": "26 de noviembre de 1874",
+    "anio": 1874,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Estancia La Verde, partido de Veinticinco de Mayo",
+    "provincia": "Buenos Aires",
+    "lat": -35.4300,
+    "lng": -60.1700,
+    "fuerzas": "Ejército Nacional leal al presidente Avellaneda vs. Ejército revolucionario mitrista",
+    "lideres": {
+      "bando1": "José Inocencio Arias (Ejército Nacional)",
+      "bando2": "Bartolomé Mitre y Francisco Isidro Borges (Revolucionarios)"
+    },
+    "muertos": {
+      "bando1": "Ejército Nacional: bajas mínimas gracias a trincheras y fusiles Remington",
+      "bando2": "Revolucionarios: ~300 bajas entre muertos y heridos (incl. el coronel Francisco Borges)",
+      "totalEstimado": 150
+    },
+    "razones": "Mitre se levantó en armas denunciando fraude en las elecciones presidenciales que habían consagrado a Nicolás Avellaneda.",
+    "consecuencias": "Rendición de Mitre en Junín (y derrota de Arredondo en Santa Rosa días después), consolidando la autoridad del Estado nacional y el ascenso político de Julio A. Roca.",
+    "resultado": "Victoria del Gobierno Nacional",
+    "fuente": "Wikipedia (Batalla de La Verde)"
+  },
+  {
+    "id": 31,
+    "titulo": "Campaña del Desierto: Avance al Río Negro",
+    "fecha": "Abril–junio de 1879",
+    "anio": 1879,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Isla de Choele Choel y Valle del Río Negro",
+    "provincia": "Río Negro",
+    "lat": -39.2861,
+    "lng": -65.6561,
+    "fuerzas": "Ejército Argentino (5 divisiones con fusiles Remington y telégrafo) vs. Pueblos originarios mapuches, ranqueles y tehuelches",
+    "lideres": {
+      "bando1": "Julio Argentino Roca, Conrado Villegas y Eduardo Racedo (Estado Argentino)",
+      "bando2": "Manuel Namuncurá, Vicente Pincén, Baigorrita y Valentín Sayhueque (Pueblos Originarios)"
+    },
+    "muertos": {
+      "bando1": "Ejército Argentino: bajas militares reducidas en combate directo",
+      "bando2": "Pueblos originarios: más de 1.300 muertos en combate y ~14.000 prisioneros y desplazados (cifra debatida y ampliada por historiografía actual)",
+      "totalEstimado": 1350
+    },
+    "razones": "El Estado nacional buscaba ejercer soberanía efectiva sobre la Pampa y la Patagonia frente a disputas con Chile y expandir tierras para el modelo agroexportador.",
+    "consecuencias": "Incorporación definitiva de millones de hectáreas a la soberanía argentina, catástrofe demográfica y despojo territorial de los pueblos originarios, y salto de Roca a la presidencia en 1880.",
+    "resultado": "Ocupación militar del Estado argentino",
+    "fuente": "Wikipedia (Conquista del Desierto)"
+  },
+  {
+    "id": 32,
+    "titulo": "Batallas de Puente Alsina y Los Corrales (Revolución de 1880)",
+    "fecha": "20 y 21 de junio de 1880",
+    "anio": 1880,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Puente Alsina, Barracas y Corrales Viejos (Parque Patricios)",
+    "provincia": "Ciudad de Buenos Aires",
+    "lat": -34.6408,
+    "lng": -58.4044,
+    "fuerzas": "Ejército Nacional (gobierno en Belgrano) vs. Milicias de la Provincia de Buenos Aires",
+    "lideres": {
+      "bando1": "Nicolás Avellaneda, Carlos Pellegrini, Nicolás Levalle y Eduardo Racedo (Nación)",
+      "bando2": "Carlos Tejedor, Hilario Lagos (h) y Bartolomé Mitre (Provincia de Buenos Aires)"
+    },
+    "muertos": {
+      "bando1": "Fuerzas Nacionales: cientos de muertos y heridos en los asaltos a la ciudad",
+      "bando2": "Fuerzas Porteñas: cientos de muertos y heridos (total estimado de 1.000 a 3.000 bajas sumando todos los combates)",
+      "totalEstimado": 1200
+    },
+    "razones": "El gobernador porteño Carlos Tejedor rechazó la candidatura presidencial de Julio A. Roca y se resistió con milicias propias al proyecto de federalizar la ciudad de Buenos Aires.",
+    "consecuencias": "Último episodio de las guerras civiles del siglo XIX: se prohibieron las milicias provinciales, se sancionó la Federalización de Buenos Aires como Capital Federal y nació el Estado moderno argentino.",
+    "resultado": "Victoria del Gobierno Nacional",
+    "fuente": "Wikipedia (Revolución de 1880 / Batalla de los Corrales Viejos)"
+  },
+  {
+    "id": 33,
+    "titulo": "Campaña del Gran Chaco (Expedición Victorica)",
+    "fecha": "Octubre–diciembre de 1884",
+    "anio": 1884,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Río Bermejo y La Cangayé (Gran Chaco)",
+    "provincia": "Chaco",
+    "lat": -25.6000,
+    "lng": -60.3500,
+    "fuerzas": "Ejército y Marina de la República Argentina vs. Pueblos qom (tobas), mocovíes y wichís",
+    "lideres": {
+      "bando1": "Benjamín Victorica y Manuel Obligado (Estado Argentino)",
+      "bando2": "Caciques Cambá, Yaloschi y líderes qom y mocovíes (Pueblos del Chaco)"
+    },
+    "muertos": {
+      "bando1": "Ejército Argentino: bajas reducidas en escaramuzas",
+      "bando2": "Pueblos originarios: cientos de muertos (incl. el cacique Cambá) y miles sometidos o desplazados",
+      "totalEstimado": 400
+    },
+    "razones": "Extender el control militar estatal post-1880 sobre el nordeste argentino para abrir el territorio a la explotación forestal, ganadera y al trazado de límites definitivos.",
+    "consecuencias": "Creación de los Territorios Nacionales del Chaco y Formosa, establecimiento de fortines y sometimiento de las comunidades indígenas a obrajes e ingenios.",
+    "resultado": "Ocupación militar del Estado argentino",
+    "fuente": "Wikipedia (Conquista del Chaco)"
+  },
+  {
+    "id": 34,
+    "titulo": "Revolución del Parque",
+    "fecha": "26 al 29 de julio de 1890",
+    "anio": 1890,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Parque de Artillería (actual Plaza Lavalle) y microcentro porteño",
+    "provincia": "Ciudad de Buenos Aires",
+    "lat": -34.6011,
+    "lng": -58.3839,
+    "fuerzas": "Unión Cívica y regimientos militares sublevados vs. Ejército leal al gobierno nacional",
+    "lideres": {
+      "bando1": "Leandro N. Alem, Manuel J. Campos, Aristóbulo del Valle y Bartolomé Mitre (Unión Cívica)",
+      "bando2": "Miguel Juárez Celman, Carlos Pellegrini y Nicolás Levalle (Gobierno / PAN)"
+    },
+    "muertos": {
+      "bando1": "Revolucionarios y civiles: parte de los 150–300 muertos y más de 1.000 heridos totales",
+      "bando2": "Fuerzas leales: decenas de soldados y oficiales muertos en el combate urbano",
+      "totalEstimado": 250
+    },
+    "razones": "Profunda crisis económica de 1890, corrupción financiera y repudio al fraude electoral sistemático del Partido Autonomista Nacional (PAN).",
+    "consecuencias": "Aunque fue derrotada militarmente, forzó la renuncia del presidente Juárez Celman (asumió Pellegrini) y dio origen en 1891 a la Unión Cívica Radical (UCR).",
+    "resultado": "Victoria militar del gobierno / Derrota política del presidente",
+    "fuente": "Wikipedia (Revolución del Parque)"
+  },
+  {
+    "id": 35,
+    "titulo": "Revolución Radical de 1893 (Combates en Rosario y El Espinillo)",
+    "fecha": "Julio–octubre de 1893",
+    "anio": 1893,
+    "periodo": "Consolidación y Territorio",
+    "periodoId": "consolidacion",
+    "lugar": "Rosario y Río Paraná (Combate naval de El Espinillo)",
+    "provincia": "Santa Fe",
+    "lat": -32.9442,
+    "lng": -60.6505,
+    "fuerzas": "Milicias de la Unión Cívica Radical y buques sublevados vs. Ejército Nacional y Marina leal",
+    "lideres": {
+      "bando1": "Leandro N. Alem, Hipólito Yrigoyen y Mariano Candioti (UCR)",
+      "bando2": "Luis Sáenz Peña, Julio Argentino Roca y Carlos Pellegrini (Gobierno Nacional)"
+    },
+    "muertos": {
+      "bando1": "Radicales: decenas de muertos y heridos en Rosario, Santa Fe y Tucumán",
+      "bando2": "Fuerzas Nacionales: decenas de bajas en combates urbanos y navales",
+      "totalEstimado": 120
+    },
+    "razones": "La UCR impulsó levantamientos simultáneos en Buenos Aires, Santa Fe, San Luis y Tucumán exigiendo sufragio libre y el fin del régimen conservador.",
+    "consecuencias": "El Ejército Nacional sofocó las sublevaciones y encarceló a Alem; la derrota consolidó el liderazgo interno de Hipólito Yrigoyen y la estrategia de intransigencia radical.",
+    "resultado": "Victoria del Gobierno Nacional",
+    "fuente": "Wikipedia (Revolución radical de 1893)"
+  },
+  {
+    "id": 36,
+    "titulo": "La Semana Trágica",
+    "fecha": "7 al 14 de enero de 1919",
+    "anio": 1919,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Talleres Vasena (San Cristóbal / Nueva Pompeya) y barrios de Buenos Aires",
+    "provincia": "Ciudad de Buenos Aires",
+    "lat": -34.6247,
+    "lng": -58.4072,
+    "fuerzas": "Obreros metalúrgicos y huelguistas generales vs. Policía, Ejército Argentino y grupos parapoliciales (Liga Patriótica)",
+    "lideres": {
+      "bando1": "Sindicatos metalúrgicos, FORA V y FORA IX (Movimiento Obrero)",
+      "bando2": "Gobierno de Hipólito Yrigoyen, General Luis Dellepiane y Manuel Carlés (Estado / Liga Patriótica)"
+    },
+    "muertos": {
+      "bando1": "Obreros, manifestantes y vecinos judíos víctimas de pogromos: ~700–1.000 muertos estimados y miles de heridos",
+      "bando2": "Fuerzas de seguridad: menos de 10 agentes muertos",
+      "totalEstimado": 700
+    },
+    "razones": "Huelga en los talleres metalúrgicos Vasena por jornadas de 8 horas y mejores salarios; tras los primeros disparos policiales contra huelguistas, estalló una huelga general insurreccional.",
+    "consecuencias": "Una de las represiones obreras más sangrientas del siglo XX argentino; dio origen formal a la Liga Patriótica Argentina y marcó una grieta profunda entre el radicalismo y sectores obreros.",
+    "resultado": "Represión estatal y levantamiento de la huelga",
+    "fuente": "Wikipedia (Semana Trágica en Argentina)"
+  },
+  {
+    "id": 37,
+    "titulo": "La Patagonia Rebelde (Huelgas Patagónicas)",
+    "fecha": "Noviembre de 1920 – enero de 1922",
+    "anio": 1921,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Estancias de Santa Cruz (Río Gallegos, Jaramillo, Estancia La Anita)",
+    "provincia": "Santa Cruz",
+    "lat": -50.3200,
+    "lng": -72.5200,
+    "fuerzas": "Peones rurales y obreros patagónicos (FORA) vs. Regimiento 10 de Caballería del Ejército Argentino",
+    "lideres": {
+      "bando1": "Antonio Soto, José Font ('Facón Grande') y Albino Argüelles (Obreros rurales)",
+      "bando2": "Teniente Coronel Héctor Benigno Varela y Sociedad Rural (Ejército / Estancieros)"
+    },
+    "muertos": {
+      "bando1": "Obreros rurales huelguistas: ~1.000–1.500 fusilados sumariamente",
+      "bando2": "Ejército y policía: ~3–5 efectivos muertos",
+      "totalEstimado": 1200
+    },
+    "razones": "Los peones de estancias ovinas reclamaban condiciones básicas de trabajo, pago en moneda nacional y cumplimiento del convenio laboral incumplido por los terratenientes.",
+    "consecuencias": "Masacre obrera silenciada durante décadas (luego documentada por Osvaldo Bayer) y asesinato posterior de Varela en 1923 por el anarquista Kurt Wilckens.",
+    "resultado": "Represión y fusilamiento masivo de huelguistas",
+    "fuente": "Wikipedia (Patagonia Rebelde)"
+  },
+  {
+    "id": 38,
+    "titulo": "Masacre de Napalpí",
+    "fecha": "19 de julio de 1924",
+    "anio": 1924,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Reducción indígena de Napalpí (cerca de Quitilipi)",
+    "provincia": "Chaco",
+    "lat": -26.8667,
+    "lng": -60.1500,
+    "fuerzas": "Comunidades qom, moqoit y peones criollos en huelga vs. Policía del Territorio Nacional del Chaco, gendarmes y colonos armados",
+    "lideres": {
+      "bando1": "Caciques José Machado, Dionisio Gómez y comunidad de Napalpí (Pueblos Originarios)",
+      "bando2": "Gobernador Fernando Centeno (Territorio Nacional del Chaco)"
+    },
+    "muertos": {
+      "bando1": "Comunidades qom y moqoit: ~200–500 personas asesinadas (hombres, mujeres y niños)",
+      "bando2": "Fuerzas represivas: 0 muertos",
+      "totalEstimado": 350
+    },
+    "razones": "Reclamo de las comunidades indígenas contra la explotación en la cosecha de algodón, el pago con vales y la prohibición de salir de la reducción para buscar mejores salarios.",
+    "consecuencias": "Sometimiento brutal de las comunidades chaqueñas. En 2022, un juicio por la verdad histórico en la justicia federal declaró la masacre crimen de lesa humanidad en marco de genocidio.",
+    "resultado": "Masacre estatal contra población indígena",
+    "fuente": "Wikipedia (Masacre de Napalpí)"
+  },
+  {
+    "id": 39,
+    "titulo": "Bombardeo de la Plaza de Mayo",
+    "fecha": "16 de junio de 1955",
+    "anio": 1955,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Plaza de Mayo, Casa Rosada y Paseo Colón",
+    "provincia": "Ciudad de Buenos Aires",
+    "lat": -34.6081,
+    "lng": -58.3703,
+    "fuerzas": "Aviación Naval, sectores de la Fuerza Aérea y comandos civiles antiperonistas vs. Gobierno constitucional de Perón, Ejército leal y civiles en la plaza",
+    "lideres": {
+      "bando1": "Juan Domingo Perón y General Franklin Lucero (Gobierno Constitucional)",
+      "bando2": "Contralmirante Samuel Toranzo Calderón y Vicealmirante Benjamín Gargiulo (Sublevados)"
+    },
+    "muertos": {
+      "bando1": "Población civil y fuerzas leales: 308–355 muertos documentados y más de 800–1.200 heridos",
+      "bando2": "Sublevados: bajas mínimas en combate (Gargiulo se suicidó al fracasar el golpe)",
+      "totalEstimado": 330
+    },
+    "razones": "Intento de golpe de Estado para asesinar al presidente Juan Domingo Perón en medio de una polarización extrema entre peronismo y oposición.",
+    "consecuencias": "Único bombardeo aéreo de fuerzas armadas propias sobre población civil en la historia argentina; agravó la crisis política, derivó en la quema de iglesias esa noche y precedió al golpe de septiembre de 1955.",
+    "resultado": "Fracaso del golpe / Masacre de civiles",
+    "fuente": "Wikipedia (Bombardeo de la Plaza de Mayo)"
+  },
+  {
+    "id": 40,
+    "titulo": "Golpe de 1955 ('Revolución Libertadora'): Combates de Córdoba",
+    "fecha": "16 al 21 de septiembre de 1955",
+    "anio": 1955,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Escuela de Artillería, Ciudad de Córdoba (y focos en Puerto Belgrano)",
+    "provincia": "Córdoba",
+    "lat": -31.4201,
+    "lng": -64.1888,
+    "fuerzas": "Fuerzas sublevadas del Ejército, Armada y Fuerza Aérea vs. Tropas leales al gobierno constitucional de Perón",
+    "lideres": {
+      "bando1": "Eduardo Lonardi, Isaac Rojas y Pedro Eugenio Aramburu (Sublevados)",
+      "bando2": "Juan Domingo Perón y General Franklin Lucero (Gobierno Constitucional)"
+    },
+    "muertos": {
+      "bando1": "Sublevados y civiles: decenas de muertos en Córdoba y Puerto Belgrano",
+      "bando2": "Fuerzas leales y civiles: decenas de muertos (al menos 156 muertos documentados en todo el país)",
+      "totalEstimado": 156
+    },
+    "razones": "Coalición cívico-militar decidida a derrocar a Juan Domingo Perón tras la ruptura institucional iniciada con el bombardeo de junio.",
+    "consecuencias": "Derrocamiento y exilio de Perón por 18 años, proscripción del peronismo, derogación de la Constitución de 1949 e inicio de décadas de inestabilidad democrática.",
+    "resultado": "Victoria de los sublevados (Golpe de Estado)",
+    "fuente": "Wikipedia (Revolución Libertadora)"
+  },
+  {
+    "id": 41,
+    "titulo": "Enfrentamientos entre Azules y Colorados",
+    "fecha": "Septiembre de 1962 y abril de 1963",
+    "anio": 1963,
+    "periodo": "Guerrilla y Militares",
+    "periodoId": "guerrilla_militares",
+    "lugar": "Magdalena, Punta Indio, Campo de Mayo y Puerto Belgrano",
+    "provincia": "Buenos Aires",
+    "lat": -35.0833,
+    "lng": -57.5167,
+    "fuerzas": "Facción 'Azul' (Ejército y Fuerza Aérea) vs. Facción 'Colorada' (Armada y sectores del Ejército)",
+    "lideres": {
+      "bando1": "Juan Carlos Onganía y Alejandro Agustín Lanusse (Azules)",
+      "bando2": "Isaac Rojas, Benjamín Menéndez y Federico Toranzo Montero (Colorados)"
+    },
+    "muertos": {
+      "bando1": "Azules: parte de los 24 combatientes fallecidos y 87 heridos",
+      "bando2": "Colorados: parte de los 24 combatientes fallecidos (incl. bombardeo a la Base Punta Indio)",
+      "totalEstimado": 24
+    },
+    "razones": "Pugna interna dentro de las Fuerzas Armadas tras el derrocamiento de Frondizi sobre qué hacer con el peronismo proscripto: salida electoral limitada (Azules) vs. dictadura militar prolongada (Colorados).",
+    "consecuencias": "Triunfo de los Azules, llamado a elecciones con proscripción peronista en 1963 (asumió Arturo Illia) y consolidación de Onganía, quien luego daría el golpe de 1966.",
+    "resultado": "Victoria de la facción Azul",
+    "fuente": "Wikipedia (Azules y Colorados)"
+  },
+  {
+    "id": 42,
+    "titulo": "El Rosariazo",
+    "fecha": "Mayo y septiembre de 1969",
+    "anio": 1969,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Centro universitario y barrios obreros de Rosario",
+    "provincia": "Santa Fe",
+    "lat": -32.9468,
+    "lng": -60.6393,
+    "fuerzas": "Estudiantes universitarios, trabajadores ferroviarios y vecinos vs. Policía Provincial y Ejército Argentino",
+    "lideres": {
+      "bando1": "Movimiento estudiantil y CGT de los Argentinos (Población / Sindicatos)",
+      "bando2": "Dictadura de Juan Carlos Onganía y General Roberto Fonseca (Estado Militar)"
+    },
+    "muertos": {
+      "bando1": "Estudiantes y manifestantes: al menos 2–3 muertos confirmados en mayo (Adolfo Bello y Luis Norberto Blanco, de 15 años) y cientos de heridos",
+      "bando2": "Fuerzas de seguridad: 0 muertos",
+      "totalEstimado": 3
+    },
+    "razones": "Protestas solidarias tras el asesinato del estudiante Juan José Cabral en Corrientes, el aumento de tarifas y el autoritarismo de la dictadura de Onganía.",
+    "consecuencias": "Anticipó y acompañó al Cordobazo, demostrando la alianza obrero-estudiantil en las grandes ciudades industriales contra el régimen militar.",
+    "resultado": "Declaración de zona de emergencia y ocupación militar de la ciudad",
+    "fuente": "Wikipedia (Rosariazo)"
+  },
+  {
+    "id": 43,
+    "titulo": "El Cordobazo",
+    "fecha": "29 y 30 de mayo de 1969",
+    "anio": 1969,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Avenida Colón, Barrio Clínicas y centro de Córdoba",
+    "provincia": "Córdoba",
+    "lat": -31.4135,
+    "lng": -64.1885,
+    "fuerzas": "Obreros automotrices, de Luz y Fuerza y estudiantes universitarios vs. Policía de Córdoba y III Cuerpo del Ejército",
+    "lideres": {
+      "bando1": "Agustín Tosco, Elpidio Torres y Atilio López (Obreros y Estudiantes)",
+      "bando2": "Juan Carlos Onganía, Carlos Caballero y General Jorge Carcagno (Régimen Militar)"
+    },
+    "muertos": {
+      "bando1": "Manifestantes y vecinos: 14–34 muertos documentados (entre ellos Máximo Mena) y cientos de heridos",
+      "bando2": "Fuerzas de seguridad: bajas heridas en barricadas",
+      "totalEstimado": 20
+    },
+    "razones": "Rechazo a la supresión del 'sábado inglés', el congelamiento salarial, la intervención universitaria y la dictadura de la autodenominada 'Revolución Argentina'.",
+    "consecuencias": "Hirió de muerte al gobierno de Onganía (que caería en 1970), revitalizó el sindicalismo combativo y aceleró el proceso político que llevó al retorno electoral en 1973.",
+    "resultado": "Pueblada reprimida por el Ejército / Punto de inflexión político",
+    "fuente": "Wikipedia (Cordobazo)"
+  },
+  {
+    "id": 44,
+    "titulo": "Masacre de Ezeiza",
+    "fecha": "20 de junio de 1973",
+    "anio": 1973,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Trébol de la Autopista Riccheri y Ruta 205, Ezeiza",
+    "provincia": "Buenos Aires",
+    "lat": -34.7772,
+    "lng": -58.5322,
+    "fuerzas": "Sectores armados de la derecha peronista (custodia del palco) vs. Columnas de la Tendencia Revolucionaria (Juventud Peronista y Montoneros)",
+    "lideres": {
+      "bando1": "Jorge Osinde y José López Rega (Organización del palco / Derecha peronista)",
+      "bando2": "Juventud Peronista y Montoneros (Izquierda peronista)"
+    },
+    "muertos": {
+      "bando1": "Custodia del palco: algunas bajas menores en el intercambio",
+      "bando2": "Manifestantes y militantes: al menos 13 muertos oficialmente identificados y 365 heridos (estimaciones mayores sin confirmar)",
+      "totalEstimado": 13
+    },
+    "razones": "Disputa armada por el control del acto multitudinario del regreso definitivo de Juan Domingo Perón a la Argentina.",
+    "consecuencias": "El avión de Perón debió aterrizar en Morón; fracturó irreversiblemente al movimiento peronista, precipitó la renuncia de Héctor Cámpora y abrió una espiral de violencia política en los años 70.",
+    "resultado": "Suspensión del acto y quiebre definitivo del peronismo",
+    "fuente": "Wikipedia (Masacre de Ezeiza)"
+  },
+  {
+    "id": 45,
+    "titulo": "Operativo Independencia y Combate de Manchalá",
+    "fecha": "Febrero de 1975 – marzo de 1976 (Manchalá: 28 de mayo de 1975)",
+    "anio": 1975,
+    "periodo": "Guerrilla y Militares",
+    "periodoId": "guerrilla_militares",
+    "lugar": "Famaillá, Acheral y Escuela de Manchalá (monte tucumano)",
+    "provincia": "Tucumán",
+    "lat": -27.0817,
+    "lng": -65.4369,
+    "fuerzas": "Ejército Argentino y Fuerzas de Seguridad vs. Compañía de Monte 'Ramón Rosa Jiménez' del ERP",
+    "lideres": {
+      "bando1": "General Acdel Vilas y luego General Antonio Domingo Bussi (Ejército Argentino)",
+      "bando2": "Mario Roberto Santucho y Juan Eliseo Ledesma (PRT-ERP)"
+    },
+    "muertos": {
+      "bando1": "Fuerzas Armadas y seguridad: decenas de muertos en toda la campaña (sin muertos en Manchalá)",
+      "bando2": "ERP y víctimas civiles: decenas de guerrilleros muertos en combate (2 en Manchalá) y más de 300 civiles secuestrados/desaparecidos en centros clandestinos",
+      "totalEstimado": 350
+    },
+    "razones": "El gobierno de María Estela Martínez de Perón ordenó al Ejército 'aniquilar el accionar de los elementos subversivos' frente al foco guerrillero rural instalado por el ERP en Tucumán.",
+    "consecuencias": "Derrota militar del foco rural del ERP, pero inauguró el método de centros clandestinos de detención ('La Escuelita de Famaillá') que luego la dictadura de 1976 aplicó a escala nacional.",
+    "resultado": "Victoria militar del Ejército / Inicio del terrorismo de Estado sistemático",
+    "fuente": "Wikipedia (Operativo Independencia / Combate de Manchalá)"
+  },
+  {
+    "id": 46,
+    "titulo": "Operación Primicia (Ataque al Regimiento de Monte 29)",
+    "fecha": "5 de octubre de 1975",
+    "anio": 1975,
+    "periodo": "Guerrilla y Militares",
+    "periodoId": "guerrilla_militares",
+    "lugar": "Regimiento de Infantería de Monte 29 y Aeropuerto de Formosa",
+    "provincia": "Formosa",
+    "lat": -26.1856,
+    "lng": -58.1914,
+    "fuerzas": "Organización político-militar Montoneros vs. Guarnición del Ejército Argentino y Policía",
+    "lideres": {
+      "bando1": "Raúl Yäger (operativo de Montoneros)",
+      "bando2": "Guarnición del RIM 29 y soldados conscriptos (Ejército Argentino)"
+    },
+    "muertos": {
+      "bando1": "Montoneros: 12–16 militantes muertos",
+      "bando2": "Ejército, policía y civiles: 12 militares (10 conscriptos), 1 policía y 3 civiles muertos",
+      "totalEstimado": 28
+    },
+    "razones": "Montoneros buscó copar un cuartel del Ejército para capturar armamento (fusiles FAL) y dar un golpe de efecto político-militar en plena crisis del gobierno constitucional.",
+    "consecuencias": "El ataque fue repelido; el gobierno nacional extendió los decretos de aniquilamiento a todo el país y aceleró la presión militar hacia el golpe de Estado de marzo de 1976.",
+    "resultado": "Ataque repelido por la guarnición",
+    "fuente": "Wikipedia (Operación Primicia)"
+  },
+  {
+    "id": 47,
+    "titulo": "Ataque al Batallón de Arsenales 601 en Monte Chingolo",
+    "fecha": "23 de diciembre de 1975",
+    "anio": 1975,
+    "periodo": "Guerrilla y Militares",
+    "periodoId": "guerrilla_militares",
+    "lugar": "Batallón Depósito de Arsenales 601, Monte Chingolo (Lanús)",
+    "provincia": "Buenos Aires",
+    "lat": -34.7311,
+    "lng": -58.3522,
+    "fuerzas": "Ejército Revolucionario del Pueblo (ERP) vs. Ejército Argentino, Policía y Fuerza Aérea",
+    "lideres": {
+      "bando1": "Mario Roberto Santucho y Benito Urteaga (PRT-ERP)",
+      "bando2": "General Roberto Viola y Coronel Eduardo Abud (Ejército Argentino)"
+    },
+    "muertos": {
+      "bando1": "ERP: ~60–62 combatientes muertos (incluyendo fusilamientos posteriores a la rendición)",
+      "bando2": "Fuerzas de seguridad: 7–10 efectivos muertos (además de víctimas civiles en el barrio)",
+      "totalEstimado": 100
+    },
+    "razones": "El ERP intentó copar el mayor depósito de armas del conurbano bonaerense para robar toneladas de fusiles y municiones, sin saber que la inteligencia militar había infiltrado la operación.",
+    "consecuencias": "Combate más sangriento entre guerrilla y militares en los años 70; destruyó la capacidad militar del ERP tres meses antes del golpe de Estado del 24 de marzo de 1976.",
+    "resultado": "Derrota decisiva del ERP",
+    "fuente": "Wikipedia (Ataque al batallón de Monte Chingolo)"
+  },
+  {
+    "id": 48,
+    "titulo": "Operación Rosario (Desembarco en Malvinas)",
+    "fecha": "2 de abril de 1982",
+    "anio": 1982,
+    "periodo": "Guerra de Malvinas",
+    "periodoId": "malvinas",
+    "lugar": "Puerto Argentino (Stanley), Isla Soledad",
+    "provincia": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+    "lat": -51.6922,
+    "lng": -57.8575,
+    "fuerzas": "Fuerza de Tareas Anfibia de la Armada y Ejército Argentino vs. Destacamento de Royal Marines británicos",
+    "lideres": {
+      "bando1": "Contralmirante Carlos Büsser y General Osvaldo García (Argentina)",
+      "bando2": "Gobernador Rex Hunt y Mayor Mike Norman (Reino Unido)"
+    },
+    "muertos": {
+      "bando1": "Argentina: 1 muerto (Capitán de Corbeta Pedro Edgardo Giachino) y 2 heridos",
+      "bando2": "Reino Unido: 0 muertos",
+      "totalEstimado": 1
+    },
+    "razones": "La Junta Militar argentina ordenó la recuperación militar del archipiélago bajo soberanía disputada desde 1833, buscando forzar negociaciones con Londres y desviar la crisis interna.",
+    "consecuencias": "Recuperación inicial de las islas con rendición británica, pero provocó la respuesta militar del gobierno de Margaret Thatcher y el inicio de la Guerra de Malvinas.",
+    "resultado": "Victoria argentina inicial",
+    "fuente": "Wikipedia (Operación Rosario)"
+  },
+  {
+    "id": 49,
+    "titulo": "Batalla de San Carlos (Guerra de Malvinas)",
+    "fecha": "21 al 27 de mayo de 1982",
+    "anio": 1982,
+    "periodo": "Guerra de Malvinas",
+    "periodoId": "malvinas",
+    "lugar": "Estrecho y Bahía de San Carlos, Islas Malvinas",
+    "provincia": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+    "lat": -51.5000,
+    "lng": -59.0500,
+    "fuerzas": "Fuerza Aérea Argentina y Aviación Naval vs. Fuerza de Tareas de la Royal Navy británica",
+    "lideres": {
+      "bando1": "Brigadier Ernesto Crespo y pilotos de FAA/COAN (Argentina)",
+      "bando2": "Almirante Sandy Woodward y Comodoro Michael Clapp (Reino Unido)"
+    },
+    "muertos": {
+      "bando1": "Argentina: ~11 pilotos muertos y más de 20 aviones perdidos en el estrecho",
+      "bando2": "Reino Unido: ~45–50 marinos muertos (hundimiento de HMS Ardent, HMS Antelope, HMS Coventry y Atlantic Conveyor)",
+      "totalEstimado": 60
+    },
+    "razones": "Las tropas británicas ejecutaron su desembarco anfibio principal en San Carlos; la aviación argentina realizó audaces ataques a ras del agua para impedir la cabeza de playa.",
+    "consecuencias": "Pese a causar graves pérdidas navales británicas, el Reino Unido logró consolidar su desembarco terrestre y comenzar el avance hacia Darwin y Puerto Argentino.",
+    "resultado": "Consolidación de la cabeza de playa británica con altas pérdidas navales",
+    "fuente": "Wikipedia (Batalla de San Carlos)"
+  },
+  {
+    "id": 50,
+    "titulo": "Batalla de Pradera del Ganso (Goose Green)",
+    "fecha": "28 y 29 de mayo de 1982",
+    "anio": 1982,
+    "periodo": "Guerra de Malvinas",
+    "periodoId": "malvinas",
+    "lugar": "Istmo de Darwin y Pradera del Ganso, Isla Soledad",
+    "provincia": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+    "lat": -51.8292,
+    "lng": -58.9694,
+    "fuerzas": "Fuerza de Tareas Mercedes (RI 12 y FAA) vs. 2.º Batallón de Paracaidistas británico (2 PARA)",
+    "lideres": {
+      "bando1": "Teniente Coronel Ítalo Piaggi y Teniente Roberto Estévez (Argentina)",
+      "bando2": "Teniente Coronel Herbert Jones (caído en combate) y Chris Keeble (Reino Unido)"
+    },
+    "muertos": {
+      "bando1": "Argentina: ~50 muertos, ~145 heridos y ~960 prisioneros",
+      "bando2": "Reino Unido: 19 muertos (incl. el comandante H. Jones) y 64 heridos",
+      "totalEstimado": 69
+    },
+    "razones": "Primer gran combate terrestre de la guerra: el mando británico buscaba asegurar el flanco sur del istmo de Darwin y obtener una victoria rápida tras las bajas navales.",
+    "consecuencias": "Caída de la guarnición argentina por falta de munición y apoyo logístico, elevando la moral británica en el avance hacia Puerto Argentino.",
+    "resultado": "Victoria británica",
+    "fuente": "Wikipedia (Batalla de Pradera del Ganso)"
+  },
+  {
+    "id": 51,
+    "titulo": "Batalla de Monte Longdon y caída de Puerto Argentino",
+    "fecha": "11 al 14 de junio de 1982",
+    "anio": 1982,
+    "periodo": "Guerra de Malvinas",
+    "periodoId": "malvinas",
+    "lugar": "Monte Longdon, Dos Hermanas y Monte Tumbledown (perímetro de Puerto Argentino)",
+    "provincia": "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+    "lat": -51.6761,
+    "lng": -57.9917,
+    "fuerzas": "Regimiento de Infantería 7, BIM 5 y defensores de Puerto Argentino vs. 3.º de Paracaidistas y Brigada Británica",
+    "lideres": {
+      "bando1": "General Mario Benjamín Menéndez y Mayor Carlos Carrizo Salvadores (Argentina)",
+      "bando2": "General Jeremy Moore y Teniente Coronel Hew Pike (Reino Unido)"
+    },
+    "muertos": {
+      "bando1": "Argentina: 31 muertos en Monte Longdon (649 muertos totales en toda la Guerra de Malvinas)",
+      "bando2": "Reino Unido: 23 muertos en Monte Longdon (255 muertos totales en toda la guerra)",
+      "totalEstimado": 54
+    },
+    "razones": "Asalto nocturno final británico sobre las alturas estratégicas que defendían Puerto Argentino, con feroces combates cuerpo a cuerpo en condiciones extremas de frío.",
+    "consecuencias": "Rendición argentina el 14 de junio de 1982; aceleró el colapso total de la dictadura militar y abrió el camino al retorno de la democracia en diciembre de 1983.",
+    "resultado": "Victoria británica / Fin de la guerra",
+    "fuente": "Wikipedia (Batalla de Monte Longdon)"
+  },
+  {
+    "id": 52,
+    "titulo": "Copamiento del Cuartel de La Tablada",
+    "fecha": "23 y 24 de enero de 1989",
+    "anio": 1989,
+    "periodo": "Guerrilla y Militares",
+    "periodoId": "guerrilla_militares",
+    "lugar": "Regimiento de Infantería Mecanizado 3, La Tablada (La Matanza)",
+    "provincia": "Buenos Aires",
+    "lat": -34.6889,
+    "lng": -58.5267,
+    "fuerzas": "Movimiento Todos por la Patria (MTP) vs. Ejército Argentino y Policía de la Provincia de Buenos Aires",
+    "lideres": {
+      "bando1": "Enrique Gorriarán Merlo y Francisco Provenzano (MTP)",
+      "bando2": "Gobierno de Raúl Alfonsín y General Alfredo Arrillaga (Estado Constitucional / Ejército)"
+    },
+    "muertos": {
+      "bando1": "MTP: 32 atacantes muertos (incluyendo 4 desaparecidos tras rendirse)",
+      "bando2": "Fuerzas estatales y civiles: 9 militares, 2 policías y 2 civiles muertos (45 fallecidos totales)",
+      "totalEstimado": 45
+    },
+    "razones": "El grupo guerrillero MTP atacó el regimiento alegando prevenir un presunto golpe carapintada, en medio de la tensión militar y económica del final del gobierno de Alfonsín.",
+    "consecuencias": "Repudio unánime de todo el arco democrático, debilitamiento de la política de derechos humanos de la época y aumento de la crisis política previa a las elecciones de 1989.",
+    "resultado": "Recuperación del cuartel por el Ejército",
+    "fuente": "Wikipedia (Copamiento del cuartel de La Tablada)"
+  },
+  {
+    "id": 53,
+    "titulo": "Cuarto Levantamiento Carapintada",
+    "fecha": "3 de diciembre de 1990",
+    "anio": 1990,
+    "periodo": "Guerrilla y Militares",
+    "periodoId": "guerrilla_militares",
+    "lugar": "Edificio Libertador, Regimiento de Patricios (Palermo) y planta TAMSE (Boulogne)",
+    "provincia": "Ciudad de Buenos Aires",
+    "lat": -34.5767,
+    "lng": -58.4317,
+    "fuerzas": "Militares sublevados 'carapintadas' vs. Fuerzas Armadas leales al gobierno constitucional",
+    "lideres": {
+      "bando1": "Coronel Mohamed Alí Seineldín (desde prisión) y Gustavo Breide Obeid (Sublevados)",
+      "bando2": "Presidente Carlos Menem y General Martín Bonnet (Gobierno Constitucional)"
+    },
+    "muertos": {
+      "bando1": "Sublevados: bajas menores y un suicidio",
+      "bando2": "Fuerzas leales y civiles: 2 oficiales leales fusilados, militares caídos y 5 civiles muertos (14 muertos y ~200 heridos totales)",
+      "totalEstimado": 14
+    },
+    "razones": "Último motín del sector nacionalista militar 'carapintada' contra la cúpula del Ejército, los recortes presupuestarios y la subordinación al poder civil.",
+    "consecuencias": "Represión firme y rendición incondicional de los sublevados; cerró definitivamente la etapa de los planteos militares y consolidó la subordinación militar a la democracia.",
+    "resultado": "Victoria del Gobierno Constitucional",
+    "fuente": "Wikipedia (Levantamiento carapintada de 1990)"
+  },
+  {
+    "id": 54,
+    "titulo": "Jornadas del 19 y 20 de diciembre de 2001 ('Argentinazo')",
+    "fecha": "19 y 20 de diciembre de 2001",
+    "anio": 2001,
+    "periodo": "Estado y Pueblo",
+    "periodoId": "estado_pueblo",
+    "lugar": "Plaza de Mayo, Obelisco, Congreso (y focos en Rosario, Córdoba y conurbano)",
+    "provincia": "Ciudad de Buenos Aires",
+    "lat": -34.6085,
+    "lng": -58.3735,
+    "fuerzas": "Población civil, cacerolazos, asambleas y manifestantes vs. Policía Federal, policías provinciales y Gendarmería Nacional",
+    "lideres": {
+      "bando1": "Movilización popular espontánea, ahorristas, trabajadores y movimientos sociales (Pueblo)",
+      "bando2": "Presidente Fernando de la Rúa, Ministro Domingo Cavallo y Enrique Mathov (Gobierno Nacional)"
+    },
+    "muertos": {
+      "bando1": "Manifestantes y ciudadanos en todo el país: 39 muertos documentados (5 en Plaza de Mayo y 34 en provincias y conurbano) y cientos de heridos",
+      "bando2": "Fuerzas de seguridad: 0 muertos",
+      "totalEstimado": 39
+    },
+    "razones": "Colapso de la Convertibilidad, desempleo y pobreza récord, imposición del 'corralito' bancario y declaración del Estado de Sitio por cadena nacional el 19 de diciembre.",
+    "consecuencias": "Renuncia del presidente Fernando de la Rúa en helicóptero desde la Casa Rosada, sucesión de cinco presidentes en once días, fin de la Convertibilidad y profunda reconfiguración política del siglo XXI.",
+    "resultado": "Caída del gobierno tras brutal represión estatal",
+    "fuente": "Wikipedia (Crisis de diciembre de 2001 en Argentina)"
+  }
+]
