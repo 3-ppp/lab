@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz de fútbol</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <main>
+    <header>
+      <h1>⚽ Quiz de fútbol</h1>
+      <p id="progreso">Cargando preguntas…</p>
+    </header>
+
+    <section id="juego" hidden>
+      <h2 id="pregunta"></h2>
+      <div id="opciones"></div>
+      <p id="mensaje" aria-live="polite"></p>
+      <button id="siguiente" class="principal" hidden>Siguiente</button>
+    </section>
+
+    <section id="final" hidden>
+      <h2>¡Terminaste!</h2>
+      <p id="resultado"></p>
+      <button id="reiniciar" class="principal">Jugar de nuevo</button>
+    </section>
+  </main>
+
+  <script src="quiz.js"></script>
+</body>
+</html>

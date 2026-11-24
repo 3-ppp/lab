@@ -1,0 +1,61 @@
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+  background: #0b6e3a;
+  background-image: repeating-linear-gradient(90deg, #0b6e3a 0 60px, #0d7a41 60px 120px);
+  color: #1b1b1b;
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+}
+
+main {
+  width: 100%;
+  max-width: 560px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  align-self: flex-start;
+}
+
+header { text-align: center; }
+h1 { margin: 0 0 4px; font-size: 1.8rem; }
+#progreso { margin: 0 0 16px; color: #555; }
+h2 { font-size: 1.25rem; line-height: 1.35; }
+
+#opciones { display: grid; gap: 10px; }
+
+button {
+  font: inherit;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  background: #f7f7f7;
+  cursor: pointer;
+  text-align: left;
+}
+button:hover:not(:disabled) { border-color: #0b6e3a; }
+button:disabled { cursor: default; }
+
+button.correcta { background: #d4f5df; border-color: #1a9c4b; }
+button.incorrecta { background: #fde0e0; border-color: #d33; }
+
+.principal {
+  display: block;
+  width: 100%;
+  margin-top: 16px;
+  text-align: center;
+  background: #0b6e3a;
+  border-color: #0b6e3a;
+  color: #fff;
+  font-weight: bold;
+}
+.principal:hover { background: #095c30; }
+
+#mensaje { min-height: 1.5em; margin: 16px 0 0; }
+#resultado { font-size: 1.15rem; }
