@@ -123,7 +123,7 @@ button, input { font: inherit; }
 .upload-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .upload-label.secondary { color: var(--wine); background: #f7f0e1; }
 .file-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; clip-path: inset(50%); }
-.file-input:focus-visible + .upload-label, button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.file-input:focus-visible + .upload-label, .file-input:focus-visible + .session-button, button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .file-list { display: grid; gap: 8px; margin-top: 13px; }
 .file-item { padding: 10px; border: 1px solid var(--line); background: #fffaf0; }
 .file-item summary { color: var(--wine); cursor: pointer; overflow-wrap: anywhere; }
@@ -137,6 +137,8 @@ button, input { font: inherit; }
 .counter-caption { margin-top: 12px; color: var(--muted); font-size: 13px; }
 .session-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .session-status { min-height: 1.4em; margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+.state-actions { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; padding-top: 8px; border-top: 1px solid var(--line); }
+.state-status { width: 100%; margin: 0; color: var(--muted); font-size: 12px; }
 .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 15px; border-bottom: 1px solid var(--line); background: #e9dfc9; }
 .tabs { display: flex; gap: 0; }
 .tab, .clear {
@@ -226,8 +228,8 @@ button, input { font: inherit; }
   <div class="study-card"><h2>Mis resúmenes</h2><p class="study-note">Elegí archivos .txt, .md o .pdf, o una carpeta entera. Podés leerlos acá mientras la página esté abierta.</p><div class="upload-actions"><input class="file-input" id="summaryFiles" type="file" accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf" multiple aria-label="Elegir archivos de resumen"><label class="upload-label" for="summaryFiles">＋ Adjuntar archivos</label><input class="file-input" id="summaryFolder" type="file" accept=".txt,.md,.pdf,text/plain,text/markdown,application/pdf" webkitdirectory directory multiple aria-label="Elegir una carpeta de resúmenes"><label class="upload-label secondary" for="summaryFolder">＋ Adjuntar carpeta</label></div><div class="file-list" id="fileList" aria-live="polite"><span class="study-note">Todavía no adjuntaste resúmenes.</span></div></div>
   <div class="study-card"><h2>Contador de puchos</h2><p class="study-note">Un registro para acompañar tus horas de estudio.</p><div class="counter"><button class="counter-button" id="smokeLess" type="button" aria-label="Restar un pucho">−</button><strong id="smokeCount" aria-live="polite">0</strong><button class="counter-button" id="smokeMore" type="button" aria-label="Sumar un pucho">＋</button></div><div class="counter-caption">fumados mientras preparás el final</div><div class="session-actions"><button class="session-button" id="saveSmoke" type="button">Guardar contador en mi PC</button><input class="file-input" id="loadSmoke" type="file" accept=".json,application/json" aria-label="Cargar contador guardado"><label class="session-button" for="loadSmoke">Cargar contador</label></div><p class="session-status" id="smokeStatus" aria-live="polite">Descargá un archivo para conservar el contador entre sesiones.</p></div>
 </section>
-<section class="panel"><div class="tools"><div class="tabs"><button class="tab active" data-filter="all" type="button">Todos</button><button class="tab" data-filter="read" type="button">Leídos</button><button class="tab" data-filter="todo" type="button">Pendientes</button></div><input class="search" id="search" placeholder="Buscar por autor o título…" aria-label="Buscar lecturas"><button class="clear" id="reset" type="button">Desmarcar todo</button></div><div id="list" aria-live="polite"></div></section>
-<p class="foot">Los resúmenes adjuntos duran hasta que cierres o recargues la página; volvé a seleccionarlos en la próxima sesión. Para conservar el contador, guardalo en tu PC y cargalo al volver. Los archivos quedan en tu navegador y no se envían al sitio.</p>
+<section class="panel"><div class="tools"><div class="tabs"><button class="tab active" data-filter="all" type="button">Todos</button><button class="tab" data-filter="read" type="button">Leídos</button><button class="tab" data-filter="todo" type="button">Pendientes</button></div><input class="search" id="search" placeholder="Buscar por autor o título…" aria-label="Buscar lecturas"><button class="clear" id="reset" type="button">Desmarcar todo</button><div class="state-actions"><button class="session-button" id="saveProgress" type="button">Guardar tildados en mi PC</button><input class="file-input" id="loadProgress" type="file" accept=".json,application/json" aria-label="Cargar tildados guardados"><label class="session-button" for="loadProgress">Cargar tildados</label><p class="state-status" id="progressStatus" aria-live="polite">Descargá un archivo para conservar el progreso entre sesiones.</p></div></div><div id="list" aria-live="polite"></div></section>
+<p class="foot">Los resúmenes adjuntos duran hasta que cierres o recargues la página; volvé a seleccionarlos en la próxima sesión. Para conservar el contador o los tildados, guardalos en tu PC y cargalos al volver. Los archivos quedan en tu navegador y no se envían al sitio.</p>
 <script>
 let items = [];
 let done = {};
@@ -334,6 +336,32 @@ document.querySelector('#loadSmoke').addEventListener('change', async event => {
     document.querySelector('#smokeStatus').textContent = 'Contador cargado desde ' + file.name + '.';
   } catch (error) {
     document.querySelector('#smokeStatus').textContent = 'No se pudo cargar el contador: ' + error.message;
+  }
+  event.target.value = '';
+});
+document.querySelector('#saveProgress').addEventListener('click', () => {
+  const record = { version: 1, savedAt: new Date().toISOString(), doneIds: items.filter(item => done[item.id]).map(item => item.id) };
+  const url = URL.createObjectURL(new Blob([JSON.stringify(record, null, 2)], { type: 'application/json' }));
+  const download = document.createElement('a');
+  download.href = url;
+  download.download = 'progreso-moderna.json';
+  download.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  document.querySelector('#progressStatus').textContent = 'Progreso descargado en tu PC. Cargá ese archivo al volver.';
+});
+document.querySelector('#loadProgress').addEventListener('change', async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    if (file.size > 50 * 1024) throw new Error('El archivo supera 50 KB.');
+    const record = JSON.parse(await file.text());
+    if (!Array.isArray(record.doneIds) || record.doneIds.some(id => !['string', 'number'].includes(typeof id))) throw new Error('El archivo no contiene un progreso válido.');
+    done = Object.fromEntries(record.doneIds.map(id => [id, true]));
+    update();
+    draw();
+    document.querySelector('#progressStatus').textContent = 'Tildados cargados desde ' + file.name + '.';
+  } catch (error) {
+    document.querySelector('#progressStatus').textContent = 'No se pudo cargar el progreso: ' + error.message;
   }
   event.target.value = '';
 });
