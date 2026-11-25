@@ -1099,3 +1099,23 @@ body {
     grid-template-columns: 1fr;
   }
 }
+
+/* Encabezado en celulares chicos: el título puede ocupar más de una línea y no se pisa con el botón */
+@media (max-width: 600px) {
+  .brand h1 {
+    white-space: normal;
+    line-height: 1.2;
+  }
+  .brand .years {
+    display: block;
+    margin-left: 0;
+  }
+  .topbar-actions {
+    flex-shrink: 0;
+  }
+  .topbar-actions .btn-outline {
+    white-space: nowrap;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
