@@ -1,114 +1,311 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Atlas de riesgos del mundo</title>
 <style>
-:root{--bg:#f5f4ef;--fg:#1d1d1b;--mu:#6b6a63;--cd:#fff;--bd:#d9d7cc;--sea:#dbe7ef;--land:#f1efe5;--ln:#8d8a7c;--ac:#c2410c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161a;--fg:#ecebe4;--mu:#9a9a92;--cd:#1d2026;--bd:#333741;--sea:#0f1e2b;--land:#262c33;--ln:#5b6671;--ac:#fb923c}}
-:root[data-theme="dark"]{--bg:#14161a;--fg:#ecebe4;--mu:#9a9a92;--cd:#1d2026;--bd:#333741;--sea:#0f1e2b;--land:#262c33;--ln:#5b6671;--ac:#fb923c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-.w{max-width:1180px;margin:0 auto;padding:18px 14px 40px}h1{font-size:26px;margin:0 0 4px}h2{font-size:17px;margin:0 0 8px}.mu{color:var(--mu)}.sub{margin:0 0 14px;color:var(--mu)}
-#tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}#tabs button,.zb button{border:1px solid var(--bd);background:var(--cd);color:var(--fg);padding:6px 12px;border-radius:999px;cursor:pointer;font:inherit;font-size:14px}
-#tabs button.on{background:var(--ac);border-color:var(--ac);color:#fff}
-.g{display:grid;grid-template-columns:minmax(0,2fr) minmax(270px,1fr);gap:12px;margin-bottom:12px}@media(max-width:820px){.g{grid-template-columns:1fr}}
-.cd{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:12px}.mp{padding:8px}
-canvas{width:100%;display:block;border-radius:8px;cursor:crosshair;touch-action:none}
-.lg{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mu);margin-top:8px;flex-wrap:wrap}.bar{flex:1;min-width:120px;height:10px;border-radius:5px;background:linear-gradient(90deg,#faeb8c,#f8a03c,#d62828,#64146e)}
-.zb{display:flex;gap:6px;margin-left:auto}.zb button{padding:2px 11px}
-select{font:inherit;padding:6px;border-radius:8px;border:1px solid var(--bd);background:var(--cd);color:var(--fg);max-width:100%}
-table{width:100%;border-collapse:collapse;font-size:13.5px}td,th{padding:5px 3px;border-bottom:1px solid var(--bd);text-align:right}th{color:var(--mu);font-weight:500;font-size:12px}td:first-child,th:first-child{text-align:left}
-.tb{height:4px;background:var(--bd);border-radius:2px;margin-top:3px}.tb i{display:block;height:4px;border-radius:2px;background:var(--ac)}
-.big{font-size:30px;font-weight:650;line-height:1.1}.sl{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:600px){.sl{grid-template-columns:1fr}}
-input[type=range]{width:100%;accent-color:var(--ac)}.nt{font-size:13px;color:var(--mu)}.nt a{color:var(--ac)}.nt li{margin-bottom:4px}
-:root:root:root{--bg:#030a06;--fg:#8dffb8;--mu:#4fae78;--cd:#06140b;--bd:#124a28;--sea:#020d07;--land:#0b2a17;--ln:#35ff8c;--ac:#ff5a1f}
-body{font-family:"Courier New",ui-monospace,Menlo,monospace;background:radial-gradient(ellipse at center,#06180d 0%,#020805 85%);text-shadow:0 0 6px rgba(53,255,140,.3)}
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px)}
-h1{font-size:22px;letter-spacing:.14em;text-transform:uppercase;color:#35ff8c}h2,th,#tabs button{text-transform:uppercase;letter-spacing:.08em}h2{color:#35ff8c;font-size:14px}
-.cd{border-radius:2px;border-left:3px solid #35ff8c;box-shadow:0 0 16px rgba(53,255,140,.12) inset}
-#tabs button,.zb button{border-radius:2px;background:#04100a;color:var(--fg);font-family:inherit;font-size:12px}#tabs button.on{background:#ff5a1f;border-color:#ff5a1f;color:#000;text-shadow:none;box-shadow:0 0 12px #ff5a1f88}
-canvas{border:1px solid var(--bd);border-radius:2px}.bar{border-radius:0}.big{color:#ff5a1f;text-shadow:0 0 12px #ff5a1f88}.tb i{background:#ff5a1f;box-shadow:0 0 6px #ff5a1f}
-select{border-radius:2px;background:#04100a;color:var(--fg);border-color:var(--bd);font-family:inherit}.nt a{color:#ff9a5f}
-.st{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--bd);border-left:3px solid #ff5a1f;padding:6px 10px;margin-bottom:12px;background:#04100a}.st b{color:#ff5a1f}.blink{animation:bl 1.2s steps(2) infinite}@keyframes bl{50%{opacity:.15}}
-.sg{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end}.sg label{display:flex;flex-direction:column;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);gap:4px}.lk{border:1px solid var(--bd);background:#04100a;color:var(--fg);font:inherit;font-size:12px;padding:5px 10px;cursor:pointer;border-radius:2px;text-transform:uppercase;letter-spacing:.06em}.lk.on{background:#ff5a1f;border-color:#ff5a1f;color:#000;text-shadow:none}.rk tr{cursor:pointer}.rk tr:hover td{background:#0b2a17}
-.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:8px 0}.kp div{border:1px solid var(--bd);padding:8px;background:#04100a}.kp b{display:block;font-size:20px;color:#ff5a1f}.kp span{font-size:11.5px;color:var(--mu)}.bd{display:inline-block;padding:1px 7px;border:1px solid #ff5a1f;color:#ff5a1f;font-size:11px;text-transform:uppercase;letter-spacing:.06em}
-
-.cf-tools{display:flex;flex-wrap:wrap;gap:8px;align-items:end;margin:10px 0 8px}
-.cf-tools label{display:flex;flex-direction:column;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);gap:4px;min-width:130px}
-.cf-tools input,.cf-tools select,.cf-form input,.cf-form select,.cf-form textarea{font:inherit;font-size:13px;padding:6px 8px;border-radius:2px;border:1px solid var(--bd);background:#04100a;color:var(--fg)}
-.cf-tools input[type=search]{min-width:210px;flex:1}
-.cf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:8px 0 10px}
-.cf-stats div{border:1px solid var(--bd);border-left:2px solid #35ff8c;padding:6px 8px;background:#04100a}
-.cf-stats b{display:block;font-size:17px;color:#35ff8c}
-.cf-stats span{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
-.cf-form{border:1px solid var(--bd);border-left:3px solid #ff5a1f;background:#04100a;padding:10px;margin:10px 0;display:none}
+:root{
+  --desk:#1a2f30;--win:#c4c9c4;--win2:#d4d8d4;--paper:#edf0ed;--ink:#151d1a;--mu:#47544e;
+  --hi:#e9ede9;--lo:#747c76;--dk:#242b27;
+  --bar1:#122b30;--bar2:#265452;
+  --crt:#0a1512;--crt2:#0f1f1b;--crt-bd:#213d34;--crt-fg:#9be0be;--crt-mu:#5d8c78;
+  --sea:#081316;--land:#142621;--ln:#4ea882;--bd:#1d342c;
+  --ac:#2f7d5d;--warn:#b84c2e;--warn-crt:#e6835e;--info-crt:#6ec4da;--gold-crt:#e8c468;
+  --mono:"Courier New",ui-monospace,Consolas,Menlo,monospace;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box}
+body{
+  margin:0;color:var(--ink);
+  font:13px/1.45 Tahoma,"Segoe UI",system-ui,-apple-system,sans-serif;
+  background-color:var(--desk);
+  background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.w{max-width:1220px;margin:14px auto 26px;padding:0 10px}
+.win{
+  background:var(--win);
+  border-top:2px solid var(--hi);border-left:2px solid var(--hi);
+  border-right:2px solid var(--dk);border-bottom:2px solid var(--dk);
+  box-shadow:inset -1px -1px 0 var(--lo),0 14px 36px rgba(0,0,0,.45);
+  padding:3px;
+}
+.titlebar{
+  background:linear-gradient(90deg,var(--bar1),var(--bar2));
+  color:#e8f0ec;padding:4px 6px 4px 8px;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  user-select:none;
+}
+.titlebar h1{
+  font:700 13px/1.2 Tahoma,"Segoe UI",sans-serif;letter-spacing:.04em;margin:0;
+  display:flex;align-items:center;gap:7px;color:#edf5f1;
+}
+.dot-live{width:8px;height:8px;border-radius:50%;background:#63d49b;box-shadow:0 0 6px #63d49b;display:inline-block;animation:bl 1.8s steps(2) infinite}
+@keyframes bl{50%{opacity:.25}}
+.win-btns{display:flex;gap:3px}
+.win-btns i{
+  display:grid;place-items:center;width:18px;height:16px;font:700 11px/1 var(--mono);font-style:normal;
+  background:var(--win);color:var(--ink);
+  border-top:1px solid var(--hi);border-left:1px solid var(--hi);
+  border-right:1px solid var(--dk);border-bottom:1px solid var(--dk);
+}
+.win-body{padding:8px}
+.menubar{
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;
+  padding:4px 6px;margin-bottom:8px;
+  border-bottom:1px solid var(--lo);box-shadow:0 1px 0 var(--hi);
+  font-size:12px;color:var(--mu);
+}
+.menubar .tag{font-family:var(--mono);font-weight:700;color:var(--bar1);letter-spacing:.05em}
+.btn95,#tabs button,.zb button,.lk,.btabs button{
+  background:var(--win);color:var(--ink);cursor:pointer;font:inherit;font-size:12px;
+  padding:4px 10px;border-radius:0;
+  border-top:2px solid var(--hi);border-left:2px solid var(--hi);
+  border-right:2px solid var(--dk);border-bottom:2px solid var(--dk);
+  box-shadow:inset -1px -1px 0 var(--lo);
+}
+#tabs button:hover,.zb button:hover,.lk:hover,.btabs button:hover{background:#cfd4cf}
+#tabs button:active,.lk:active,.zb button:active,
+#tabs button.on,.lk.on{
+  border-top:2px solid var(--dk);border-left:2px solid var(--dk);
+  border-right:2px solid var(--hi);border-bottom:2px solid var(--hi);
+  box-shadow:inset 1px 1px 0 var(--lo);
+}
+#tabs button.on{background:#b5c5bc;color:#0e251d;font-weight:700}
+.lk.on{background:#d4c0b8;color:#4a1b0d;font-weight:700}
+.bar-row{margin-bottom:8px}
+#tabs{display:flex;flex-wrap:wrap;gap:4px}
+.sg{
+  display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;padding:6px 8px;
+  background:var(--win2);
+  border-top:1px solid var(--lo);border-left:1px solid var(--lo);
+  border-right:1px solid var(--hi);border-bottom:1px solid var(--hi);
+}
+.sg select,.lv-bar select,select{
+  font:inherit;font-size:12px;padding:4px 7px;border-radius:0;
+  background:var(--paper);color:var(--ink);max-width:100%;
+  border-top:2px solid var(--lo);border-left:2px solid var(--lo);
+  border-right:2px solid var(--hi);border-bottom:2px solid var(--hi);
+}
+.act-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-left:auto}
+.g{display:grid;grid-template-columns:minmax(0,1.95fr) minmax(305px,1fr);gap:10px;margin-bottom:10px;align-items:start}
+@media(min-width:881px){#p{max-height:575px;overflow-y:auto}}
+@media(max-width:880px){.g{grid-template-columns:1fr}.act-row{margin-left:0}}
+.cd{
+  background:var(--win2);
+  border-top:2px solid var(--hi);border-left:2px solid var(--hi);
+  border-right:2px solid var(--dk);border-bottom:2px solid var(--dk);
+  box-shadow:inset -1px -1px 0 var(--lo);
+  padding:10px;
+}
+.mp{padding:8px;background:var(--win)}
+.mp-wrap{
+  position:relative;background:var(--crt);
+  border-top:2px solid var(--dk);border-left:2px solid var(--dk);
+  border-right:2px solid var(--hi);border-bottom:2px solid var(--hi);
+  box-shadow:inset 1px 1px 0 #000;
+  overflow:hidden;
+}
+/* Sutil efecto CRT solo dentro de la pantalla del radar */
+.mp-wrap::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.14) 0 1px,transparent 1px 3px);
+}
+canvas{width:100%;display:block;cursor:crosshair;touch-action:none}
+.hud{position:absolute;top:7px;left:7px;display:flex;flex-wrap:wrap;gap:5px;pointer-events:none;z-index:2;max-width:calc(100% - 82px)}
+.hud span{
+  background:rgba(8,19,16,.88);border:1px solid #2b4f42;padding:2px 7px;
+  font:600 11px/1.3 var(--mono);color:var(--crt-fg);letter-spacing:.03em;
+}
+.hud .hud-live{border-color:#4ea882;color:#a8eccb}
+.hud .hud-cmp{border-color:#d97b59;color:#f4b096}
+.zb{position:absolute;right:7px;bottom:7px;display:flex;flex-direction:column;gap:3px;z-index:2}
+.zb button{width:24px;height:24px;padding:0;display:grid;place-items:center;font:700 14px/1 var(--mono)}
+.tip{
+  position:absolute;display:none;pointer-events:none;z-index:4;max-width:250px;
+  background:#0a1714;border:1px solid #4ea882;border-left:3px solid var(--warn-crt);
+  padding:6px 8px;font:11.5px/1.35 var(--mono);color:#d7efe4;
+  box-shadow:3px 3px 0 rgba(0,0,0,.55);
+}
+.tip b{display:block;color:var(--gold-crt);margin-bottom:2px}
+.tip .tm{color:var(--crt-mu);font-size:10.5px;text-transform:uppercase}
+.mp-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:8px}
+.lg{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--mu);flex:1;min-width:210px}
+.bar{
+  flex:1;min-width:80px;max-width:170px;height:10px;
+  border-top:1px solid var(--dk);border-left:1px solid var(--dk);
+  border-right:1px solid var(--hi);border-bottom:1px solid var(--hi);
+  background:linear-gradient(90deg,#e9d985,#e39b55,#c85249,#6d396e);
+}
+.lv-bar{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.lv-bar .lk{font-size:11.5px;padding:3px 7px}
+h2{font:700 13px/1.25 Tahoma,"Segoe UI",sans-serif;text-transform:uppercase;letter-spacing:.04em;margin:0 0 7px;color:#122b30}
+.mu{color:var(--mu)}
+.big-crt{
+  background:var(--crt);color:var(--crt-fg);padding:8px 10px;margin:6px 0 8px;
+  border-top:2px solid var(--dk);border-left:2px solid var(--dk);
+  border-right:2px solid var(--hi);border-bottom:2px solid var(--hi);
+}
+.big-crt .lbl{font:10.5px/1.3 var(--mono);color:var(--crt-mu);text-transform:uppercase;letter-spacing:.05em}
+.big{font:700 26px/1.15 var(--mono);color:var(--gold-crt);margin-top:2px}
+table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--paper);border-top:2px solid var(--lo);border-left:2px solid var(--lo);border-right:2px solid var(--hi);border-bottom:2px solid var(--hi)}
+td,th{padding:5px 6px;border-bottom:1px solid #d5dcd7;text-align:right;color:var(--ink)}
+th{background:#d8deda;color:#2c3a34;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.03em;border-bottom:1px solid var(--lo)}
+td:first-child,th:first-child{text-align:left}
+td:not(:first-child){font-family:var(--mono);font-size:12px}
+.tb{height:4px;background:#cfd7d2;margin-top:3px}
+.tb i{display:block;height:4px;background:var(--warn)}
+.sl{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}@media(max-width:600px){.sl{grid-template-columns:1fr}}
+input[type=range]{width:100%;accent-color:var(--bar2)}
+.nt{font-size:12px;color:var(--mu)}.nt a{color:#164c45;font-weight:600}.nt li{margin-bottom:5px}
+.rk tr{cursor:pointer}.rk tr:hover td{background:#d7e5de}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:6px;margin:8px 0}
+.kp div{background:var(--crt);color:var(--crt-fg);padding:7px 9px;border-top:2px solid var(--dk);border-left:2px solid var(--dk);border-right:2px solid var(--hi);border-bottom:2px solid var(--hi)}
+.kp b{display:block;font:700 16px/1.2 var(--mono);color:var(--gold-crt)}
+.kp span{font-size:11px;color:#93b5a7;line-height:1.3;display:block;margin-top:2px}
+.bd{display:inline-block;padding:1px 6px;background:#3a1911;color:#f5b49b;border:1px solid #8a3a24;font:700 10.5px/1.3 var(--mono);text-transform:uppercase}
+.cf-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:end;margin:8px 0}
+.cf-tools label{display:flex;flex-direction:column;font-size:11px;font-weight:700;color:var(--mu);gap:3px;min-width:130px;text-transform:uppercase}
+.cf-tools input,.cf-tools select,.cf-form input,.cf-form select,.cf-form textarea{
+  font:inherit;font-size:12.5px;padding:4px 7px;border-radius:0;background:var(--paper);color:var(--ink);
+  border-top:2px solid var(--lo);border-left:2px solid var(--lo);
+  border-right:2px solid var(--hi);border-bottom:2px solid var(--hi);
+}
+.cf-tools input[type=search]{min-width:200px;flex:1}
+.cf-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;margin:8px 0}
+.cf-stats div{background:var(--crt);padding:6px 8px;border-top:2px solid var(--dk);border-left:2px solid var(--dk);border-right:2px solid var(--hi);border-bottom:2px solid var(--hi)}
+.cf-stats b{display:block;font:700 15px/1.2 var(--mono);color:var(--crt-fg)}
+.cf-stats span{font:10.5px/1.2 var(--mono);color:var(--crt-mu);text-transform:uppercase}
+.cf-form{background:var(--win);padding:10px;margin:8px 0;display:none;border-top:2px solid var(--hi);border-left:2px solid var(--hi);border-right:2px solid var(--dk);border-bottom:2px solid var(--dk)}
 .cf-form.open{display:block}
-.cf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:8px}
-.cf-form label{display:flex;flex-direction:column;font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--mu);gap:4px}
-.cf-form textarea{width:100%;min-height:54px;resize:vertical}
-.cf-meta{font-size:11.5px;color:var(--mu);margin:2px 0 4px}
-.rg-tag{display:inline-block;padding:0 6px;border:1px solid var(--bd);color:#8dffb8;font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;margin-left:6px}
-.btn-del{border:1px solid #ff5a1f88;background:transparent;color:#ff8a5f;font:inherit;font-size:11px;padding:3px 7px;cursor:pointer;border-radius:2px;text-transform:uppercase;letter-spacing:.05em;margin-left:6px}
-.btn-del:hover{background:#ff5a1f;color:#000;text-shadow:none}
+.cf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-bottom:8px}
+.cf-form label{display:flex;flex-direction:column;font-size:11px;font-weight:700;color:var(--mu);gap:3px;text-transform:uppercase}
+.cf-form textarea{width:100%;min-height:52px;resize:vertical}
+.cf-meta{font-size:11px;color:var(--mu);margin:2px 0}
+.rg-tag{display:inline-block;padding:0 5px;background:#d3dbd6;color:#273831;border:1px solid #9aa79f;font-size:10.5px;margin-left:5px}
+.btn-del{background:var(--win);color:#7d2111;font:700 11px/1 Tahoma,sans-serif;padding:3px 7px;cursor:pointer;margin-left:5px;border-top:1px solid var(--hi);border-left:1px solid var(--hi);border-right:1px solid var(--dk);border-bottom:1px solid var(--dk)}
+.btn-del:hover{background:#dfd0cc}
 .cf-act{white-space:nowrap;text-align:right}
-.cf-msg{font-size:12px;color:#35ff8c;margin:6px 0}
-.cf-err{border:1px solid #ff5a1f;padding:10px;background:#1a0904;color:#ffb499;font-size:13px;margin:8px 0}
-.mp-wrap{position:relative}
-.hud{position:absolute;top:8px;left:8px;display:flex;flex-wrap:wrap;gap:6px;pointer-events:none;z-index:2;max-width:calc(100% - 16px)}
-.hud span{background:rgba(3,10,6,.84);border:1px solid var(--bd);padding:2px 7px;font-size:11px;letter-spacing:.06em;color:var(--fg);text-transform:uppercase}
-.hud b{color:#35ff8c}
-.hud .hud-live{border-color:#35ff8c88;color:#35ff8c}
-.hud .hud-cmp{border-color:#ff5a1f;color:#ff9a5f}
-.tip{position:absolute;display:none;pointer-events:none;z-index:4;max-width:250px;background:rgba(4,14,8,.95);border:1px solid #35ff8c;border-left:3px solid #ff5a1f;padding:6px 8px;font-size:11.5px;line-height:1.35;color:var(--fg);box-shadow:0 6px 20px rgba(0,0,0,.65)}
-.tip b{display:block;color:#35ff8c;margin-bottom:2px}
-.tip .tm{color:var(--mu);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em}
-.lv-bar{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:8px;padding-top:8px;border-top:1px dashed var(--bd)}
-.lv-bar .lk{font-size:11px;padding:3px 8px}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:middle}
-.d-eq{background:#ffd166;box-shadow:0 0 6px #ffd166}
-.d-fi{background:#ff7b29;box-shadow:0 0 6px #ff7b29}
-.d-vo{background:#ff3b7f;box-shadow:0 0 6px #ff3b7f}
-.d-cy{background:#38e8ff;box-shadow:0 0 6px #38e8ff}
-.d-fl{background:#4da6ff;box-shadow:0 0 6px #4da6ff}
-.d-no{background:#ff2e63;box-shadow:0 0 6px #ff2e63}
-.d-cf{background:#ff3b1f;box-shadow:0 0 6px #ff3b1f}
-.wx-box{border:1px solid var(--bd);border-left:3px solid #38e8ff;background:#04100a;padding:8px;margin:10px 0}
-.wx-box h3{margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#38e8ff}
-.wx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-.wx-grid div{border:1px solid #124a2877;padding:5px 6px;background:#030c07}
-.wx-grid b{display:block;font-size:14px;color:var(--fg)}
-.wx-grid span{font-size:10.5px;color:var(--mu);text-transform:uppercase}
-.ev-card{border:1px solid #ff5a1f;background:#120b06;padding:8px;margin-bottom:10px}
-.ev-card b{color:#ffd166}
-.ev-card a{color:#ff9a5f;font-size:11.5px}
-.lv-list{max-height:280px;overflow:auto;margin-top:6px;border-top:1px solid var(--bd)}
-.lv-list table{font-size:12.5px}
+.cf-msg{font-size:12px;font-weight:700;color:#155e42;margin:6px 0}
+.cf-err{border:2px inset var(--lo);padding:8px;background:#f5dcd5;color:#6e1d0d;font-size:12.5px;margin:8px 0}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.d-eq{background:#d4a238}.d-fi{background:#d96c30}.d-vo{background:#c94668}.d-cy{background:#2d9bb8}.d-fl{background:#3478c6}.d-no{background:#c9384f}.d-cf{background:#b84c2e}
+.wx-box{
+  background:var(--crt);color:var(--crt-fg);padding:8px;margin:8px 0;
+  border-top:2px solid var(--dk);border-left:2px solid var(--dk);
+  border-right:2px solid var(--hi);border-bottom:2px solid var(--hi);
+}
+.wx-box h3{margin:0 0 6px;font:700 11px/1.2 var(--mono);color:var(--info-crt);text-transform:uppercase;letter-spacing:.06em}
+.wx-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.wx-grid div{padding:5px 7px;background:var(--crt2);border:1px solid var(--crt-bd)}
+.wx-grid b{display:block;font:700 13px/1.2 var(--mono);color:#e4f4ec}
+.wx-grid span{font:10.5px/1.2 var(--mono);color:var(--crt-mu)}
+.ev-card{
+  background:#17100c;color:#f0e4d8;padding:8px 9px;margin-bottom:8px;
+  border-top:2px solid var(--dk);border-left:2px solid var(--dk);
+  border-right:2px solid var(--hi);border-bottom:2px solid var(--hi);
+}
+.ev-card b{color:var(--gold-crt);font-family:var(--mono)}
+.ev-card .nt{color:#bfa899}
+.ev-card a{color:#7ee0b4;font:700 11.5px/1.3 var(--mono);text-decoration:none}.ev-card a:hover{text-decoration:underline}
+.lv-list{max-height:300px;overflow:auto;margin-top:6px}
+.lv-list table{font-size:12px}
 .lv-list td{vertical-align:top}
-.lv-pill{display:inline-block;padding:1px 5px;font-size:10px;border:1px solid var(--bd);text-transform:uppercase;letter-spacing:.05em}
+.lv-pill{display:inline-block;padding:1px 5px;font:700 10px/1.3 var(--mono);text-transform:uppercase;background:#10221d;border:1px solid currentColor}
 .cmp-hdr{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px}
-.cmp-win{color:#35ff8c;font-weight:700}
-.cmp-hi{color:#ff5a1f;font-weight:700}
-.act-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.kbd{font-size:10.5px;color:var(--mu);margin-top:6px}
-.kbd code{border:1px solid var(--bd);padding:0 4px;color:var(--fg);background:#04100a}
-</style></head><body><div class="w">
-<h1>◉ Sala de guerra // Atlas de riesgos</h1>
-<div class="st"><span><span class="blink" style="color:#ff5a1f">●</span> Estado: <b id="st-mode">radar en vivo</b></span><span>Sismos USGS: <b id="st-eq">…</b></span><span>NASA activos: <b id="st-na">…</b></span><span>Alertas NOAA: <b id="st-no">…</b></span><span>Reloj Juicio Final: <b>85 s</b></span><span>UTC <b id="utc"></b></span></div>
-<p class="sub">Modelo de probabilidad anual + eventos reales en vivo (USGS, NASA EONET, Open-Meteo y NOAA). Tocá cualquier punto o marcador del radar, arrastrá para explorar o compará dos lugares.</p>
-<div id="tabs"></div>
-<div class="cd" style="margin-bottom:12px"><div class="sg"><label>Región / bloque<select id="rg"></select></label><label>País<select id="pa"></select></label><div class="act-row"><button class="lk on" id="btn-live" type="button" title="Mostrar u ocultar eventos reales en vivo (tecla L)">● En vivo</button><button class="lk" id="btn-cmp" type="button" title="Comparar dos puntos del planeta (tecla C)">⇄ Comparar</button><button class="lk" id="btn-jump" type="button" title="Volar al evento real más fuerte activo">⚡ Mayor evento</button><button class="lk" id="btn-snd" type="button" title="Activar o silenciar avisos tácticos de radar">🔇 Sonido</button><button class="lk" id="rs" type="button" title="Volver a vista global (tecla R)">↺ Mundo</button></div></div></div>
-<div class="g"><div class="cd mp"><div class="mp-wrap"><canvas id="c"></canvas><div class="hud"><span id="hud-pos">Pasá el cursor o tocá el mapa</span><span id="hud-info" class="hud-live">Sincronizando APIs…</span></div><div id="tip" class="tip"></div></div><div class="lg"><span id="l0"></span><div class="bar"></div><span id="l1"></span><div class="zb"><button id="zi" aria-label="Acercar">+</button><button id="zo" aria-label="Alejar">−</button></div></div><div class="lv-bar" id="lv-bar"></div><div class="kbd">Atajos: <code>+</code>/<code>−</code> zoom · <code>L</code> en vivo · <code>C</code> comparar A/B · <code>R</code> mundo · <code>Esc</code> limpiar</div></div>
-<div class="cd" id="p"></div></div>
-<div class="cd" id="lv" style="margin-bottom:12px"></div>
-<div class="cd" id="rk" style="margin-bottom:12px"></div>
-<div class="cd" id="cf" style="margin-bottom:12px"></div>
-<div class="cd" style="margin-bottom:12px"><h2>Supuestos nucleares (ajustables)</h2>
-<p class="nt" style="margin-top:0">Nadie puede medir esto con datos históricos: son supuestos tuyos. El mapa reparte la probabilidad según la cercanía a capitales, bases y silos de las potencias nucleares.</p>
-<div class="sl"><label>Probabilidad anual de uso nuclear limitado (regional): <b id="vl"></b><input id="pl" type="range" min="0" max="5" step="0.1" value="1"></label>
-<label>Probabilidad anual de intercambio nuclear mayor: <b id="vf"></b><input id="pf" type="range" min="0" max="3" step="0.05" value="0.3"></label></div></div>
-<div class="cd nt"><h2>Datos y método</h2><ul style="padding-left:18px;margin:0">
-<li><b>Fuentes en vivo (abiertas, sin clave de API):</b> sismos reales desde <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener">USGS GeoJSON</a> (actualizado cada minuto), eventos naturales activos desde <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA EONET v3</a> (incendios, volcanes, tormentas severas e inundaciones), clima actual y caudal fluvial por coordenada desde <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo (Weather + Flood API)</a> y alertas extremas/severas activas desde <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">NOAA NWS Alerts</a>.</li>
-<li><b>Arsenales (SIPRI/FAS, enero de 2026):</b> unas 12.187 ojivas en total y ~9.745 en arsenales militares. Rusia ~5.400, EE. UU. ~5.040, China ~620, Francia ~290, Reino Unido ~225, India ~190, Pakistán ~170, Israel ~90, Corea del Norte ~50. El Reloj del Juicio Final está en 85 segundos (27 de enero de 2026, récord) y el tratado New START venció en febrero de 2026. Fuentes: <a href="https://fas.org/initiative/status-world-nuclear-forces/" target="_blank" rel="noopener">FAS</a> · <a href="https://thebulletin.org/doomsday-clock/2026-statement/" target="_blank" rel="noopener">Bulletin of the Atomic Scientists</a>.</li>
-<li><b>Nuclear:</b> los pesos de cada objetivo (capitales, bases, silos, zonas de conflicto) son una modelización propia; la probabilidad local = probabilidad anual de cada escenario × chance de que haya una detonación a menos de ~40 km.</li>
-<li><b>Naturales (capa de calor):</b> modelo simplificado calibrado con frecuencias globales publicadas (≈130 sismos M6+ y ≈15 M7+ por año según USGS, ≈80–90 ciclones tropicales por año, unos 50 volcanes en erupción en un año típico según el Smithsonian) sobre cinturones sísmicos, volcanes activos y zonas ciclónicas, de inundación, incendio y tornados. Sobre esa capa estadística se superponen los marcadores reales en vivo.</li>
-<li><b>Conflictos armados (datos al 17 de noviembre de 2026):</b> cifras globales de UCDP/PRIO (<a href="https://www.prio.org/resolve/PrioPublication/d81ccf0a-03e0-4579-8dd2-b0b2fe845d60" target="_blank" rel="noopener">Conflict Trends 1946–2025</a>) y <a href="https://acleddata.com/series/acled-conflict-index" target="_blank" rel="noopener">ACLED</a>; cifras por frente de la ONU (<a href="https://www.globalsecurity.org/wmd/library/news/ukraine/2026/08/ukraine-260813-unnews01.htm" target="_blank" rel="noopener">Ucrania</a>), <a href="https://www.globalsecurity.org/military/ops/iran-war-oprep.htm" target="_blank" rel="noopener">Irán</a>, OCHA (Sudán), ministerios de Salud de Gaza y Líbano, AAPP/Myanmar Peace Monitor y rastreadores como <a href="https://warmonit.com/" target="_blank" rel="noopener">WarMonit</a>. Las cifras de bajas son recuentos de cada fuente y pueden diferir entre sí. La capa “Conflictos armados” es una estimación propia: probabilidad anual de combates o ataques a pocos cientos de km de cada frente según su intensidad, no de que una persona resulte herida.</li><li><b>Base local (<code>datos.json</code>):</b> los conflictos armados activos y sus frentes están separados en el archivo <code>datos.json</code> como una lista de registros con <code>id</code>, y la página los lee con <code>fetch</code> para mostrarlos, buscarlos, filtrarlos, ordenarlos, calcular métricas y editarlos en memoria.</li><li>Es una herramienta educativa: no reemplaza los mapas oficiales de protección civil, USGS, NOAA ni los servicios geológicos nacionales.</li></ul></div>
+.cmp-win{color:#176b48;font-weight:700}
+.cmp-hi{color:#a8391f;font-weight:700}
+/* Pestañas estilo Windows 95 Property Sheet */
+.btabs{display:flex;flex-wrap:wrap;gap:2px;margin:0;padding-left:2px;position:relative;z-index:2}
+.btabs button{
+  padding:5px 12px;border-bottom:none;margin-bottom:-2px;background:#b4bab5;color:#2c3631;
+}
+.btabs button.on{
+  background:var(--win2);color:var(--ink);font-weight:700;padding-bottom:7px;
+  border-top:2px solid var(--hi);border-left:2px solid var(--hi);border-right:2px solid var(--dk);border-bottom:none;
+  box-shadow:none;
+}
+.bpanel{display:none}.bpanel.active{display:block}
+/* Barra de estado inferior estilo Windows 95 */
+.statusbar{
+  display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;padding:3px 2px 1px;
+  font:11.5px/1.3 var(--mono);color:var(--ink);
+}
+.statusbar span{
+  padding:2px 8px;background:var(--win);
+  border-top:1px solid var(--lo);border-left:1px solid var(--lo);
+  border-right:1px solid var(--hi);border-bottom:1px solid var(--hi);
+}
+.statusbar b{color:#12382c}
+.statusbar .st-grow{flex:1;min-width:160px}
+</style></head><body><div class="w"><div class="win">
+<div class="titlebar">
+  <h1><span class="dot-live"></span> ATLAS95.EXE — Sala de guerra // Monitor global de riesgos</h1>
+  <div class="win-btns" aria-hidden="true"><i>_</i><i>□</i><i>×</i></div>
 </div>
+<div class="win-body">
+<div class="menubar">
+  <span class="tag">[MODO OPERATIVO: VIGILANCIA GLOBAL]</span>
+  <span>Capas estadísticas + telemetría en vivo (USGS · NASA EONET · Open-Meteo · NOAA)</span>
+</div>
+<div class="bar-row"><div id="tabs"></div></div>
+<div class="sg">
+  <select id="rg" aria-label="Región o bloque"></select>
+  <select id="pa" aria-label="País"></select>
+  <div class="act-row">
+    <button class="lk on" id="btn-live" type="button" title="Mostrar u ocultar eventos reales en vivo (tecla L)">● En vivo</button>
+    <button class="lk" id="btn-cmp" type="button" title="Comparar dos puntos del planeta (tecla C)">⇄ Comparar</button>
+    <button class="lk" id="btn-jump" type="button" title="Ir al evento real más intenso activo">⚡ Mayor evento</button>
+    <button class="lk" id="btn-snd" type="button" title="Sonido táctico opcional">🔇</button>
+    <button class="lk" id="rs" type="button" title="Volver a vista global (tecla R)">↺ Mundo</button>
+  </div>
+</div>
+<div class="g">
+  <div class="cd mp">
+    <div class="mp-wrap">
+      <canvas id="c"></canvas>
+      <div class="hud"><span id="hud-pos">LISTO · TOCÁ O ARRASTRÁ EL RADAR</span><span id="hud-info" class="hud-live">SINCRONIZANDO…</span></div>
+      <div class="zb"><button id="zi" aria-label="Acercar">+</button><button id="zo" aria-label="Alejar">−</button></div>
+      <div id="tip" class="tip"></div>
+    </div>
+    <div class="mp-foot">
+      <div class="lg"><span id="l0"></span><div class="bar"></div><span id="l1"></span></div>
+      <div class="lv-bar" id="lv-bar"></div>
+    </div>
+  </div>
+  <div class="cd" id="p"></div>
+</div>
+<div class="btabs" id="btabs">
+  <button type="button" class="on" data-bt="lv">Radar en vivo</button>
+  <button type="button" data-bt="cf">Conflictos (datos.json)</button>
+  <button type="button" data-bt="rk">Ranking por país</button>
+  <button type="button" data-bt="mt">Supuestos y método</button>
+</div>
+<div class="cd bpanel active" id="lv"></div>
+<div class="cd bpanel" id="cf"></div>
+<div class="cd bpanel" id="rk"></div>
+<div class="cd bpanel" id="mt">
+  <h2>Supuestos nucleares (ajustables)</h2>
+  <p class="nt" style="margin-top:0">Nadie puede medir esto con datos históricos: son supuestos tuyos. El mapa reparte la probabilidad según la cercanía a capitales, bases y silos de las potencias nucleares.</p>
+  <div class="sl">
+    <label>Probabilidad anual de uso nuclear limitado (regional): <b id="vl"></b><input id="pl" type="range" min="0" max="5" step="0.1" value="1"></label>
+    <label>Probabilidad anual de intercambio nuclear mayor: <b id="vf"></b><input id="pf" type="range" min="0" max="3" step="0.05" value="0.3"></label>
+  </div>
+  <h2>Datos y método</h2>
+  <ul class="nt" style="padding-left:18px;margin:0">
+    <li><b>Fuentes en vivo (abiertas, sin clave de API):</b> sismos reales desde <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank" rel="noopener">USGS GeoJSON</a> (actualizado cada minuto), eventos naturales activos desde <a href="https://eonet.gsfc.nasa.gov/" target="_blank" rel="noopener">NASA EONET v3</a> (incendios, volcanes, tormentas severas e inundaciones), clima actual y caudal fluvial por coordenada desde <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo (Weather + Flood API)</a> y alertas extremas/severas activas desde <a href="https://www.weather.gov/documentation/services-web-api" target="_blank" rel="noopener">NOAA NWS Alerts</a>.</li>
+    <li><b>Arsenales (SIPRI/FAS, enero de 2026):</b> unas 12.187 ojivas en total y ~9.745 en arsenales militares. Rusia ~5.400, EE. UU. ~5.040, China ~620, Francia ~290, Reino Unido ~225, India ~190, Pakistán ~170, Israel ~90, Corea del Norte ~50. El Reloj del Juicio Final está en 85 segundos (27 de enero de 2026, récord) y el tratado New START venció en febrero de 2026. Fuentes: <a href="https://fas.org/initiative/status-world-nuclear-forces/" target="_blank" rel="noopener">FAS</a> · <a href="https://thebulletin.org/doomsday-clock/2026-statement/" target="_blank" rel="noopener">Bulletin of the Atomic Scientists</a>.</li>
+    <li><b>Nuclear:</b> los pesos de cada objetivo (capitales, bases, silos, zonas de conflicto) son una modelización propia; la probabilidad local = probabilidad anual de cada escenario × chance de que haya una detonación a menos de ~40 km.</li>
+    <li><b>Naturales (capa de calor):</b> modelo simplificado calibrado con frecuencias globales publicadas (≈130 sismos M6+ y ≈15 M7+ por año según USGS, ≈80–90 ciclones tropicales por año, unos 50 volcanes en erupción en un año típico según el Smithsonian) sobre cinturones sísmicos, volcanes activos y zonas ciclónicas, de inundación, incendio y tornados. Sobre esa capa estadística se superponen los marcadores reales en vivo.</li>
+    <li><b>Conflictos armados (datos al 17 de noviembre de 2026):</b> cifras globales de UCDP/PRIO (<a href="https://www.prio.org/resolve/PrioPublication/d81ccf0a-03e0-4579-8dd2-b0b2fe845d60" target="_blank" rel="noopener">Conflict Trends 1946–2025</a>) y <a href="https://acleddata.com/series/acled-conflict-index" target="_blank" rel="noopener">ACLED</a>; cifras por frente de la ONU (<a href="https://www.globalsecurity.org/wmd/library/news/ukraine/2026/08/ukraine-260813-unnews01.htm" target="_blank" rel="noopener">Ucrania</a>), <a href="https://www.globalsecurity.org/military/ops/iran-war-oprep.htm" target="_blank" rel="noopener">Irán</a>, OCHA (Sudán), ministerios de Salud de Gaza y Líbano, AAPP/Myanmar Peace Monitor y rastreadores como <a href="https://warmonit.com/" target="_blank" rel="noopener">WarMonit</a>. Las cifras de bajas son recuentos de cada fuente y pueden diferir entre sí. La capa “Conflictos armados” es una estimación propia: probabilidad anual de combates o ataques a pocos cientos de km de cada frente según su intensidad, no de que una persona resulte herida.</li>
+    <li><b>Base local (<code>datos.json</code>):</b> los conflictos armados activos y sus frentes están separados en el archivo <code>datos.json</code> como una lista de registros con <code>id</code>, y la página los lee con <code>fetch</code> para mostrarlos, buscarlos, filtrarlos, ordenarlos, calcular métricas y editarlos en memoria.</li>
+    <li>Es una herramienta educativa: no reemplaza los mapas oficiales de protección civil, USGS, NOAA ni los servicios geológicos nacionales.</li>
+  </ul>
+</div>
+<div class="statusbar">
+  <span class="st-grow">SISTEMA: <b>EN LÍNEA</b> · RELOJ JUICIO FINAL <b>85 s</b></span>
+  <span>USGS: <b id="st-eq">…</b></span>
+  <span>NASA: <b id="st-na">…</b></span>
+  <span>NOAA: <b id="st-no">…</b></span>
+  <span>UTC <b id="utc"></b></span>
+</div>
+</div></div></div>
 <script>
 const $=s=>document.querySelector(s),R=Math.PI/180,wr=d=>((d+540)%360)-180;
 const km=(a,b,c,d)=>Math.hypot(wr(c-a)*111.32*Math.cos((b+d)/2*R),(d-b)*110.57);
@@ -153,10 +350,10 @@ nu:(o,a)=>{let l=0,f=0;for(const[x,y,wl,wf]of N){const d=km(o,a,x,y);if(d<260){c
 H.all=(o,a)=>1-['eq','cy','vo','fl','fi','to'].reduce((q,k)=>q*(1-H[k](o,a)),1);
 const MN={all:-3,eq:-3,ts:-4,cy:-3,vo:-4,fl:-2,fi:-2,to:-2.5,nu:-6,cf:-2};
 const LB=[['all','Natural combinado'],['eq','Sismos'],['ts','Tsunamis'],['cy','Ciclones'],['vo','Volcanes'],['fl','Inundaciones'],['fi','Incendios'],['to','Tornados'],['nu','Bomba atómica'],['cf','Conflictos armados']];
-const ST=[[250,235,140],[248,160,60],[214,40,40],[100,20,110]];
+const ST=[[233,217,133],[227,155,85],[200,82,73],[109,57,110]];
 const ramp=v=>{const t=v*3,i=Math.min(2,t|0),f=t-i,a=ST[i],b=ST[i+1];return a.map((c,n)=>c+(b[n]-c)*f)};
 const cache={};
-function grid(k){if(cache[k])return cache[k];const o=document.createElement('canvas');o.width=360;o.height=180;const x=o.getContext('2d'),im=x.createImageData(360,180),mn=MN[k];const VV=vals(k);for(let j=0;j<180;j++)for(let i=0;i<360;i++){const p=VV[j*360+i],v=Math.min(1,(Math.log10(Math.max(p,1e-12))-mn)/-mn);if(v>0){const c=ramp(v);im.data.set([c[0],c[1],c[2],70+185*v],(j*360+i)*4)}}x.putImageData(im,0,0);return cache[k]=o}
+function grid(k){if(cache[k])return cache[k];const o=document.createElement('canvas');o.width=360;o.height=180;const x=o.getContext('2d'),im=x.createImageData(360,180),mn=MN[k];const VV=vals(k);for(let j=0;j<180;j++)for(let i=0;i<360;i++){const p=VV[j*360+i],v=Math.min(1,(Math.log10(Math.max(p,1e-12))-mn)/-mn);if(v>0){const c=ramp(v);im.data.set([c[0],c[1],c[2],45+150*v],(j*360+i)*4)}}x.putImageData(im,0,0);return cache[k]=o}
 const cv=$('#c'),cx=cv.getContext('2d');let cur='all',sel=null,V0={lo:0,la:0,z:1},dp=1;
 
 const VC={};let RC={},CLc=null,grp=0,MB=null,cs=-1,cm=0,rm='m',started=0;
@@ -166,15 +363,15 @@ function CL(){if(CLc)return CLc;const L=CO.map(()=>[]);for(let j=0;j<180;j++)for
 const ptv=(k,o,a)=>k==='eq7'?1-Math.pow(1-H.eq(o,a),1/9):k==='all'?H.all(o,a):H[k](o,a);
 function stat(c,k){const L=CL()[c];if(!L.length){const q=CO[c].m;const v=ptv(k,(q[0]+q[1])/2,(q[2]+q[3])/2);return[v,v]}const V=vals(k);let s=0,w=0,x=0;for(const i of L){const t=Math.cos((89.5-((i/360)|0))*R);s+=V[i]*t;w+=t;if(V[i]>x)x=V[i]}return[s/w,x]}
 function pathC(l,X,Y){cx.beginPath();for(const c of l)for(const p of CO[c].r){cx.moveTo(X(p[0]),Y(p[1]));for(let i=2;i<p.length;i+=2)cx.lineTo(X(p[i]),Y(p[i+1]));cx.closePath()}}
-function hl1(X,Y){if(MB){pathC(MB,X,Y);cx.fillStyle='rgba(53,255,140,.13)';cx.fill('evenodd')}}
-function hl2(X,Y){drawCF(X,Y);if(MB){pathC(MB,X,Y);cx.strokeStyle='rgba(141,255,184,.95)';cx.lineWidth=1.3*dp;cx.stroke()}if(cm&&cs>=0){pathC([cs],X,Y);cx.fillStyle='rgba(255,90,31,.15)';cx.fill('evenodd');cx.strokeStyle='#ff5a1f';cx.lineWidth=2.2*dp;cx.stroke()}drawLive(X,Y);drawCompare(X,Y)}
+function hl1(X,Y){if(MB){pathC(MB,X,Y);cx.fillStyle='rgba(82,183,136,.12)';cx.fill('evenodd')}}
+function hl2(X,Y){drawCF(X,Y);if(MB){pathC(MB,X,Y);cx.strokeStyle='rgba(139,224,184,.75)';cx.lineWidth=1.2*dp;cx.stroke()}if(cm&&cs>=0){pathC([cs],X,Y);cx.fillStyle='rgba(217,123,89,.16)';cx.fill('evenodd');cx.strokeStyle='#d97b59';cx.lineWidth=1.8*dp;cx.stroke()}drawLive(X,Y);drawCompare(X,Y)}
 function setG(i){grp=i;const g=GR[i];MB=i?CO.map((c,n)=>g[4].includes(c.a)?n:-1).filter(n=>n>=0):null;cm=0;cs=-1;sel=null;LIVE.selectedEv=null;flyTo(g[1],g[2],g[3]);$('#rg').value=i;$('#pa').value='';panel();rank()}
 function setC(c){cs=c;cm=1;sel=null;LIVE.selectedEv=null;const q=CO[c].m;const tz=Math.max(1,Math.min(14,Math.min(360/((q[1]-q[0]+.4)*1.5),180/((q[3]-q[2]+.4)*1.5))));flyTo((q[0]+q[1])/2,(q[2]+q[3])/2,tz);$('#pa').value=c;beep(620,.05);panel()}
 $('#rg').innerHTML=GR.map((g,i)=>`<option value="${i}">${g[0]}</option>`).join('');
 $('#pa').innerHTML='<option value="">Elegir país…</option>'+CO.map((c,i)=>[c.n,i]).sort((a,b)=>a[0].localeCompare(b[0],'es')).map(([n,i])=>`<option value="${i}">${n}</option>`).join('');
 $('#rg').onchange=e=>setG(+e.target.value);$('#pa').onchange=e=>{if(e.target.value!=='')setC(+e.target.value)};$('#rs').onclick=()=>setG(0);
 function panelC(){const p=$('#p'),c=CO[cs];p.innerHTML=`<h2>${c.n}</h2><p class="mu">Calculando…</p>`;setTimeout(()=>{if(!cm||CO[cs]!==c)return;const ks=['eq','eq7','ts','cy','vo','fl','fi','to','me','cf','nu'],r={};for(const k of['all',...ks])r[k]=k==='me'?[6e-8,6e-8]:stat(cs,k);
-p.innerHTML=`<h2>${c.n}</h2><div class="mu" style="margin-bottom:8px">Resumen sobre toda su superficie (${CL()[cs].length} celdas de 1°)</div><div class="mu" style="font-size:12px">Probabilidad anual de al menos un evento natural grave (promedio · máximo)</div><div class="big">${fp(r.all[0])} <span class="mu" style="font-size:15px">· ${fp(r.all[1])}</span></div><table><tr><th></th><th>Promedio</th><th>Máximo</th><th>50 años (prom.)</th></tr>${RW.map(([k,n])=>`<tr><td>${n}</td><td>${fp(r[k][0])}</td><td>${fp(r[k][1])}</td><td>${f50(r[k][0])}</td></tr>`).join('')}</table>${confC(cs)}<p style="margin:10px 0 0"><button class="lk" id="bk">← Volver al mapa</button></p>`},20)}
+p.innerHTML=`<h2>${c.n}</h2><div class="mu" style="margin-bottom:6px">Resumen sobre toda su superficie (${CL()[cs].length} celdas de 1°)</div><div class="big-crt"><div class="lbl">Probabilidad anual · evento natural grave (prom. · máx.)</div><div class="big">${fp(r.all[0])} <span style="font-size:14px;color:var(--crt-mu)">· ${fp(r.all[1])}</span></div></div><table><tr><th></th><th>Promedio</th><th>Máximo</th><th>50 años (prom.)</th></tr>${RW.map(([k,n])=>`<tr><td>${n}</td><td>${fp(r[k][0])}</td><td>${fp(r[k][1])}</td><td>${f50(r[k][0])}</td></tr>`).join('')}</table>${confC(cs)}<p style="margin:10px 0 0"><button class="lk" id="bk">← Volver al mapa</button></p>`},20)}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-c]'),r=e.target.closest('#bk'),m=e.target.closest('[data-m]');if(b&&b.tagName==='BUTTON')setC(+b.dataset.c);if(r){cm=0;panel();draw()}if(m){rm=m.dataset.m;rank()}const t=e.target.closest('tr[data-r]');if(t)setC(+t.dataset.r)});
 function rank(){const box=$('#rk'),nm=LB.find(l=>l[0]===cur)[1],sc=MB?GR[grp][0]:'todo el mundo';box.innerHTML=`<h2>Ranking · ${nm} · ${sc}</h2><p class="mu">Calculando…</p>`;started=1;
 setTimeout(()=>{const key=cur+rm;if(!RC[key]){RC[key]=CO.map((c,i)=>[i,stat(i,cur)[rm==='m'?0:1]])}let L=RC[key].filter(x=>!MB||MB.includes(x[0])).sort((a,b)=>b[1]-a[1]).slice(0,10);const mx=L.length?Math.max(L[0][1],1e-12):1;
@@ -232,7 +429,7 @@ function drawCF(X,Y){
       cx.beginPath();cx.arc(px,py,r/111*k,0,7);
       cx.strokeStyle='rgba(255,59,31,.55)';cx.lineWidth=dp;cx.setLineDash([4*dp,4*dp]);cx.stroke();cx.setLineDash([]);
     }
-    cx.beginPath();cx.arc(px,py,(1.5+n*.6)*dp,0,7);cx.fillStyle='#ff3b1f';cx.fill();
+    cx.beginPath();cx.arc(px,py,(1.5+n*.55)*dp,0,7);cx.fillStyle='#d96652';cx.fill();
   }
 }
 
@@ -502,12 +699,12 @@ const LIVE={
   jumpIdx:0
 };
 const CAT_META={
-  eq:{label:'Sismo USGS',short:'Sismo',color:'#ffd166',dot:'d-eq',shape:'ring'},
-  fi:{label:'Incendio NASA',short:'Incendio',color:'#ff7b29',dot:'d-fi',shape:'tri'},
-  vo:{label:'Volcán NASA',short:'Volcán',color:'#ff3b7f',dot:'d-vo',shape:'dia'},
-  cy:{label:'Tormenta NASA',short:'Tormenta',color:'#38e8ff',dot:'d-cy',shape:'ring'},
-  fl:{label:'Inundación NASA',short:'Inundación',color:'#4da6ff',dot:'d-fl',shape:'dot'},
-  no:{label:'Alerta NOAA',short:'NOAA',color:'#ff2e63',dot:'d-no',shape:'tri'}
+  eq:{label:'Sismo USGS',short:'Sismo',color:'#e9c46a',dot:'d-eq',shape:'ring'},
+  fi:{label:'Incendio NASA',short:'Incendio',color:'#e78a52',dot:'d-fi',shape:'tri'},
+  vo:{label:'Volcán NASA',short:'Volcán',color:'#e06c88',dot:'d-vo',shape:'dia'},
+  cy:{label:'Tormenta NASA',short:'Tormenta',color:'#63c5da',dot:'d-cy',shape:'ring'},
+  fl:{label:'Inundación NASA',short:'Inundación',color:'#64a6e8',dot:'d-fl',shape:'dot'},
+  no:{label:'Alerta NOAA',short:'NOAA',color:'#e05a6d',dot:'d-no',shape:'tri'}
 };
 const WMO_ES={0:'Despejado',1:'Mayormente despejado',2:'Parcialmente nublado',3:'Nublado',45:'Niebla',48:'Niebla helada',51:'Llovizna leve',53:'Llovizna',55:'Llovizna intensa',61:'Lluvia leve',63:'Lluvia moderada',65:'Lluvia fuerte',71:'Nieve leve',73:'Nieve',75:'Nieve fuerte',80:'Chaparrones',81:'Chaparrones fuertes',82:'Chaparrones intensos',95:'Tormenta eléctrica',96:'Tormenta con granizo',99:'Tormenta severa'};
 const safeUrl=u=>typeof u==='string'&&/^https?:\/\//i.test(u)?u:'';
@@ -634,22 +831,22 @@ function drawCompare(X,Y){
     const x1=X(LIVE.cmpA.lon),y1=Y(LIVE.cmpA.lat),x2=X(LIVE.cmpB.lon),y2=Y(LIVE.cmpB.lat);
     cx.save();
     cx.beginPath();cx.moveTo(x1,y1);cx.lineTo(x2,y2);
-    cx.strokeStyle='#38e8ff';cx.lineWidth=2*dp;cx.setLineDash([7*dp,5*dp]);cx.stroke();cx.setLineDash([]);
+    cx.strokeStyle='#68b8cf';cx.lineWidth=1.8*dp;cx.setLineDash([6*dp,4*dp]);cx.stroke();cx.setLineDash([]);
     const dist=Math.round(km(LIVE.cmpA.lon,LIVE.cmpA.lat,LIVE.cmpB.lon,LIVE.cmpB.lat)).toLocaleString('es-AR')+' km';
     const mx=(x1+x2)/2,my=(y1+y2)/2;
-    cx.font=`bold ${11*dp}px "Courier New",monospace`;
+    cx.font=`600 ${11*dp}px ui-monospace,monospace`;
     const tw=cx.measureText(dist).width+10*dp;
-    cx.fillStyle='rgba(3,10,6,.9)';cx.fillRect(mx-tw/2,my-10*dp,tw,18*dp);
-    cx.strokeStyle='#38e8ff';cx.lineWidth=1*dp;cx.strokeRect(mx-tw/2,my-10*dp,tw,18*dp);
-    cx.fillStyle='#38e8ff';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(dist,mx,my-1*dp);
+    cx.fillStyle='rgba(13,19,18,.9)';cx.fillRect(mx-tw/2,my-10*dp,tw,18*dp);
+    cx.strokeStyle='#68b8cf';cx.lineWidth=1*dp;cx.strokeRect(mx-tw/2,my-10*dp,tw,18*dp);
+    cx.fillStyle='#9ad5e6';cx.textAlign='center';cx.textBaseline='middle';cx.fillText(dist,mx,my-1*dp);
     cx.restore();
   }
   pts.forEach((pt,idx)=>{
     const x=X(pt.lon),y=Y(pt.lat),lbl=idx===0?'A':'B';
     cx.save();
-    cx.beginPath();cx.arc(x,y,10*dp,0,7);cx.fillStyle=idx===0?'#35ff8c':'#38e8ff';cx.fill();
-    cx.strokeStyle='#030a06';cx.lineWidth=2*dp;cx.stroke();
-    cx.fillStyle='#030a06';cx.font=`bold ${11*dp}px "Courier New",monospace`;cx.textAlign='center';cx.textBaseline='middle';
+    cx.beginPath();cx.arc(x,y,9.5*dp,0,7);cx.fillStyle=idx===0?'#52b788':'#68b8cf';cx.fill();
+    cx.strokeStyle='#0d1312';cx.lineWidth=1.8*dp;cx.stroke();
+    cx.fillStyle='#0d1312';cx.font=`bold ${11*dp}px ui-monospace,monospace`;cx.textAlign='center';cx.textBaseline='middle';
     cx.fillText(lbl,x,y+.5*dp);
     cx.restore();
   });
@@ -660,38 +857,35 @@ function updateLiveBar(){
   if(!b)return;
   const counts={all:LIVE.events.length,eq:0,fi:0,vo:0,cy:0,fl:0,no:0};
   for(const ev of LIVE.events)if(counts[ev.cat]!=null)counts[ev.cat]++;
-  const pills=[
-    ['all','Todos',''],
-    ['eq','Sismos','d-eq'],
-    ['vo','Volcanes','d-vo'],
-    ['fi','Incendios','d-fi'],
-    ['cy','Tormentas','d-cy'],
-    ['fl','Inundaciones','d-fl'],
-    ['no','NOAA','d-no']
+  const opts=[
+    ['all',`Radar: todos (${counts.all})`],
+    ['eq',`Sismos USGS (${counts.eq})`],
+    ['vo',`Volcanes NASA (${counts.vo})`],
+    ['fi',`Incendios NASA (${counts.fi})`],
+    ['cy',`Tormentas NASA (${counts.cy})`],
+    ['fl',`Inundaciones NASA (${counts.fl})`],
+    ['no',`Alertas NOAA (${counts.no})`]
   ];
-  b.innerHTML=pills.map(([k,n,dot])=>`<button type="button" class="lk${LIVE.cat===k&&LIVE.on?' on':''}" data-lcat="${k}">${dot?`<i class="dot ${dot}"></i>`:''}${n} (${counts[k]})</button>`).join('')+
-    `<span style="margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap">
-      <button type="button" class="lk${LIVE.eqWin==='day'?' on':''}" data-eqw="day" title="Sismos M2.5+ últimas 24 horas">24 h</button>
-      <button type="button" class="lk${LIVE.eqWin==='week'?' on':''}" data-eqw="week" title="Sismos M4.5+ últimos 7 días">7 d</button>
-      <button type="button" class="lk" id="lv-ref" title="Volver a consultar USGS, NASA EONET y NOAA">${LIVE.loading?'…':'↻ Sync'}</button>
-    </span>`;
+  b.innerHTML=`<select id="lv-cat" aria-label="Filtrar eventos en vivo">${opts.map(([k,n])=>`<option value="${k}"${LIVE.cat===k?' selected':''}>${n}</option>`).join('')}</select>
+    <button type="button" class="lk${LIVE.eqWin==='day'?' on':''}" data-eqw="day" title="Sismos M2.5+ últimas 24 horas">24 h</button>
+    <button type="button" class="lk${LIVE.eqWin==='week'?' on':''}" data-eqw="week" title="Sismos M4.5+ últimos 7 días">7 d</button>
+    <button type="button" class="lk" id="lv-ref" title="Volver a consultar USGS, NASA EONET y NOAA">${LIVE.loading?'…':'↻'}</button>`;
   $('#st-eq').textContent=LIVE.status.usgs==='error'?'offline':LIVE.counts.eq;
   $('#st-na').textContent=LIVE.status.nasa==='error'?'offline':LIVE.counts.nasa;
   $('#st-no').textContent=LIVE.status.noaa==='error'?'offline':LIVE.counts.noaa;
-  $('#st-mode').textContent=LIVE.cmpMode?'comparando A/B':(LIVE.on?'radar en vivo':'solo modelo');
   const hi=$('#hud-info');
   if(hi){
     if(LIVE.cmpMode){
       hi.className='hud-cmp';
-      hi.textContent=!LIVE.cmpA?'Comparar: tocá Punto A':(!LIVE.cmpB?'Comparar: tocá Punto B':'Comparación A ↔ B activa');
+      hi.textContent=!LIVE.cmpA?'Comparar: tocá Punto A':(!LIVE.cmpB?'Comparar: tocá Punto B':'Comparación A ↔ B');
     }else if(!LIVE.on){
-      hi.className='';hi.textContent='Capa en vivo pausada';
+      hi.className='';hi.textContent='Radar pausado';
     }else if(LIVE.loading){
-      hi.className='hud-live';hi.textContent='Sincronizando USGS · NASA · NOAA…';
+      hi.className='hud-live';hi.textContent='Sincronizando…';
     }else{
       hi.className='hud-live';
       const hh=LIVE.updatedAt?LIVE.updatedAt.toTimeString().slice(0,5):'';
-      hi.textContent=`● ${visibleLiveEvents().length} eventos en vivo${hh?' · '+hh:''}`;
+      hi.textContent=`● ${visibleLiveEvents().length} en vivo${hh?' · '+hh:''}`;
     }
   }
 }
@@ -929,8 +1123,8 @@ function renderComparePanel(){
   const wxA=LIVE.wxCache.get(A.lat.toFixed(1)+','+A.lon.toFixed(1));
   const wxB=LIVE.wxCache.get(B.lat.toFixed(1)+','+B.lon.toFixed(1));
   p.innerHTML=`<div class="cmp-hdr"><h2 style="margin:0">Comparador A ↔ B</h2><button class="lk" id="cmp-exit" type="button">✕ Cerrar</button></div>
-    <div class="cf-meta">Distancia en línea recta: <b style="color:#38e8ff">${dist} km</b></div>
-    <table><tr><th>Riesgo anual</th><th style="color:#35ff8c">A · ${esc(A.short)}</th><th style="color:#38e8ff">B · ${esc(B.short)}</th></tr>
+    <div class="big-crt"><div class="lbl">Distancia en línea recta</div><div class="big" style="font-size:20px;color:#6ec4da">${dist} km</div></div>
+    <table><tr><th>Riesgo anual</th><th style="color:#155e42">A · ${esc(A.short)}</th><th style="color:#19596b">B · ${esc(B.short)}</th></tr>
       ${rows.map(([k,n])=>`<tr><td>${n}</td><td class="${rA[k]>rB[k]*1.15?'cmp-hi':(rA[k]*1.15<rB[k]?'cmp-win':'')}">${fp(rA[k])}</td><td class="${rB[k]>rA[k]*1.15?'cmp-hi':(rB[k]*1.15<rA[k]?'cmp-win':'')}">${fp(rB[k])}</td></tr>`).join('')}
       <tr><td>Clima ahora</td><td>${wxA?.ok&&wxA.temp!=null?wxA.temp.toFixed(0)+'°C · '+Math.round(wxA.wind||0)+' km/h':'…'}</td><td>${wxB?.ok&&wxB.temp!=null?wxB.temp.toFixed(0)+'°C · '+Math.round(wxB.wind||0)+' km/h':'…'}</td></tr>
     </table>
@@ -957,7 +1151,7 @@ function draw(){clampV();const w=cv.width,h=cv.height,k=w/360*V0.z,X=o=>(o-V0.lo
 cx.fillStyle=c('--sea');cx.fillRect(0,0,w,h);cx.strokeStyle=c('--bd');cx.lineWidth=dp*.6;cx.beginPath();for(let o=-150;o<=180;o+=30){cx.moveTo(X(o),0);cx.lineTo(X(o),h)}for(let a=-60;a<=60;a+=30){cx.moveTo(0,Y(a));cx.lineTo(w,Y(a))}cx.stroke();
 const path=()=>{cx.beginPath();for(const p of P){cx.moveTo(X(p[0]),Y(p[1]));for(let i=2;i<p.length;i+=2)cx.lineTo(X(p[i]),Y(p[i+1]));cx.closePath()}};
 path();cx.fillStyle=c('--land');cx.fill('evenodd');cx.imageSmoothingEnabled=true;cx.drawImage(grid(cur),X(-180),Y(90),360*k,180*k);hl1(X,Y);cx.beginPath();for(const p of BD){cx.moveTo(X(p[0]),Y(p[1]));for(let i=2;i<p.length;i+=2)cx.lineTo(X(p[i]),Y(p[i+1]))}cx.strokeStyle=c('--bd');cx.lineWidth=dp*.8;cx.stroke();path();cx.strokeStyle=c('--ln');cx.lineWidth=dp;cx.stroke();
-hl2(X,Y);if(sel&&!LIVE.cmpMode){const x=X(sel[0]),y=Y(sel[1]);if(!reduceMotion){cx.beginPath();cx.arc(x,y,(8+12*pulseT)*dp,0,7);cx.strokeStyle=`rgba(53,255,140,${(1-pulseT)*.55})`;cx.lineWidth=1.3*dp;cx.stroke()}cx.strokeStyle=c('--fg');cx.lineWidth=2*dp;cx.beginPath();cx.arc(x,y,8*dp,0,7);cx.moveTo(x-14*dp,y);cx.lineTo(x+14*dp,y);cx.moveTo(x,y-14*dp);cx.lineTo(x,y+14*dp);cx.stroke()}}
+hl2(X,Y);if(sel&&!LIVE.cmpMode){const x=X(sel[0]),y=Y(sel[1]);if(!reduceMotion){cx.beginPath();cx.arc(x,y,(8+11*pulseT)*dp,0,7);cx.strokeStyle=`rgba(99,212,155,${(1-pulseT)*.6})`;cx.lineWidth=1.2*dp;cx.stroke()}cx.strokeStyle='#d7f2e4';cx.lineWidth=1.8*dp;cx.beginPath();cx.arc(x,y,7.5*dp,0,7);cx.moveTo(x-13*dp,y);cx.lineTo(x+13*dp,y);cx.moveTo(x,y-13*dp);cx.lineTo(x,y+13*dp);cx.stroke()}}
 function pick(e){const r=cv.getBoundingClientRect(),w=cv.width,k=w/360*V0.z,x=(e.clientX-r.left)*dp,y=(e.clientY-r.top)*dp;return[(x-w/2)/k+V0.lo,V0.la-(y-cv.height/2)/k,x,y,e.clientX-r.left,e.clientY-r.top]}
 let dr=null;const tipEl=$('#tip'),hudPos=$('#hud-pos');
 cv.addEventListener('pointerdown',e=>{camAnim=null;dr={x:e.clientX,y:e.clientY,lo:V0.lo,la:V0.la,m:0};cv.setPointerCapture(e.pointerId)});
@@ -1023,7 +1217,8 @@ function panel(){
   const evHtml=ev?`<div class="ev-card"><div class="cf-meta" style="color:${(CAT_META[ev.cat]||CAT_META.eq).color}">${esc((CAT_META[ev.cat]||CAT_META.eq).label)} · ${esc(ago(ev.time))}</div><b>${esc(ev.title)}</b><div class="nt" style="margin:3px 0">${esc(ev.detail||'')}</div>${ev.url?`<a href="${esc(ev.url)}" target="_blank" rel="noopener">Ver reporte oficial (${esc(ev.src)}) ↗</a>`:''}</div>`:'';
   const wxKey=a.toFixed(1)+','+o.toFixed(1);
   const wx=LIVE.wxCache.get(wxKey);
-  p.innerHTML=`${evHtml}<h2>${esc(nm||'Punto elegido')}</h2><div class="mu" style="margin-bottom:8px">${pos}${cs>=0?' · '+CO[cs].n:''}</div><div class="mu" style="font-size:12px">Probabilidad anual de al menos un evento natural grave</div><div class="big">${fp(v.all)}</div>
+  const heading=ev?(cs>=0?CO[cs].n:'Detalle del lugar'):(nm||'Punto elegido');
+  p.innerHTML=`${evHtml}<h2>${esc(heading)}</h2><div class="mu" style="margin-bottom:6px">${pos}${cs>=0&&!ev?' · '+CO[cs].n:''}</div><div class="big-crt"><div class="lbl">Probabilidad anual · evento natural grave</div><div class="big">${fp(v.all)}</div></div>
   <div id="wx-slot">${renderWxHtml(wx)}</div>
   <table><tr><th></th><th>Por año</th><th>1 en…</th><th>50 años</th></tr>${RW.map(([k,n])=>`<tr><td>${n}<div class="tb"><i style="width:${Math.max(0,Math.min(100,(Math.log10(Math.max(v[k],1e-12))+7)/7*100))}%"></i></div></td><td>${fp(v[k])}</td><td>${fn(v[k])}</td><td>${f50(v[k])}</td></tr>`).join('')}</table>${nearLive(o,a)}${near(o,a)}<div class="act-row" style="margin-top:10px">${cs>=0?`<button class="lk" data-c="${cs}">Resumen de ${CO[cs].n} →</button>`:''}<button class="lk" id="cmp-from-pt" type="button">⇄ Comparar este punto</button></div><p style="margin:10px 0 6px" class="mu">Ir a otra ciudad:</p>${cities()}`;
   if(!wx){
@@ -1038,15 +1233,25 @@ function panel(){
 }
 const CI=[['Buenos Aires',-58.4,-34.6],['Santiago',-70.7,-33.4],['Lima',-77,-12],['Ciudad de México',-99.1,19.4],['Los Ángeles',-118.2,34],['Nueva York',-74,40.7],['Washington D. C.',-77,38.9],['Reikiavik',-21.9,64.1],['Londres',-.1,51.5],['Madrid',-3.7,40.4],['Roma',12.5,41.9],['Estambul',29,41],['Moscú',37.6,55.8],['El Cairo',31.2,30],['Lagos',3.4,6.5],['Nueva Delhi',77.2,28.6],['Pekín',116.4,39.9],['Tokio',139.7,35.7],['Manila',121,14.6],['Yakarta',106.8,-6.2],['Sídney',151.2,-33.9]];
 const cities=()=>'<select id="ci"><option value="">Ciudad…</option>'+CI.map((c,i)=>`<option value="${i}">${c[0]}</option>`).join('')+'</select>';
-document.addEventListener('change',e=>{if(e.target.id==='ci'&&e.target.value!==''){const c=CI[e.target.value];LIVE.selectedEv=null;sel=[c[1],c[2],c[0]];cs=cAt(c[1],c[2]);cm=0;flyTo(c[1],c[2],Math.max(V0.z,3.2));beep(600,.045);panel()}});
+document.addEventListener('change',e=>{
+  if(e.target.id==='ci'&&e.target.value!==''){const c=CI[e.target.value];LIVE.selectedEv=null;sel=[c[1],c[2],c[0]];cs=cAt(c[1],c[2]);cm=0;flyTo(c[1],c[2],Math.max(V0.z,3.2));beep(600,.045);panel()}
+  if(e.target.id==='lv-cat'){LIVE.on=true;LIVE.cat=e.target.value;$('#btn-live').classList.add('on');beep(680,.035);updateLiveBar();renderLiveFeed();draw()}
+});
 document.addEventListener('click',e=>{
+  const bt=e.target.closest('[data-bt]');
+  if(bt){
+    const id=bt.dataset.bt;
+    document.querySelectorAll('#btabs button').forEach(b=>b.classList.toggle('on',b.dataset.bt===id));
+    document.querySelectorAll('.bpanel').forEach(p=>p.classList.toggle('active',p.id===id));
+    beep(560,.03);return;
+  }
   const lc=e.target.closest('[data-lcat]');
   if(lc){LIVE.on=true;LIVE.cat=lc.dataset.lcat;$('#btn-live').classList.add('on');beep(680,.035);updateLiveBar();renderLiveFeed();draw();return}
   const ew=e.target.closest('[data-eqw]');
   if(ew&&ew.dataset.eqw!==LIVE.eqWin){LIVE.eqWin=ew.dataset.eqw;beep(700,.04);fetchLiveAPIs();return}
   if(e.target.closest('#lv-ref')){beep(740,.04);fetchLiveAPIs();return}
   if(e.target.closest('#btn-live')){LIVE.on=!LIVE.on;$('#btn-live').classList.toggle('on',LIVE.on);beep(LIVE.on?720:420,.04);updateLiveBar();renderLiveFeed();draw();return}
-  if(e.target.closest('#btn-snd')){LIVE.sound=!LIVE.sound;const b=$('#btn-snd');b.classList.toggle('on',LIVE.sound);b.textContent=LIVE.sound?'🔊 Sonido':'🔇 Sonido';if(LIVE.sound)beep(820,.06);return}
+  if(e.target.closest('#btn-snd')){LIVE.sound=!LIVE.sound;const b=$('#btn-snd');b.classList.toggle('on',LIVE.sound);b.textContent=LIVE.sound?'🔊':'🔇';if(LIVE.sound)beep(820,.06);return}
   if(e.target.closest('#btn-jump')){
     const list=visibleLiveEvents();
     if(!list.length){fetchLiveAPIs();return}
