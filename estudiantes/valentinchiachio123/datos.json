@@ -33,5 +33,6 @@
   { "id": 30, "tipo": "objeto", "x": 2320, "alto": null, "ancho": null, "valor": "pucho" },
   { "id": 31, "tipo": "objeto", "x": 2700, "alto": null, "ancho": null, "valor": "G" },
   { "id": 32, "tipo": "objeto", "x": 2880, "alto": null, "ancho": null, "valor": "pucho" },
-  { "id": 33, "tipo": "objeto", "x": 3100, "alto": null, "ancho": null, "valor": "pucho" }
+  { "id": 33, "tipo": "objeto", "x": 3100, "alto": null, "ancho": null, "valor": "pucho" },
+  { "id": 34, "tipo": "objeto", "x": 2560, "alto": null, "ancho": null, "valor": "porro" }
 ]

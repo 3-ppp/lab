@@ -119,7 +119,7 @@ document.querySelectorAll('.tb').forEach(b => {
 // Cada registro de datos.json tiene un "tipo":
 //   plataforma -> cajas, auto, bondi donde se puede subir (x, alto, ancho, valor = clase)
 //   oleada     -> grupo de enemigos que aparece en x (valor: T = matón, D = perro)
-//   objeto     -> cosa para recoger en x (valor: pucho, H, G, chori, moto)
+//   objeto     -> cosa para recoger en x (valor: pucho, H, G, chori, moto, porro)
 let PLAT = [], TRIG0 = [], PICK0 = [], dataError = '';
 function cargarNivel(registros){
   PLAT = registros.filter(r => r.tipo === 'plataforma').map(r => ({ x:r.x, y:G - r.alto, w:r.ancho, kind:r.valor }));
@@ -135,11 +135,33 @@ const isBoss = e => e.t === 'B' || e.t === 'G' || e.t === 'M';
 let state = 'title', frame = 0, camX = 0, shake = 0, msgT = 0, msgS = '', score = 0, lives = 3, endT = 0, hiscore = 0;
 let p, pp, enemies, bullets, ebullets, grenades, parts, picks, trig, bossMode, stage, nextT, obj;
 
+// ===================== El porro =====================
+// Power-up raro: da inmunidad, pero con una contraparte elegida al azar.
+const LOCO_DURA = 480;   // 8 segundos de inmunidad
+const PAPA_TARDA = 180;  // si el Papa se enojó, tarda 3 segundos más en volver
+const CONTRAS = {
+  bajon:    { titulo:'CONTRA: SE VIENE EL BAJÓN',  detalle:'AL TERMINAR, ENERGÍA AL MÍNIMO',      hud:'BAJÓN AL FINAL' },
+  punteria: { titulo:'CONTRA: NO LE PEGA A NADA',  detalle:'LOS TIROS SALEN PARA CUALQUIER LADO', hud:'SIN PUNTERÍA' },
+  papa:     { titulo:'CONTRA: EL PAPA NO APRUEBA', detalle:'EL PAPA NO DISPARA NI LO SIGUE',      hud:'PAPA ENOJADO' }
+};
+let cartel = null; // cartel grande en el medio de la pantalla: { lineas:[[texto, color, tamaño]], t }
+function cartelGrande(lineas, t = 210){ cartel = { lineas, t }; }
+const papaEnojado = () => (p.loco > 0 && p.contra === 'papa') || pp.enojo > 0;
+function terminaLoco(){
+  if (p.contra === 'bajon') {
+    p.hp = 1; p.bajon = true; sfx.ouch();
+    cartelGrande([['¡EL BAJÓN!', '#ff8a3a', 12], ['ENERGÍA AL MÍNIMO', '#fff', 8], ['BUSCÁ UN PUCHO O UN CHORI', '#ffd23f', 6]], 200);
+  } else if (p.contra === 'papa') { pp.enojo = PAPA_TARDA; say('EL PAPA TODAVÍA ESTÁ ENOJADO', 100); }
+  else say('SE LE PASÓ: YA APUNTA BIEN', 80);
+  p.contra = null;
+}
+
 function start(){
   if (dataError || !PICK0.length) return;
   state = 'play'; frame = 0; camX = 0; score = 0; lives = 3; bossMode = false; stage = 0; nextT = 0; endT = 0;
-  p = { x:40, y:G-22, vx:0, vy:0, face:1, onGround:true, anim:0, cool:0, inv:120, moto:false, gun:'P', ammo:0, gren:10, dead:0, hp:5, max:5, up:false };
-  pp = { x:18, y:G-22, vx:0, vy:0, face:1, onGround:true, anim:0, cool:40 };
+  p = { x:40, y:G-22, vx:0, vy:0, face:1, onGround:true, anim:0, cool:0, inv:120, moto:false, gun:'P', ammo:0, gren:10, dead:0, hp:5, max:5, up:false, loco:0, contra:null, bajon:false };
+  pp = { x:18, y:G-22, vx:0, vy:0, face:1, onGround:true, anim:0, cool:40, enojo:0 };
+  cartel = null;
   enemies = []; bullets = []; ebullets = []; grenades = []; parts = [];
   picks = PICK0.map(([t, x]) => ({ t, x, y:G-14, on:true }));
   trig = TRIG0.map(([x, s]) => ({ x, s, done:false }));
@@ -183,7 +205,7 @@ function spawnBoss(s){
 }
 
 function hitPlayer(d = 1){
-  if (p.inv > 0 || p.dead) return;
+  if (p.inv > 0 || p.loco > 0 || p.dead) return; // con el porro no siente nada
   if (p.moto) { p.moto = false; p.inv = 90; boom(p.x + 6, p.y + 16, 24, 1.2); say('¡CHAU MOTO!', 80); return; }
   p.hp -= d; p.inv = 70; sfx.ouch(); bits(p.x + 6, p.y + 8, ['#c0262d','#23262f'], 6);
   if (p.hp <= 0) { p.hp = 0; p.dead = 70; boom(p.x + 6, p.y + 10, 20); sfx.die(); bits(p.x + 6, p.y + 8, ['#23262f','#c0262d','#e8b48a']); }
@@ -200,7 +222,7 @@ function update(){
   if (p.dead) {
     p.dead--;
     if (p.dead === 0) { lives--; if (lives < 0) { state = 'over'; endT = 0; saveHi(); return; }
-      p.inv = 150; p.gun = 'P'; p.ammo = 0; p.hp = p.max; p.gren = Math.max(p.gren, 5); p.y = G - 60; p.vy = 0; say('¡DE NUEVO!', 60); }
+      p.inv = 150; p.gun = 'P'; p.ammo = 0; p.hp = p.max; p.bajon = false; p.gren = Math.max(p.gren, 5); p.y = G - 60; p.vy = 0; say('¡DE NUEVO!', 60); }
   } else {
     const spd = p.moto ? 2.2 : 1.3;
     p.vx = K.L ? -spd : K.R ? spd : 0; if (p.vx) p.face = Math.sign(p.vx);
@@ -213,16 +235,26 @@ function update(){
       let bx, by, vx, vy;
       if (p.up) { bx = p.x + (p.face > 0 ? 8 : 2); by = p.y - 6; vx = 0; vy = -5; }
       else { bx = p.face > 0 ? p.x + 17 : p.x - 5; by = p.y + (p.moto ? 7 : 8); vx = (p.gun === 'H' ? 5 : 4)*p.face; vy = 0; }
+      // Contraparte "no le pega a nada": cada tiro sale en una dirección al azar.
+      if (p.loco > 0 && p.contra === 'punteria') { const a = Math.random()*6.28, s = Math.hypot(vx, vy); vx = Math.cos(a)*s; vy = Math.sin(a)*s; }
       if (p.gun === 'H') { const sp = (Math.random() - .5)*.5; bullets.push({ x:bx, y:by, vx:vx + (p.up ? sp : 0), vy:vy + (p.up ? 0 : sp), dmg:1, hmg:true }); p.cool = 5; sfx.hmg();
         if (--p.ammo <= 0) { p.gun = 'P'; say('SIN BALAS', 50); } }
       else { bullets.push({ x:bx, y:by, vx, vy, dmg:1 }); p.cool = 14; sfx.shot(); }
     }
     if (P.B && p.gren > 0) { p.gren--; grenades.push({ x:p.x + 6, y:p.y + 6, vx:1.8*p.face + p.vx*.5, vy:-2.6 }); beep(300, .05); }
     if (p.inv > 0) p.inv--;
+    if (p.loco > 0) {
+      if (frame % 5 === 0) parts.push({ x:p.x + 8, y:p.y + 4, vx:(Math.random() - .5)*.6, vy:-.5 - Math.random()*.4, life:35, c:frame % 10 ? '#9be88a' : '#c8c8c8', sz:2 });
+      if (--p.loco === 0) terminaLoco();
+    }
   }
+  if (cartel && --cartel.t <= 0) cartel = null;
 
   // --- el Papa ---
+  const enojado = papaEnojado();
+  if (pp.enojo > 0) pp.enojo--;
   if (p.moto) { pp.x = p.x - 9*p.face; pp.y = p.y - 2; pp.face = p.face; pp.vx = 0; }
+  else if (enojado) { pp.vx = 0; phys(pp, true); pp.anim++; } // enojado: se queda donde está
   else {
     const tx = p.x - 18*p.face, dx = tx - pp.x;
     pp.vx = Math.abs(dx) > 4 ? Math.sign(dx)*Math.min(1.6, Math.abs(dx)*.1) : 0;
@@ -233,7 +265,7 @@ function update(){
   let tgt = null, best = 200;
   for (const e of enemies) { if (e.dead) continue; const b = ebox(e), d = Math.abs(b.x + b.w/2 - pp.x); if (d < best && b.x + b.w > camX && b.x < camX + W) { best = d; tgt = e; } }
   if (tgt) { const b = ebox(tgt); pp.face = Math.sign(b.x + b.w/2 - pp.x) || 1; } else if (!p.moto && pp.vx) pp.face = Math.sign(pp.vx);
-  if (--pp.cool <= 0 && tgt && !p.dead) {
+  if (--pp.cool <= 0 && tgt && !p.dead && !enojado) {
     const b = ebox(tgt), tx = b.x + b.w/2, ty = b.y + b.h/2, ox = pp.x + (pp.face > 0 ? 16 : -4), oy = pp.y + 8, a = Math.atan2(ty - oy, tx - ox);
     bullets.push({ x:ox, y:oy, vx:Math.cos(a)*3.5, vy:Math.sin(a)*3.5, dmg:1, papa:true });
     pp.cool = 36; beep(700, .04, 'square', .025, 300);
@@ -305,6 +337,14 @@ function update(){
       if (k.t === 'H') { p.gun = 'H'; p.ammo = 120; say('¡AMETRALLADORA!', 70); }
       if (k.t === 'G') { p.gren += 5; say('+5 BOMBAS', 60); }
       if (k.t === 'chori') { lives++; say('¡CHORIPÁN! +1 VIDA', 70); }
+      if ((k.t === 'pucho' || k.t === 'chori') && p.bajon) { p.bajon = false; p.hp = p.max; say('¡SE LE PASÓ EL BAJÓN!', 90); }
+      if (k.t === 'porro') {
+        const opciones = Object.keys(CONTRAS);
+        p.loco = LOCO_DURA; p.contra = opciones[Math.floor(Math.random()*opciones.length)]; p.bajon = false; msgT = 0;
+        const c = CONTRAS[p.contra];
+        cartelGrande([['EL TIRRI ESTÁ RE LOCO,', '#7dff7a', 10], ['NO SIENTE NADA', '#7dff7a', 10], [c.titulo, '#ffb02e', 7], [c.detalle, '#fff', 6]], 240);
+        [196, 247, 294, 392].forEach((f, i) => setTimeout(() => beep(f, .18, 'triangle', .06, f*.75), i*120));
+      }
       if (k.t === 'moto') { p.moto = true; obj.moto = true; say('¡APARECIÓ LA MOTO!', 120); }
       if (k.t === 'skull') { obj.skull = true; score += 5000; state = 'win'; endT = 0; msgT = 0; saveHi(); }
     } }
@@ -379,7 +419,10 @@ function hurt(e, d){
   e.hp -= d; sfx.hit();
   if (isBoss(e)) { e.flash = 4; if (e.hp <= 0 && !e.dead) e.dead = 1; return; }
   if (e.hp <= 0) { score += e.t === 'T' ? 100 : 50;
-    if (e.t === 'T' && Math.random() < .25) picks.push({ t:'pucho', x:e.x, y:G - 14, on:true });
+    // Los matones a veces sueltan algo: porro muy de vez en cuando (3%), pucho más seguido (25%).
+    const suerte = Math.random();
+    if (e.t === 'T' && suerte < .03) picks.push({ t:'porro', x:e.x, y:G - 14, on:true });
+    else if (e.t === 'T' && suerte < .28) picks.push({ t:'pucho', x:e.x, y:G - 14, on:true });
     bits(e.x + 6, e.y + 6, e.t === 'T' ? ['#8b1d1d','#e8b48a','#333a44'] : ['#7a4a22','#4f2f14']); boom(e.x + 6, e.y + 8, 8, .6); }
 }
 function saveHi(){ if (score > hiscore) hiscore = score; }
@@ -450,6 +493,21 @@ function drawPucho(x, y){
   ctx.fillStyle = 'rgba(200,200,200,.7)';
   for (let i = 0; i < 3; i++) ctx.fillRect(x + 12 + Math.round(Math.sin((frame + i*12)*.12)*2), y + 5 - i*3, 1, 2);
 }
+function drawPorro(x, y){
+  disc(x + 7, y + 9, 8 + Math.sin(frame*.15)*1.5, 'rgba(125,255,122,.22)');  // brillo para que se vea
+  ctx.fillStyle = '#6fd14f'; ctx.fillRect(x + 2, y + 8, 10, 3);              // papel verde, más gordito que el pucho
+  ctx.fillStyle = '#3f9a2f'; ctx.fillRect(x + 2, y + 10, 10, 1);
+  ctx.fillStyle = '#2f6b23'; ctx.fillRect(x, y + 9, 2, 1);                   // la punta retorcida
+  ctx.fillStyle = frame % 10 < 5 ? '#ff5a1f' : '#ffb02e'; ctx.fillRect(x + 12, y + 8, 1, 3);
+  ctx.fillStyle = 'rgba(150,235,140,.75)';
+  for (let i = 0; i < 4; i++) ctx.fillRect(x + 12 + Math.round(Math.sin((frame + i*10)*.1)*3), y + 5 - i*3, 2, 2);
+}
+function drawCartel(){
+  const n = cartel.lineas.length, alto = 18 + n*14, y0 = Math.round(H/2 - alto/2) - 6;
+  ctx.fillStyle = 'rgba(0,0,0,.8)'; ctx.fillRect(10, y0, W - 20, alto);
+  ctx.strokeStyle = frame % 16 < 8 ? cartel.lineas[0][1] : '#fff'; ctx.lineWidth = 2; ctx.strokeRect(11, y0 + 1, W - 22, alto - 2); ctx.lineWidth = 1;
+  cartel.lineas.forEach(([s, col, size], i) => txt(s, W/2, y0 + 10 + i*14, col, 'center', size));
+}
 function drawGun(e, X, Y, color, hmg, up){
   const f = e.face > 0;
   if (up) { const ax = f ? X + 8 : X + 2;
@@ -504,6 +562,7 @@ function draw(){
   for (const k of picks) { const x = X(k.x), b = k.fall ? 0 : Math.sin(frame*.1)*2;
     if (k.t === 'moto') { drawMoto(x, G - 14, 1); txt('!', x + 12, G - 30 + b, '#ffd23f', 'left', 8); continue; }
     if (k.t === 'skull') { disc(x + 6, k.y + 5 + b, 10 + Math.sin(frame*.2)*2, 'rgba(160,255,190,.35)'); spr(SKULL, x, k.y + b); continue; }
+    if (k.t === 'porro') { drawPorro(x, k.y + b); continue; }
     if (k.t === 'pucho') { drawPucho(x, k.y + b); continue; }
     if (k.t === 'chori') { ctx.fillStyle = '#d9a35b'; ctx.fillRect(x, k.y + 5 + b, 14, 5); ctx.fillStyle = '#8b2f1f'; ctx.fillRect(x + 1, k.y + 3 + b, 12, 3); continue; }
     ctx.fillStyle = '#eee'; ctx.fillRect(x, k.y + b, 12, 12); ctx.strokeStyle = '#333'; ctx.strokeRect(x + .5, k.y + b + .5, 11, 11);
@@ -517,6 +576,8 @@ function draw(){
     if (e.t === 'M') drawHand(e, x);
   }
   const blink = p.inv > 0 && frame % 6 < 3;
+  if (p.loco > 0) disc(X(p.x) + 6, p.y + 11, 14 + Math.sin(frame*.3)*2, frame % 20 < 10 ? 'rgba(125,255,122,.35)' : 'rgba(80,200,80,.25)');
+  if (papaEnojado() && frame % 30 < 20) txt('!!', X(pp.x) + 6, pp.y - 12, '#ff5a3a', 'center', 8);
   if (p.moto) {
     if (!blink) { spr(PAPA.j, X(pp.x), pp.y, pp.face < 0); drawGun(pp, X(pp.x), pp.y, '#f4f4f4');
       spr(TIRRI.j, X(p.x), p.y, p.face < 0); drawGun(p, X(p.x), p.y - 1, '#23262f', p.gun === 'H', p.up); }
@@ -535,6 +596,7 @@ function draw(){
   for (const q of parts) { ctx.fillStyle = q.c; ctx.fillRect(X(q.x), q.y, q.sz, q.sz); }
   ctx.restore();
   drawHUD();
+  if (cartel && state === 'play') drawCartel();
   if (state === 'over') { ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(0, 0, W, H); txt('GAME OVER', W/2, 70, '#ff5a3a', 'center', 16);
     txt('PUNTAJE ' + score, W/2, 98, '#fff', 'center'); if (endT > 60 && frame % 40 < 28) txt('ENTER / TOCÁ PARA VOLVER', W/2, 120, '#ffd23f', 'center', 6); }
   if (state === 'win') drawWin();
@@ -548,6 +610,8 @@ function drawHUD(){
     if (i < p.hp) { ctx.fillStyle = p.hp <= 2 ? (frame % 20 < 10 ? '#ff3b3b' : '#a01010') : '#5fe35f'; ctx.fillRect(45 + i*7, 26, 4, 4); } }
   txt(p.gun === 'H' ? 'ARMA H ' + p.ammo : 'ARMA PISTOLA', 6, H - 12, '#fff', 'left', 6);
   txt('BOMBAS ' + p.gren, 100, H - 12, '#fff', 'left', 6);
+  if (p.loco > 0) txt('RE LOCO ' + Math.ceil(p.loco/60) + 's · ' + CONTRAS[p.contra].hud, 6, H - 22, '#7dff7a', 'left', 6);
+  else if (p.bajon && frame % 30 < 20) txt('BAJÓN: BUSCÁ UN PUCHO O UN CHORI', 6, H - 22, '#ff8a3a', 'left', 6);
   txt((obj.moto ? '■' : '□') + ' MOTO', W - 6, 5, obj.moto ? '#7dff7a' : '#fff', 'right', 6);
   txt('JEFES ' + obj.jefes + '/3', W - 6, 14, obj.jefes === 3 ? '#7dff7a' : '#fff', 'right', 6);
   txt((obj.skull ? '■' : '□') + ' CALAVERA', W - 6, 23, obj.skull ? '#7dff7a' : '#fff', 'right', 6);
@@ -555,7 +619,7 @@ function drawHUD(){
   if (bs.length) { const hp = bs.reduce((a, e) => a + Math.max(0, e.hp), 0), mx = bs.reduce((a, e) => a + e.max, 0);
     ctx.fillStyle = '#000'; ctx.fillRect(W/2 - 61, 36, 122, 6); ctx.fillStyle = '#c0262d'; ctx.fillRect(W/2 - 60, 37, 120*hp/mx, 4);
     txt(BOSSNAME[stage], W/2, 44, '#fff', 'center', 6); }
-  if (msgT > 0 && (msgT > 20 || frame % 6 < 3)) txt(msgS, W/2, 58, '#fff', 'center', 8);
+  if (msgT > 0 && !cartel && (msgT > 20 || frame % 6 < 3)) txt(msgS, W/2, 58, '#fff', 'center', 8);
   if (!bossMode && msgT <= 0 && frame % 60 < 40 && enemies.filter(e => e.x < camX + W).length === 0) txt('ADELANTE ▶', W - 60, 80, '#ffd23f', 'left', 6);
 }
 function drawTitle(){
