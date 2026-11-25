@@ -34,7 +34,6 @@ jobs:
           set -u
           read -r AUTOR SHA ESTADO < <(gh api "repos/$REPO/pulls/$PR" --jq '[.user.login, .head.sha, .state] | join(" ")')
           [ "$ESTADO" = "open" ] || { echo "El pull request no está abierto."; exit 0; }
-          if [ "${AUTOR,,}" = "${DUENO,,}" ]; then echo "PR del docente: se revisa a mano."; exit 0; fi
 
           propia="estudiantes/${AUTOR,,}/"
           ext='html|css|js|json|svg|png|jpg|gif|webp|ico|txt|md|woff|woff2'
@@ -74,6 +73,9 @@ jobs:
               fi
             fi
           fi
+
+          # PR del docente (dueño del repo): solo se automatiza si propone un cambio a la carpeta de un estudiante; lo demás se revisa a mano
+          if [ "${AUTOR,,}" = "${DUENO,,}" ] && { [ "${#errores[@]}" -gt 0 ] || [ "$modo" != "ajeno" ]; }; then echo "PR del docente: se revisa a mano."; exit 0; fi
 
           if [ "${#errores[@]}" -gt 0 ]; then
             [ "$EVENTO" = "issue_comment" ] && exit 0   # los errores ya se avisaron al abrir el PR
