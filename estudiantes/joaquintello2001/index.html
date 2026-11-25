@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Reporte de Ventas Â· JoaquÃ­n Tello</title>
+  <title>Reporte de Ventas · Joaquín Tello</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
@@ -139,7 +139,7 @@
     .tmax{max-height:560px;overflow:auto;border:1px solid var(--line);border-radius:6px}
     th.sort{cursor:pointer;user-select:none}
     th.sort:hover{color:var(--ink)}
-    th.sort[data-dir="1"]::after{content:" â–²"}th.sort[data-dir="-1"]::after{content:" â–¼"}
+    th.sort[data-dir="1"]::after{content:" ▲"}th.sort[data-dir="-1"]::after{content:" ▼"}
     td.nm{max-width:300px;overflow:hidden;text-overflow:ellipsis}
     .note{font-size:12px;color:var(--ink-3);line-height:1.5}
     ol.rank{list-style:none;margin:0;padding:0}
@@ -193,23 +193,23 @@
 <header><div class="wrap">
   <div class="head">
     <div>
-      <h1>Reporte de ventas Â· JoaquÃ­n Tello</h1>
-      <div class="sub" id="sub">Cargando datosâ€¦</div>
+      <h1>Reporte de ventas · Joaquín Tello</h1>
+      <div class="sub" id="sub">Cargando datos…</div>
     </div>
     <div class="head-actions">
       <button type="button" class="pill-progress" id="head-prog" title="Ver avance de clientes sin compra en noviembre">Avance: 0 / 0</button>
-      <button type="button" class="btn sm" id="theme-btn" title="Cambiar tema claro/oscuro">ðŸŒ™ Oscuro</button>
+      <button type="button" class="btn sm" id="theme-btn" title="Cambiar tema claro/oscuro">🌙 Oscuro</button>
     </div>
   </div>
   <nav role="tablist" id="tabs">
     <button role="tab" aria-selected="true" data-t="res">Resumen</button>
     <button role="tab" aria-selected="false" data-t="map">Mapa de clientes</button>
-    <button role="tab" aria-selected="false" data-t="lit">Clientes Â· Litros</button>
-    <button role="tab" aria-selected="false" data-t="uni">Clientes Â· Unidades</button>
+    <button role="tab" aria-selected="false" data-t="lit">Clientes · Litros</button>
+    <button role="tab" aria-selected="false" data-t="uni">Clientes · Unidades</button>
   </nav>
 </div></header>
 
-<main class="wrap" id="main"><div class="panel empty-state">Cargando <code>datos.json</code>â€¦</div></main>
+<main class="wrap" id="main"><div class="panel empty-state">Cargando <code>datos.json</code>…</div></main>
 <div id="tip"></div>
 
 <div class="modal-backdrop" id="modal-bg" role="dialog" aria-modal="true" aria-labelledby="modal-title">
@@ -222,14 +222,14 @@ const DAYS = { nov: 21, oct: 31, ly: 30 }, MONTH_DAYS = 30;
 const PER = [
   ['nov', 'Nov-26 (parcial al 21)', 'c-nov'],
   ['oct', 'Oct-26 (completo)', 'c-oct'],
-  ['ly',  'Nov-25 (completo, AgustÃ­n D)', 'c-ly']
+  ['ly',  'Nov-25 (completo, Agustín D)', 'c-ly']
 ];
 const FIXED = ['15081', '34113', '60582', '57584'];
 const ST = {
-  rec: 'ComprÃ³ en octubre y noviembre',
-  new: 'No comprÃ³ en octubre',
-  out: 'ComprÃ³ en octubre, aÃºn no en noviembre',
-  ly:  'Solo comprÃ³ en Nov-25'
+  rec: 'Compró en octubre y noviembre',
+  new: 'No compró en octubre',
+  out: 'Compró en octubre, aún no en noviembre',
+  ly:  'Solo compró en Nov-25'
 };
 
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -237,7 +237,7 @@ const nf = (n, d = 0) => n.toLocaleString('es-AR', { minimumFractionDigits: d, m
 const fL = n => nf(n, 0) + ' L';
 const fU = n => nf(n, 0) + ' u';
 const pctv = (a, b) => b > 0 ? a / b - 1 : null;
-const dh = p => p == null ? '<span class="d na">s/d</span>' : `<span class="d ${p >= 0 ? 'up' : 'dn'}">${p >= 0 ? 'â–²' : 'â–¼'} ${p >= 0 ? '+' : ''}${nf(p * 100, 1)}%</span>`;
+const dh = p => p == null ? '<span class="d na">s/d</span>' : `<span class="d ${p >= 0 ? 'up' : 'dn'}">${p >= 0 ? '▲' : '▼'} ${p >= 0 ? '+' : ''}${nf(p * 100, 1)}%</span>`;
 
 let CL = [];
 let C = new Map();
@@ -328,8 +328,8 @@ function renderProgressBanner(compact = false) {
   return `<div class="progress-box">
     <div class="progress-top">
       <div>
-        <strong>Avance de recuperaciÃ³n del mes</strong>
-        <span class="note" style="margin-left:8px">HacÃ© clic en cualquier cliente sin compra en noviembre para marcarlo en verde.</span>
+        <strong>Avance de recuperación del mes</strong>
+        <span class="note" style="margin-left:8px">Hacé clic en cualquier cliente sin compra en noviembre para marcarlo en verde.</span>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${(p.markedOutCount + p.extraLyCount) > 0 ? `<button type="button" class="btn sm" data-action="clear-marks">Limpiar marcados (${p.markedOutCount + p.extraLyCount})</button>` : ''}
@@ -343,7 +343,7 @@ function renderProgressBanner(compact = false) {
       <span>Unidades Oct marcadas: <strong>${fU(p.mkU)}</strong> de ${fU(p.totU)}</span>
       ${p.extraLyCount > 0 ? `<span>+ <strong>${p.extraLyCount}</strong> clientes de Nov-25 marcados</span>` : ''}
     </div>
-    <p class="note" style="margin:6px 0 0">Los marcados en verde se guardan en memoria mientras la pÃ¡gina estÃ¡ abierta (al recargar se reinician).</p>
+    <p class="note" style="margin:6px 0 0">Los marcados en verde se guardan en memoria mientras la página está abierta (al recargar se reinician).</p>
   </div>`;
 }
 
@@ -367,10 +367,10 @@ function periodBars(metric) {
   const max = Math.max(g('nov'), g('oct'), g('ly'), pr.totalProj);
   const f = metric === 'l' ? fL : fU;
   const w = x => (max > 0 ? (x / max * 100) : 0).toFixed(2) + '%';
-  return `<div class="pbar"><span>Nov-26</span><div class="pt" data-tip="Nov-26 al 21: ${f(g('nov'))}<br>ProyecciÃ³n base: ${f(pr.baseProj)}${pr.markedBonus > 0 ? `<br>+ Marcados en verde (ref. Oct): ${f(pr.markedBonus)}` : ''}">
+  return `<div class="pbar"><span>Nov-26</span><div class="pt" data-tip="Nov-26 al 21: ${f(g('nov'))}<br>Proyección base: ${f(pr.baseProj)}${pr.markedBonus > 0 ? `<br>+ Marcados en verde (ref. Oct): ${f(pr.markedBonus)}` : ''}">
     <i class="proj" style="width:${w(pr.totalProj)}"></i>
     <i class="c-nov" style="width:${w(g('nov'))}"></i>
-    <span class="lbl" style="left:${w(g('nov'))}">${f(g('nov'))}${pr.totalProj > g('nov') ? ` â†’ ${f(pr.totalProj)}` : ''}</span>
+    <span class="lbl" style="left:${w(g('nov'))}">${f(g('nov'))}${pr.totalProj > g('nov') ? ` → ${f(pr.totalProj)}` : ''}</span>
   </div></div>
   <div class="pbar"><span>Oct-26</span><div class="pt"><i class="c-oct" style="width:${w(g('oct'))}"></i><b>${f(g('oct'))}</b></div></div>
   <div class="pbar"><span>Nov-25</span><div class="pt"><i class="c-ly" style="width:${w(g('ly'))}"></i><b>${f(g('ly'))}</b></div></div>`;
@@ -407,17 +407,17 @@ function renderRes() {
     ['grp', 'Volumen'],
     ['Litros totales', x => fL(x.l), 'l'],
     ['Unidades totales', x => fU(x.u), 'u'],
-    ['Litros por dÃ­a', x => nf(x.ld, 0) + ' L', 'ld'],
-    ['Unidades por dÃ­a', x => nf(x.ud, 0) + ' u', 'ud'],
+    ['Litros por día', x => nf(x.ld, 0) + ' L', 'ld'],
+    ['Unidades por día', x => nf(x.ud, 0) + ' u', 'ud'],
     ['Litros por unidad', x => nf(x.lu, 2) + ' L', 'lu'],
     ['grp', 'Cartera'],
     ['Clientes activos', x => nf(x.a), 'a'],
     ['Litros por cliente', x => nf(x.la, 0) + ' L', 'la'],
     ['Unidades por cliente', x => nf(x.ua, 0) + ' u', 'ua'],
-    ['ConcentraciÃ³n top 5 clientes (litros)', x => nf(x.t5 * 100, 1) + '%', 't5', true],
-    ['ConcentraciÃ³n top 10 clientes (litros)', x => nf(x.t10 * 100, 1) + '%', 't10', true],
+    ['Concentración top 5 clientes (litros)', x => nf(x.t5 * 100, 1) + '%', 't5', true],
+    ['Concentración top 10 clientes (litros)', x => nf(x.t10 * 100, 1) + '%', 't10', true],
   ];
-  const dcell = (a, b, pp) => pp ? `<span class="d na">${a - b >= 0 ? '+' : 'âˆ’'}${nf(Math.abs(a - b) * 100, 1)} pp</span>` : dh(b > 0 ? a / b - 1 : null);
+  const dcell = (a, b, pp) => pp ? `<span class="d na">${a - b >= 0 ? '+' : '−'}${nf(Math.abs(a - b) * 100, 1)} pp</span>` : dh(b > 0 ? a / b - 1 : null);
   const kpi = rowsK.map(r => {
     if (r[0] === 'grp') return `<tr class="grp"><td colspan="6">${r[1]}</td></tr>`;
     const [lab, f, key, pp] = r;
@@ -436,7 +436,7 @@ function renderRes() {
 
   const top10 = CL.filter(c => c.nov.l > 0).sort((a, b) => b.nov.l - a.nov.l).slice(0, 10);
   const maxs = top10[0]?.nov.l || 1;
-  const conc = top10.map(r => `<div class="brow clickable" data-open-id="${esc(r.id)}" data-tip="Clic para ver detalle de ${esc(r.n)}<br>${fL(r.nov.l)} Â· ${nf(r.nov.l / n.l * 100, 1)}% del volumen"><div class="lab" title="${esc(r.n)}">${esc(r.n)}</div><div class="b"><i class="c-nov" style="width:${(r.nov.l / maxs * 72).toFixed(1)}%"></i><span>${nf(r.nov.l / n.l * 100, 1)}% (${fL(r.nov.l)})</span></div></div>`).join('');
+  const conc = top10.map(r => `<div class="brow clickable" data-open-id="${esc(r.id)}" data-tip="Clic para ver detalle de ${esc(r.n)}<br>${fL(r.nov.l)} · ${nf(r.nov.l / n.l * 100, 1)}% del volumen"><div class="lab" title="${esc(r.n)}">${esc(r.n)}</div><div class="b"><i class="c-nov" style="width:${(r.nov.l / maxs * 72).toFixed(1)}%"></i><span>${nf(r.nov.l / n.l * 100, 1)}% (${fL(r.nov.l)})</span></div></div>`).join('');
 
   return `
   <div class="tiles">
@@ -445,14 +445,14 @@ function renderRes() {
     ${tile('Clientes activos', nf(an), dh(pctv(an, ao)), dh(pctv(an, al)))}
     ${tile('Litros por cliente', fL(n.l / an), dh(pctv(n.l / an, o.l / ao)), dh(pctv(n.l / an, l.l / al)))}
   </div>
-  <p class="note" style="margin:-6px 0 0">Noviembre 2026 estÃ¡ al dÃ­a 21 de 30 (70% del mes). Los montos en pesos fueron ocultados para publicar de forma segura en GitHub; todas las mÃ©tricas se siguen por volumen, unidades y actividad de clientes.</p>
+  <p class="note" style="margin:-6px 0 0">Noviembre 2026 está al día 21 de 30 (70% del mes). Los montos en pesos fueron ocultados para publicar de forma segura en GitHub; todas las métricas se siguen por volumen, unidades y actividad de clientes.</p>
 
   <section class="panel" id="sec-pendientes">
-    <h2>Clientes de octubre que todavÃ­a no compraron en noviembre</h2>
-    <p class="hint">HacÃ© clic sobre un cliente para marcarlo o desmarcarlo en verde y seguir tu avance de gestiÃ³n.</p>
+    <h2>Clientes de octubre que todavía no compraron en noviembre</h2>
+    <p class="hint">Hacé clic sobre un cliente para marcarlo o desmarcarlo en verde y seguir tu avance de gestión.</p>
     ${renderProgressBanner()}
     <div class="ctl" style="margin-top:12px">
-      <input type="search" id="pend-q" placeholder="Buscar cliente pendiente, direcciÃ³n o zonaâ€¦" value="${esc(view.pendQ)}" aria-label="Buscar cliente pendiente">
+      <input type="search" id="pend-q" placeholder="Buscar cliente pendiente, dirección o zona…" value="${esc(view.pendQ)}" aria-label="Buscar cliente pendiente">
       <select id="pend-sort" aria-label="Ordenar pendientes">
         <option value="lit" ${view.pendSort === 'lit' ? 'selected' : ''}>Mayor litros Oct</option>
         <option value="uni" ${view.pendSort === 'uni' ? 'selected' : ''}>Mayor unidades Oct</option>
@@ -468,17 +468,17 @@ function renderRes() {
   </section>
 
   <div class="grid2">
-    <section class="panel"><h2>Litros por perÃ­odo</h2><p class="hint">Total de la cartera.</p>${periodBars('l')}</section>
-    <section class="panel"><h2>Unidades por perÃ­odo</h2><p class="hint">Total de la cartera.</p>${periodBars('u')}</section>
+    <section class="panel"><h2>Litros por período</h2><p class="hint">Total de la cartera.</p>${periodBars('l')}</section>
+    <section class="panel"><h2>Unidades por período</h2><p class="hint">Total de la cartera.</p>${periodBars('u')}</section>
   </div>
 
   <div class="grid2">
     <section class="panel">
       <h2>Simulador de cierre de noviembre</h2>
-      <p class="hint">ActivÃ¡ o desactivÃ¡ supuestos para ver cÃ³mo cambia la proyecciÃ³n a 30 dÃ­as en litros y unidades.</p>
+      <p class="hint">Activá o desactivá supuestos para ver cómo cambia la proyección a 30 días en litros y unidades.</p>
       <div class="sim-toggles">
         <label><input type="checkbox" id="sim-fix4" ${simState.fix4 ? 'checked' : ''}> Dejar fijos los 4 puntuales</label>
-        <label><input type="checkbox" id="sim-circ" ${simState.fixCirculo ? 'checked' : ''}> Dejar fijo CÃ­rculo Univ.</label>
+        <label><input type="checkbox" id="sim-circ" ${simState.fixCirculo ? 'checked' : ''}> Dejar fijo Círculo Univ.</label>
         <label><input type="checkbox" id="sim-mk" ${simState.addMarked ? 'checked' : ''}> Sumar marcados en verde (volumen Oct)</label>
       </div>
       <div class="tscroll"><table>
@@ -486,24 +486,24 @@ function renderRes() {
         <tbody>
           <tr><td>Acumulado al 21</td><td class="num">${fL(n.l)}</td><td class="num">${fU(n.u)}</td></tr>
           <tr><td>Ritmo diario ajustado</td><td class="num">${fL((n.l - prL.fx) / DAYS.nov)}</td><td class="num">${fU((n.u - prU.fx) / DAYS.nov)}</td></tr>
-          <tr><td>ProyecciÃ³n base a 30 dÃ­as</td><td class="num">${fL(prL.baseProj)}</td><td class="num">${fU(prU.baseProj)}</td></tr>
+          <tr><td>Proyección base a 30 días</td><td class="num">${fL(prL.baseProj)}</td><td class="num">${fU(prU.baseProj)}</td></tr>
           <tr><td>+ Clientes marcados en verde</td><td class="num" style="color:var(--good)">+${fL(prL.markedBonus)}</td><td class="num" style="color:var(--good)">+${fU(prU.markedBonus)}</td></tr>
-          <tr><td><strong>ProyecciÃ³n total simulada</strong></td><td class="num"><strong>${fL(prL.totalProj)}</strong></td><td class="num"><strong>${fU(prU.totalProj)}</strong></td></tr>
-          <tr><td>ProyecciÃ³n vs Oct-26</td><td>${dh(pctv(prL.totalProj, o.l))}</td><td>${dh(pctv(prU.totalProj, o.u))}</td></tr>
-          <tr><td>Falta para igualar octubre (${remDays} dÃ­as)</td><td class="num">${fL(needL)} (${fL(needL / remDays)}/dÃ­a)</td><td class="num">${fU(needU)} (${fU(needU / remDays)}/dÃ­a)</td></tr>
+          <tr><td><strong>Proyección total simulada</strong></td><td class="num"><strong>${fL(prL.totalProj)}</strong></td><td class="num"><strong>${fU(prU.totalProj)}</strong></td></tr>
+          <tr><td>Proyección vs Oct-26</td><td>${dh(pctv(prL.totalProj, o.l))}</td><td>${dh(pctv(prU.totalProj, o.u))}</td></tr>
+          <tr><td>Falta para igualar octubre (${remDays} días)</td><td class="num">${fL(needL)} (${fL(needL / remDays)}/día)</td><td class="num">${fU(needU)} (${fU(needU / remDays)}/día)</td></tr>
         </tbody>
       </table></div>
     </section>
-    <section class="panel"><h2>Top 10 clientes de noviembre</h2><p class="hint">ParticipaciÃ³n sobre los litros del mes. HacÃ© clic en un cliente para ver su detalle.</p><div class="bars">${conc}</div></section>
+    <section class="panel"><h2>Top 10 clientes de noviembre</h2><p class="hint">Participación sobre los litros del mes. Hacé clic en un cliente para ver su detalle.</p><div class="bars">${conc}</div></section>
   </div>
 
-  <section class="panel"><h2>Indicadores generales</h2><p class="hint">ComparaciÃ³n de mÃ©tricas clave entre los tres perÃ­odos.</p>
-    <div class="tscroll"><table class="kpi"><thead><tr><th></th><th>Nov-26 parcial</th><th>Oct-26</th><th>Î” vs Oct</th><th>Nov-25</th><th>Î” vs Nov-25</th></tr></thead><tbody>${kpi}</tbody></table></div>
+  <section class="panel"><h2>Indicadores generales</h2><p class="hint">Comparación de métricas clave entre los tres períodos.</p>
+    <div class="tscroll"><table class="kpi"><thead><tr><th></th><th>Nov-26 parcial</th><th>Oct-26</th><th>Δ vs Oct</th><th>Nov-25</th><th>Δ vs Nov-25</th></tr></thead><tbody>${kpi}</tbody></table></div>
   </section>
 
   <div class="grid3">
-    <section class="panel"><h2>MÃ¡s crecieron (litros)</h2><p class="hint">Nov-26 al 21 vs Oct-26 completo.</p><ol class="rank">${up.map(x => li(x.c, '+' + fL(x.dl))).join('')}</ol></section>
-    <section class="panel"><h2>MÃ¡s diferencia vs Oct (litros)</h2><p class="hint">Nov-26 al 21 vs Oct-26 completo.</p><ol class="rank">${dn.map(x => li(x.c, 'âˆ’' + fL(Math.abs(x.dl)))).join('')}</ol></section>
+    <section class="panel"><h2>Más crecieron (litros)</h2><p class="hint">Nov-26 al 21 vs Oct-26 completo.</p><ol class="rank">${up.map(x => li(x.c, '+' + fL(x.dl))).join('')}</ol></section>
+    <section class="panel"><h2>Más diferencia vs Oct (litros)</h2><p class="hint">Nov-26 al 21 vs Oct-26 completo.</p><ol class="rank">${dn.map(x => li(x.c, '−' + fL(Math.abs(x.dl)))).join('')}</ol></section>
     <section class="panel"><h2>Nuevos en noviembre</h2><p class="hint">${newC.length} clientes sin compra en octubre.</p><ol class="rank">${newC.slice(0, 6).map(c => li(c, fL(c.nov.l))).join('')}</ol></section>
   </div>`;
 }
@@ -531,15 +531,15 @@ function fillPendingGrid() {
     const mk = markedIds.has(c.id);
     return `<div class="p-item ${mk ? 'marked' : ''}" data-toggle-mark="${esc(c.id)}" role="button" tabindex="0" aria-pressed="${mk}">
       <div class="p-left">
-        <span class="chk-dot">${mk ? 'âœ“' : ''}</span>
+        <span class="chk-dot">${mk ? '✓' : ''}</span>
         <div style="min-width:0">
           <div class="p-name" title="${esc(c.n)}">${esc(c.n)}</div>
-          <div class="p-meta">${esc(c.direccion ? c.direccion + ' Â· ' + c.zona : c.zona)} Â· ID ${esc(c.id)}</div>
+          <div class="p-meta">${esc(c.direccion ? c.direccion + ' · ' + c.zona : c.zona)} · ID ${esc(c.id)}</div>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:6px">
         <div class="p-val"><div>${fL(c.oct.l)}</div><div class="p-meta">${fU(c.oct.u)}</div></div>
-        <button type="button" class="btn sm" data-open-id="${esc(c.id)}" title="Ver detalle del cliente" onclick="event.stopPropagation()">â„¹</button>
+        <button type="button" class="btn sm" data-open-id="${esc(c.id)}" title="Ver detalle del cliente" onclick="event.stopPropagation()">ℹ</button>
       </div>
     </div>`;
   }).join('');
@@ -577,11 +577,11 @@ function renderCli(t) {
   const max = Math.max(...top.map(c => Math.max(c.nov[m], c.oct[m], c.ly[m])));
   const bar = (c, k, cls) => {
     const x = Math.max(0, c[k][m]);
-    return `<div class="b"><i class="${cls}" style="width:${x > 0 ? (x / max * 78).toFixed(1) : 0}%;min-width:${x > 0 ? 2 : 0}px"></i><span>${x > 0 ? f(x) : 'â€”'}</span></div>`;
+    return `<div class="b"><i class="${cls}" style="width:${x > 0 ? (x / max * 78).toFixed(1) : 0}%;min-width:${x > 0 ? 2 : 0}px"></i><span>${x > 0 ? f(x) : '—'}</span></div>`;
   };
   const chart = top.map(c => `<div class="brow clickable" data-open-id="${esc(c.id)}" data-tip="<b>${esc(c.n)}</b><br>Nov-26: ${f(c.nov[m])}<br>Oct-26: ${f(c.oct[m])}<br>Nov-25: ${f(c.ly[m])}<br>Clic para ver detalle"><div class="lab" title="${esc(c.n)}">${esc(c.n)}</div><div class="bset">${bar(c, 'nov', 'c-nov')}${bar(c, 'oct', 'c-oct')}${bar(c, 'ly', 'c-ly')}</div></div>`).join('');
   const lg = PER.map(p => `<span><i class="sw ${p[2]}"></i>${p[1]}</span>`).join('');
-  const heads = [['nov', 'Nov-26 parcial'], ['oct', 'Oct-26'], ['dOct', 'Î” vs Oct'], ['ly', 'Nov-25'], ['dLy', 'Î” vs Nov-25'], ['act', 'Detalle']];
+  const heads = [['nov', 'Nov-26 parcial'], ['oct', 'Oct-26'], ['dOct', 'Δ vs Oct'], ['ly', 'Nov-25'], ['dLy', 'Δ vs Nov-25'], ['act', 'Detalle']];
 
   return `
   ${renderProgressBanner(true)}
@@ -590,12 +590,12 @@ function renderCli(t) {
     <div class="tile"><div class="k">${name} Oct-26</div><div class="v">${f(tot.oct)}</div><div class="r"><span>Clientes activos</span><span class="d">${act('oct').length}</span></div></div>
     <div class="tile"><div class="k">${name} Nov-25</div><div class="v">${f(tot.ly)}</div><div class="r"><span>Clientes activos</span><span class="d">${act('ly').length}</span></div></div>
   </div>
-  <section class="panel"><h2>Los 12 clientes mÃ¡s grandes en ${name.toLowerCase()}</h2><p class="hint">Ordenados por su mejor perÃ­odo. HacÃ© clic en una fila para ver su detalle.</p>
+  <section class="panel"><h2>Los 12 clientes más grandes en ${name.toLowerCase()}</h2><p class="hint">Ordenados por su mejor período. Hacé clic en una fila para ver su detalle.</p>
     <div class="legend">${lg}</div><div class="bars">${chart}</div>
   </section>
   <section class="panel">
     <h2>Todos los clientes</h2>
-    <p class="hint">HacÃ© clic sobre los clientes <strong>sin compra en noviembre</strong> para marcarlos en verde. En el resto podÃ©s hacer clic para ver su detalle.</p>
+    <p class="hint">Hacé clic sobre los clientes <strong>sin compra en noviembre</strong> para marcarlos en verde. En el resto podés hacer clic para ver su detalle.</p>
     <div class="pills">
       <button type="button" class="fpill ${view[t].st === 'all' && view[t].markFilter === 'all' ? 'active' : ''}" data-qst="all" data-qmk="all">Todos</button>
       <button type="button" class="fpill ${view[t].st === 'out' && view[t].markFilter === 'all' ? 'active' : ''}" data-qst="out" data-qmk="all">Sin compra Nov (pendientes)</button>
@@ -603,7 +603,7 @@ function renderCli(t) {
       <button type="button" class="fpill ${view[t].st === 'out' && view[t].markFilter === 'unmarked' ? 'active' : ''}" data-qst="out" data-qmk="unmarked">Pendientes sin marcar</button>
     </div>
     <div class="ctl">
-      <input type="search" id="q-${t}" placeholder="Buscar cliente, direcciÃ³n, zona o IDâ€¦" value="${esc(view[t].q)}" aria-label="Buscar cliente">
+      <input type="search" id="q-${t}" placeholder="Buscar cliente, dirección, zona o ID…" value="${esc(view[t].q)}" aria-label="Buscar cliente">
       <select id="st-${t}" aria-label="Filtrar por estado">
         <option value="all">Todos los estados</option>
         ${Object.entries(ST).map(([k, v]) => `<option value="${k}" ${view[t].st === k ? 'selected' : ''}>${v}</option>`).join('')}
@@ -640,22 +640,22 @@ function fillTable(t) {
   rows.sort((a, b) => { const x = val(a, V.sort), y = val(b, V.sort); return (x < y ? -1 : x > y ? 1 : 0) * V.dir; });
 
   const chip = c => {
-    if (markedIds.has(c.id)) return '<span class="chip done">âœ“ marcado</span>';
+    if (markedIds.has(c.id)) return '<span class="chip done">✓ marcado</span>';
     if (c.st === 'new') return '<span class="chip new">nuevo vs oct</span>';
     if (c.st === 'out') return '<span class="chip out">sin compra nov</span>';
     if (c.st === 'ly') return '<span class="chip">solo Nov-25</span>';
     return '';
   };
-  const cell = x => x > 0 ? `<td class="num">${f(x)}</td>` : '<td class="num" style="color:var(--ink-3)">â€”</td>';
+  const cell = x => x > 0 ? `<td class="num">${f(x)}</td>` : '<td class="num" style="color:var(--ink-3)">—</td>';
   const body = rows.map(c => {
     const pend = canMark(c);
     const mk = markedIds.has(c.id);
-    const chk = pend ? `<span class="row-chk ${mk ? 'marked' : ''}">${mk ? 'âœ“' : ''}</span>` : '';
+    const chk = pend ? `<span class="row-chk ${mk ? 'marked' : ''}">${mk ? '✓' : ''}</span>` : '';
     const rowAttr = pend ? `class="clickable ${mk ? 'is-marked' : ''}" data-toggle-mark="${esc(c.id)}" title="Clic para marcar o desmarcar en verde"` : `class="clickable" data-open-id="${esc(c.id)}"`;
     return `<tr ${rowAttr}><td class="nm">${chk}${esc(c.n)}${chip(c)}</td>${cell(c.nov[m])}${cell(c.oct[m])}<td>${dh(pctv(c.nov[m], c.oct[m]))}</td>${cell(c.ly[m])}<td>${dh(pctv(c.nov[m], c.ly[m]))}</td><td><button type="button" class="btn sm" data-open-id="${esc(c.id)}" onclick="event.stopPropagation()">Ver</button></td></tr>`;
   }).join('');
 
-  document.getElementById('tb-' + t).innerHTML = body || '<tr><td colspan="7" style="color:var(--ink-3)">NingÃºn cliente coincide con el filtro.</td></tr>';
+  document.getElementById('tb-' + t).innerHTML = body || '<tr><td colspan="7" style="color:var(--ink-3)">Ningún cliente coincide con el filtro.</td></tr>';
   const s = k => rows.reduce((a, c) => a + Math.max(0, c[k][m]), 0);
   const filtered = V.st !== 'all' || V.markFilter !== 'all' || q;
   const tn = filtered ? s('nov') : T('nov')[m], to = filtered ? s('oct') : T('oct')[m], tl = filtered ? s('ly') : T('ly')[m];
@@ -737,7 +737,7 @@ function renderMapView() {
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px">
       <div>
         <h2>Mapa interactivo de clientes</h2>
-        <p class="hint" style="margin:0">CargÃ¡ direcciones de forma manual, ubicalas en el mapa o marcÃ¡ en verde los clientes pendientes.</p>
+        <p class="hint" style="margin:0">Cargá direcciones de forma manual, ubicalas en el mapa o marcá en verde los clientes pendientes.</p>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <span class="chip" style="margin:0;padding:4px 10px;font-size:12px">Direcciones cargadas: <strong>${addrCount} / ${CL.length}</strong></span>
@@ -747,16 +747,16 @@ function renderMapView() {
     </div>
 
     <div class="addr-panel">
-      <div style="font-size:13px;font-weight:600;margin-bottom:8px">Cargar direcciÃ³n manual</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:8px">Cargar dirección manual</div>
       <div class="addr-grid">
         <div class="addr-field">
           <label for="addr-cli">Cliente</label>
           <select id="addr-cli">
-            ${sortedForSelect.map(c => `<option value="${esc(c.id)}" ${vm.editId === c.id ? 'selected' : ''}>${esc(c.n)}${c.direccion ? ' âœ“' : ''}</option>`).join('')}
+            ${sortedForSelect.map(c => `<option value="${esc(c.id)}" ${vm.editId === c.id ? 'selected' : ''}>${esc(c.n)}${c.direccion ? ' ✓' : ''}</option>`).join('')}
           </select>
         </div>
         <div class="addr-field">
-          <label for="addr-input">DirecciÃ³n (calle, altura, localidad)</label>
+          <label for="addr-input">Dirección (calle, altura, localidad)</label>
           <input type="text" id="addr-input" placeholder="Ej: Av. Santa Fe 3250, CABA" value="${esc(vm.editAddr)}">
         </div>
         <div class="addr-field">
@@ -765,30 +765,30 @@ function renderMapView() {
           <datalist id="zones-dl">${ZONES.map(z => `<option value="${esc(z)}">`).join('')}</datalist>
         </div>
         <div class="addr-actions">
-          <button type="button" class="btn primary sm" id="btn-save-addr">Guardar direcciÃ³n</button>
-          <button type="button" class="btn sm" id="btn-geo-addr" title="Buscar coordenadas aproximadas de la direcciÃ³n escrita">ðŸ”Ž Buscar en mapa</button>
-          <button type="button" class="btn sm good" id="btn-pick-map" title="Hacer clic en el mapa para fijar la ubicaciÃ³n exacta">ðŸ“ Elegir punto en mapa</button>
+          <button type="button" class="btn primary sm" id="btn-save-addr">Guardar dirección</button>
+          <button type="button" class="btn sm" id="btn-geo-addr" title="Buscar coordenadas aproximadas de la dirección escrita">🔎 Buscar en mapa</button>
+          <button type="button" class="btn sm good" id="btn-pick-map" title="Hacer clic en el mapa para fijar la ubicación exacta">📍 Elegir punto en mapa</button>
         </div>
       </div>
-      ${vm.addrMsg ? `<div class="addr-msg ${vm.addrMsgKind}" id="addr-msg">${esc(vm.addrMsg)}</div>` : `<div class="addr-msg" id="addr-msg">Tip: escribÃ­ la direcciÃ³n y tocÃ¡ "ðŸ”Ž Buscar en mapa" o elegÃ­ el punto haciendo clic directo en el mapa. DespuÃ©s podÃ©s bajar el nuevo <code>datos.json</code>.</div>`}
+      ${vm.addrMsg ? `<div class="addr-msg ${vm.addrMsgKind}" id="addr-msg">${esc(vm.addrMsg)}</div>` : `<div class="addr-msg" id="addr-msg">Tip: escribí la dirección y tocá "🔎 Buscar en mapa" o elegí el punto haciendo clic directo en el mapa. Después podés bajar el nuevo <code>datos.json</code>.</div>`}
     </div>
 
     <div class="legend">
       <span><i class="sw c-good"></i>Marcado en verde (pendiente gestionado)</span>
       <span><i class="sw c-oct"></i>Sin compra en Nov-26 (pendiente)</span>
-      <span><i class="sw c-nov"></i>Ya comprÃ³ en Nov-26</span>
+      <span><i class="sw c-nov"></i>Ya compró en Nov-26</span>
       <span><i class="sw" style="background:#6b7783"></i>Solo Nov-25</span>
     </div>
     ${vm.relocateId ? `<div class="relocate-banner">
-      <span>Modo ubicaciÃ³n manual: hacÃ© clic en el mapa para fijar la ubicaciÃ³n de <strong>${esc(C.get(vm.relocateId)?.n || '')}</strong>.</span>
+      <span>Modo ubicación manual: hacé clic en el mapa para fijar la ubicación de <strong>${esc(C.get(vm.relocateId)?.n || '')}</strong>.</span>
       <button type="button" class="btn sm" id="cancel-relocate">Cancelar</button>
     </div>` : ''}
     <div class="ctl">
-      <input type="search" id="map-q" placeholder="Buscar cliente, direcciÃ³n o zona en el mapaâ€¦" value="${esc(vm.q)}" aria-label="Buscar cliente en mapa">
+      <input type="search" id="map-q" placeholder="Buscar cliente, dirección o zona en el mapa…" value="${esc(vm.q)}" aria-label="Buscar cliente en mapa">
       <select id="map-st" aria-label="Filtrar estado en mapa">
         <option value="all" ${vm.st === 'all' ? 'selected' : ''}>Todos los estados</option>
         <option value="out" ${vm.st === 'out' ? 'selected' : ''}>Sin compra Nov (pendientes)</option>
-        <option value="rec" ${vm.st === 'rec' ? 'selected' : ''}>ComprÃ³ Oct y Nov</option>
+        <option value="rec" ${vm.st === 'rec' ? 'selected' : ''}>Compró Oct y Nov</option>
         <option value="new" ${vm.st === 'new' ? 'selected' : ''}>Nuevos en Nov</option>
         <option value="ly"  ${vm.st === 'ly'  ? 'selected' : ''}>Solo Nov-25</option>
       </select>
@@ -796,10 +796,10 @@ function renderMapView() {
         <option value="all">Todas las zonas (${ZONES.length})</option>
         ${ZONES.map(z => `<option value="${esc(z)}" ${vm.zone === z ? 'selected' : ''}>${esc(z)}</option>`).join('')}
       </select>
-      <select id="map-addr-filter" aria-label="Filtrar por direcciÃ³n cargada">
-        <option value="all" ${vm.addrFilter === 'all' ? 'selected' : ''}>Con y sin direcciÃ³n</option>
-        <option value="with" ${vm.addrFilter === 'with' ? 'selected' : ''}>Solo con direcciÃ³n cargada</option>
-        <option value="without" ${vm.addrFilter === 'without' ? 'selected' : ''}>Solo sin direcciÃ³n</option>
+      <select id="map-addr-filter" aria-label="Filtrar por dirección cargada">
+        <option value="all" ${vm.addrFilter === 'all' ? 'selected' : ''}>Con y sin dirección</option>
+        <option value="with" ${vm.addrFilter === 'with' ? 'selected' : ''}>Solo con dirección cargada</option>
+        <option value="without" ${vm.addrFilter === 'without' ? 'selected' : ''}>Solo sin dirección</option>
       </select>
       <select id="map-mk" aria-label="Filtrar marcados en mapa">
         <option value="all" ${vm.markFilter === 'all' ? 'selected' : ''}>Todas las marcas</option>
@@ -821,16 +821,16 @@ function popupHtml(c) {
   const pend = canMark(c), mk = markedIds.has(c.id);
   return `<div style="min-width:225px;font-family:var(--font);font-size:13px;line-height:1.45">
     <div style="font-weight:600;margin-bottom:2px">${esc(c.n)}</div>
-    <div style="font-size:11.5px;color:#445;margin-bottom:4px">${c.direccion ? `<strong>${esc(c.direccion)}</strong> Â· ` : ''}${esc(c.zona)}${c.ubicacion_estimada ? ' Â· <i>ubicaciÃ³n estimada</i>' : ' Â· ubicaciÃ³n confirmada'}</div>
+    <div style="font-size:11.5px;color:#445;margin-bottom:4px">${c.direccion ? `<strong>${esc(c.direccion)}</strong> · ` : ''}${esc(c.zona)}${c.ubicacion_estimada ? ' · <i>ubicación estimada</i>' : ' · ubicación confirmada'}</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 10px;font-size:12px;margin-bottom:8px">
-      <span>Nov-26:</span><strong style="text-align:right">${c.nov.l > 0 ? fL(c.nov.l) : 'â€”'}</strong>
-      <span>Oct-26:</span><strong style="text-align:right">${c.oct.l > 0 ? fL(c.oct.l) : 'â€”'}</strong>
-      <span>Unid. Oct:</span><strong style="text-align:right">${c.oct.u > 0 ? fU(c.oct.u) : 'â€”'}</strong>
+      <span>Nov-26:</span><strong style="text-align:right">${c.nov.l > 0 ? fL(c.nov.l) : '—'}</strong>
+      <span>Oct-26:</span><strong style="text-align:right">${c.oct.l > 0 ? fL(c.oct.l) : '—'}</strong>
+      <span>Unid. Oct:</span><strong style="text-align:right">${c.oct.u > 0 ? fU(c.oct.u) : '—'}</strong>
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      ${pend ? `<button type="button" class="btn sm ${mk ? '' : 'good'}" onclick="window.__toggleFromMap('${esc(c.id)}')">${mk ? 'Quitar verde' : 'âœ“ Marcar en verde'}</button>` : ''}
-      <button type="button" class="btn sm" onclick="window.__editAddress('${esc(c.id)}')">âœï¸ Cargar direcciÃ³n</button>
-      <button type="button" class="btn sm" onclick="window.__relocate('${esc(c.id)}')">ðŸ“ Mover pin</button>
+      ${pend ? `<button type="button" class="btn sm ${mk ? '' : 'good'}" onclick="window.__toggleFromMap('${esc(c.id)}')">${mk ? 'Quitar verde' : '✓ Marcar en verde'}</button>` : ''}
+      <button type="button" class="btn sm" onclick="window.__editAddress('${esc(c.id)}')">✏️ Cargar dirección</button>
+      <button type="button" class="btn sm" onclick="window.__relocate('${esc(c.id)}')">📍 Mover pin</button>
       <button type="button" class="btn sm" onclick="window.__openModal('${esc(c.id)}')">Detalle</button>
     </div>
   </div>`;
@@ -847,7 +847,7 @@ function renderSvgFallback(list) {
     return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="${col}" stroke="#fff" stroke-width="1.5" style="cursor:pointer" data-svg-id="${esc(c.id)}"><title>${esc(c.n)} (${esc(c.zona)})</title></circle>`;
   }).join('');
   box.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:100%;display:block;background:var(--surface-2)">
-    <text x="16" y="24" fill="var(--ink-3)" font-size="12">Mapa esquemÃ¡tico por coordenadas Â· HacÃ© clic en un punto</text>
+    <text x="16" y="24" fill="var(--ink-3)" font-size="12">Mapa esquemático por coordenadas · Hacé clic en un punto</text>
     ${pts}
   </svg>`;
   box.querySelectorAll('[data-svg-id]').forEach(el => el.addEventListener('click', () => {
@@ -869,14 +869,14 @@ function refreshMapMarkers() {
       return `<div class="m-card ${mk ? 'marked' : ''}" data-focus-pin="${esc(c.id)}">
         <div style="min-width:0;flex:1">
           <div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(c.n)}</div>
-          <div class="p-meta">${esc(c.direccion ? c.direccion + ' Â· ' + c.zona : c.zona)} Â· ${c.nov.l > 0 ? 'Nov ' + fL(c.nov.l) : 'Oct ' + fL(c.oct.l)}</div>
+          <div class="p-meta">${esc(c.direccion ? c.direccion + ' · ' + c.zona : c.zona)} · ${c.nov.l > 0 ? 'Nov ' + fL(c.nov.l) : 'Oct ' + fL(c.oct.l)}</div>
         </div>
         <div style="display:flex;gap:4px;align-items:center">
-          <button type="button" class="btn sm" data-edit-addr="${esc(c.id)}" title="Cargar o editar direcciÃ³n" onclick="event.stopPropagation()">âœï¸</button>
-          ${pend ? `<button type="button" class="btn sm ${mk ? 'good' : ''}" data-toggle-mark="${esc(c.id)}" onclick="event.stopPropagation()">${mk ? 'âœ“' : 'Marcar'}</button>` : '<span class="chip">Nov</span>'}
+          <button type="button" class="btn sm" data-edit-addr="${esc(c.id)}" title="Cargar o editar dirección" onclick="event.stopPropagation()">✏️</button>
+          ${pend ? `<button type="button" class="btn sm ${mk ? 'good' : ''}" data-toggle-mark="${esc(c.id)}" onclick="event.stopPropagation()">${mk ? '✓' : 'Marcar'}</button>` : '<span class="chip">Nov</span>'}
         </div>
       </div>`;
-    }).join('') || '<div class="note" style="padding:10px">NingÃºn cliente coincide con el filtro.</div>';
+    }).join('') || '<div class="note" style="padding:10px">Ningún cliente coincide con el filtro.</div>';
   }
 
   if (typeof window.L === 'undefined') { renderSvgFallback(list); return; }
@@ -895,7 +895,7 @@ function refreshMapMarkers() {
       fillOpacity: 0.9
     });
     m.bindPopup(() => popupHtml(c));
-    m.bindTooltip(`${esc(c.n)}${c.direccion ? ' Â· ' + esc(c.direccion) : ' (' + esc(c.zona) + ')'}`, { direction: 'top', offset: [0, -6] });
+    m.bindTooltip(`${esc(c.n)}${c.direccion ? ' · ' + esc(c.direccion) : ' (' + esc(c.zona) + ')'}`, { direction: 'top', offset: [0, -6] });
     m.addTo(leafLayer);
     markerMap.set(c.id, m);
   }
@@ -932,7 +932,7 @@ function initLeafletMap() {
       c.ubicacion_estimada = false;
       view.map.editLat = String(c.lat);
       view.map.editLng = String(c.lng);
-      view.map.addrMsg = `UbicaciÃ³n fijada para ${c.n} (${c.lat}, ${c.lng}).`;
+      view.map.addrMsg = `Ubicación fijada para ${c.n} (${c.lat}, ${c.lng}).`;
       view.map.addrMsgKind = 'ok';
       view.map.relocateId = null;
       show('map', false);
@@ -954,20 +954,20 @@ async function geocodeAddress() {
   vm.editZone = zone;
   if (!c) return;
   if (!addr) {
-    vm.addrMsg = 'EscribÃ­ primero una direcciÃ³n para buscarla en el mapa.';
+    vm.addrMsg = 'Escribí primero una dirección para buscarla en el mapa.';
     vm.addrMsgKind = 'err';
     show('map', false);
     return;
   }
   const msgEl = document.getElementById('addr-msg');
-  if (msgEl) { msgEl.className = 'addr-msg'; msgEl.textContent = 'Buscando direcciÃ³nâ€¦'; }
+  if (msgEl) { msgEl.className = 'addr-msg'; msgEl.textContent = 'Buscando dirección…'; }
   try {
     const query = encodeURIComponent(`${addr}, Buenos Aires, Argentina`);
     const resp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${query}`);
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
     if (!Array.isArray(data) || !data.length) {
-      vm.addrMsg = 'No encontrÃ© esa direcciÃ³n automÃ¡ticamente. TocÃ¡ "ðŸ“ Elegir punto en mapa" para ubicarlo con un clic.';
+      vm.addrMsg = 'No encontré esa dirección automáticamente. Tocá "📍 Elegir punto en mapa" para ubicarlo con un clic.';
       vm.addrMsgKind = 'err';
       show('map', false);
       return;
@@ -982,7 +982,7 @@ async function geocodeAddress() {
     c.ubicacion_estimada = false;
     vm.editLat = String(c.lat);
     vm.editLng = String(c.lng);
-    vm.addrMsg = `DirecciÃ³n guardada y ubicada en el mapa para ${c.n}.`;
+    vm.addrMsg = `Dirección guardada y ubicada en el mapa para ${c.n}.`;
     vm.addrMsgKind = 'ok';
     show('map', false);
     setTimeout(() => {
@@ -990,7 +990,7 @@ async function geocodeAddress() {
       if (mk && leafMap) { leafMap.setView([c.lat, c.lng], 15); mk.openPopup(); }
     }, 60);
   } catch {
-    vm.addrMsg = 'No se pudo consultar el buscador de direcciones desde el navegador. GuardÃ¡ la direcciÃ³n y usÃ¡ "ðŸ“ Elegir punto en mapa".';
+    vm.addrMsg = 'No se pudo consultar el buscador de direcciones desde el navegador. Guardá la dirección y usá "📍 Elegir punto en mapa".';
     vm.addrMsgKind = 'err';
     show('map', false);
   }
@@ -1013,8 +1013,8 @@ function bindMap() {
     vm.editZone = c.zona;
     ZONES = [...new Set(CL.map(x => x.zona))].sort((a, b) => a.localeCompare(b, 'es'));
     vm.addrMsg = c.direccion
-      ? `DirecciÃ³n "${c.direccion}" guardada en memoria para ${c.n}.`
-      : `Se limpiÃ³ la direcciÃ³n de ${c.n}.`;
+      ? `Dirección "${c.direccion}" guardada en memoria para ${c.n}.`
+      : `Se limpió la dirección de ${c.n}.`;
     vm.addrMsgKind = 'ok';
     show('map', false);
     setTimeout(() => {
@@ -1094,18 +1094,18 @@ function openClientModal(id) {
     <div class="modal-head">
       <div>
         <h2 id="modal-title" style="font-size:17px">${esc(c.n)}</h2>
-        <div class="note">ID ${esc(c.id)} Â· ${c.direccion ? `<strong>${esc(c.direccion)}</strong> Â· ` : ''}${esc(c.zona)} Â· ${ST[c.st]}</div>
+        <div class="note">ID ${esc(c.id)} · ${c.direccion ? `<strong>${esc(c.direccion)}</strong> · ` : ''}${esc(c.zona)} · ${ST[c.st]}</div>
       </div>
-      <button type="button" class="btn sm" id="modal-close">âœ•</button>
+      <button type="button" class="btn sm" id="modal-close">✕</button>
     </div>
     <div class="modal-grid">
-      <div class="mstat"><div class="k">Nov-26 (al 21)</div><div class="v">${c.nov.l > 0 ? fL(c.nov.l) : 'â€”'}</div><div class="note">${nf(c.nov.u)} unidades</div></div>
-      <div class="mstat"><div class="k">Oct-26 (completo)</div><div class="v">${c.oct.l > 0 ? fL(c.oct.l) : 'â€”'}</div><div class="note">${nf(c.oct.u)} unidades</div></div>
-      <div class="mstat"><div class="k">Nov-25</div><div class="v">${c.ly.l > 0 ? fL(c.ly.l) : 'â€”'}</div><div class="note">${nf(c.ly.u)} unidades</div></div>
+      <div class="mstat"><div class="k">Nov-26 (al 21)</div><div class="v">${c.nov.l > 0 ? fL(c.nov.l) : '—'}</div><div class="note">${nf(c.nov.u)} unidades</div></div>
+      <div class="mstat"><div class="k">Oct-26 (completo)</div><div class="v">${c.oct.l > 0 ? fL(c.oct.l) : '—'}</div><div class="note">${nf(c.oct.u)} unidades</div></div>
+      <div class="mstat"><div class="k">Nov-25</div><div class="v">${c.ly.l > 0 ? fL(c.ly.l) : '—'}</div><div class="note">${nf(c.ly.u)} unidades</div></div>
     </div>
     <div class="modal-actions">
-      ${pend ? `<button type="button" class="btn ${mk ? '' : 'good'}" id="modal-mark">${mk ? 'Quitar marca verde' : 'âœ“ Marcar en verde (gestionado)'}</button>` : ''}
-      <button type="button" class="btn" id="modal-addr">âœï¸ Cargar direcciÃ³n</button>
+      ${pend ? `<button type="button" class="btn ${mk ? '' : 'good'}" id="modal-mark">${mk ? 'Quitar marca verde' : '✓ Marcar en verde (gestionado)'}</button>` : ''}
+      <button type="button" class="btn" id="modal-addr">✏️ Cargar dirección</button>
       <button type="button" class="btn primary" id="modal-gomap">Ver en el mapa</button>
     </div>`;
   modalBg.classList.add('open');
@@ -1131,7 +1131,7 @@ function openClientModal(id) {
 modalBg.addEventListener('click', e => { if (e.target === modalBg) modalBg.classList.remove('open'); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') modalBg.classList.remove('open'); });
 
-// ---- DelegaciÃ³n global de clics
+// ---- Delegación global de clics
 const main = document.getElementById('main');
 main.addEventListener('click', e => {
   const actBtn = e.target.closest('[data-action]');
@@ -1186,7 +1186,7 @@ main.addEventListener('keydown', e => {
   }
 });
 
-// ---- NavegaciÃ³n y tema
+// ---- Navegación y tema
 function show(t, scrollTop = true) {
   const prevPendScroll = document.getElementById('pend-grid')?.scrollTop || 0;
   const prevTableScroll = document.querySelector('.tmax')?.scrollTop || 0;
@@ -1220,7 +1220,7 @@ themeBtn.addEventListener('click', () => {
   const cur = document.documentElement.dataset.theme;
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.dataset.theme = next;
-  themeBtn.textContent = next === 'dark' ? 'â˜€ï¸ Claro' : 'ðŸŒ™ Oscuro';
+  themeBtn.textContent = next === 'dark' ? '☀️ Claro' : '🌙 Oscuro';
 });
 
 // ---- Carga desde datos.json
@@ -1229,13 +1229,13 @@ fetch('datos.json')
   .then(json => {
     hydrateData(json);
     updateHeaderProgress();
-    document.getElementById('sub').textContent = `Ventas al 21/11/2026 Â· ${CL.length} clientes cargados desde datos.json (montos ocultos)`;
+    document.getElementById('sub').textContent = `Ventas al 21/11/2026 · ${CL.length} clientes cargados desde datos.json (montos ocultos)`;
     const h = location.hash.slice(1);
     show(['res', 'map', 'lit', 'uni'].includes(h) ? h : 'res');
   })
   .catch(() => {
     document.getElementById('sub').textContent = 'No se pudo cargar datos.json';
-    main.innerHTML = `<div class="panel empty-state"><h2>No pude cargar <code>datos.json</code></h2><p>Si abriste <code>index.html</code> con doble clic (<code>file://</code>), probÃ¡ verlo desde el lab o con un servidor local.</p></div>`;
+    main.innerHTML = `<div class="panel empty-state"><h2>No pude cargar <code>datos.json</code></h2><p>Si abriste <code>index.html</code> con doble clic (<code>file://</code>), probá verlo desde el lab o con un servidor local.</p></div>`;
   });
 </script>
 </body>
