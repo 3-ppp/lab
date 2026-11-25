@@ -126,3 +126,9 @@ textarea { font: inherit; font-size: 0.9rem; width: 100%; padding: 10px; border-
 .boton-enlace { display: block; padding: 14px 16px; border-radius: 10px; border: 2px solid #0b6e3a; color: #0b6e3a; text-align: center; text-decoration: none; font-weight: bold; }
 .boton-enlace:hover { background: #e9f6ee; }
 .secundario { display: block; width: 100%; margin-top: 16px; text-align: center; font-weight: bold; }
+
+/* Pestaña de goleadores */
+.ranking { list-style: none; padding: 0; margin: 12px 0; counter-reset: puesto; }
+.fila-ranking { counter-increment: puesto; display: flex; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid #ddd; }
+.fila-ranking::before { content: counter(puesto) "."; min-width: 2em; color: #666; }
+.fila-ranking span { flex: 1; }

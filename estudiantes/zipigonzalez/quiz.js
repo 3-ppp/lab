@@ -539,16 +539,61 @@ function llenarFiltro() {
 
 el("filtro").addEventListener("change", mostrarFinales);
 
+// ---------- Vista de goleadores ----------
+
+function llenarFiltroAnio() {
+  const anios = [...new Set(goleadores.map((g) => g.anio))].sort((a, b) => b - a);
+  for (const anio of anios) {
+    const opcion = crear("option", "", "Mundial " + anio);
+    opcion.value = String(anio);
+    el("filtro-anio").appendChild(opcion);
+  }
+}
+
+function mostrarGoleadores() {
+  const anio = el("filtro-anio").value;
+  let filas;
+  if (anio) {
+    // Un Mundial: los goleadores de ese año, de más a menos goles.
+    filas = goleadores.filter((g) => String(g.anio) === anio).map((g) => ({ jugador: g.jugador, seleccion: g.seleccion, goles: g.goles }));
+    el("aclaracion-goleadores").textContent = "Solo aparecen quienes hicieron 2 o más goles en ese Mundial.";
+  } else {
+    // Todos los Mundiales: se suman los goles de cada jugador (los datos solo incluyen Mundiales con 2 o más goles).
+    const suma = new Map();
+    for (const g of goleadores) {
+      const clave = g.jugador + "|" + g.seleccion;
+      const previo = suma.get(clave) || { jugador: g.jugador, seleccion: g.seleccion, goles: 0 };
+      previo.goles += g.goles;
+      suma.set(clave, previo);
+    }
+    filas = [...suma.values()];
+    el("aclaracion-goleadores").textContent = "Suma de los Mundiales en los que cada jugador hizo 2 o más goles. Se muestran los 20 primeros.";
+  }
+  filas.sort((a, b) => b.goles - a.goles || a.jugador.localeCompare(b.jugador, "es"));
+  if (!anio) filas = filas.slice(0, 20);
+
+  const lista = el("lista-goleadores");
+  lista.innerHTML = "";
+  for (const f of filas) {
+    const item = crear("li", "fila-ranking");
+    item.appendChild(crear("span", "", f.jugador + " (" + f.seleccion + ")"));
+    item.appendChild(crear("strong", "", f.goles + (f.goles === 1 ? " gol" : " goles")));
+    lista.appendChild(item);
+  }
+}
+el("filtro-anio").addEventListener("change", mostrarGoleadores);
+
 // ---------- Pestañas ----------
 
 function mostrarVista(cual) {
-  el("vista-jugar").hidden = cual !== "jugar";
-  el("vista-partidos").hidden = cual !== "partidos";
-  el("tab-jugar").classList.toggle("activa", cual === "jugar");
-  el("tab-partidos").classList.toggle("activa", cual === "partidos");
+  for (const vista of ["jugar", "partidos", "goleadores"]) {
+    el("vista-" + vista).hidden = cual !== vista;
+    el("tab-" + vista).classList.toggle("activa", cual === vista);
+  }
 }
 el("tab-jugar").addEventListener("click", () => mostrarVista("jugar"));
 el("tab-partidos").addEventListener("click", () => mostrarVista("partidos"));
+el("tab-goleadores").addEventListener("click", () => mostrarVista("goleadores"));
 
 // ---------- Carga de datos ----------
 
@@ -563,6 +608,8 @@ Promise.all([
     goleadores = datosGoleadores;
     llenarFiltro();
     mostrarFinales();
+    llenarFiltroAnio();
+    mostrarGoleadores();
     el("progreso").textContent = "Elegí cómo querés jugar";
     mostrarPantalla("inicio");
   })

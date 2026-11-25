@@ -13,6 +13,7 @@
       <nav class="pestanas">
         <button id="tab-jugar" class="pestana activa">Jugar</button>
         <button id="tab-partidos" class="pestana">Finales</button>
+        <button id="tab-goleadores" class="pestana">Goleadores</button>
       </nav>
     </header>
 
@@ -78,6 +79,14 @@
       <select id="filtro"><option value="">Todas</option></select>
       <p id="titulos"></p>
       <div id="lista-partidos"></div>
+    </div>
+
+    <div id="vista-goleadores" hidden>
+      <p class="intro">Los jugadores con 2 o más goles en un mismo Mundial.</p>
+      <label for="filtro-anio">Mundial</label>
+      <select id="filtro-anio"><option value="">Todos los Mundiales (suma)</option></select>
+      <p id="aclaracion-goleadores" class="ayuda"></p>
+      <ol id="lista-goleadores" class="ranking"></ol>
     </div>
 
     <footer>
