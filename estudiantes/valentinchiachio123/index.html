@@ -13,6 +13,13 @@
   .tb { pointer-events:auto; width:58px; height:58px; border-radius:50%; background:rgba(255,255,255,.16); border:2px solid rgba(255,255,255,.5);
         color:#fff; font:8px monospace; display:flex; align-items:center; justify-content:center; user-select:none; -webkit-user-select:none; }
   .tb.big { width:72px; height:72px; }
+  /* celulares angostos: los 6 botones entran en el ancho de la pantalla */
+  @media (max-width: 460px) {
+    #touch { padding:8px; }
+    .grp { gap:6px; }
+    .tb { width:46px; height:46px; }
+    .tb.big { width:56px; height:56px; }
+  }
 </style>
 </head>
 <body>
