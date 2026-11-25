@@ -4,7 +4,7 @@ Este repositorio es un lab de un curso: cada persona tiene **una carpeta** `estu
 
 ## Reglas (obligatorias)
 
-1. **Solo escribas dentro de `estudiantes/<usuario>/`**, donde `<usuario>` es el usuario de GitHub de la persona, en minúsculas. Preguntáselo si no lo sabés. **No modifiques ningún otro archivo del repositorio**: ni `server.js`, ni `public/`, ni `.github/`, ni las carpetas de otras personas.
+1. **Solo escribas dentro de `estudiantes/<usuario>/`**, donde `<usuario>` es el usuario de GitHub de la persona, en minúsculas. Preguntáselo si no lo sabés. **No modifiques ningún otro archivo del repositorio**: ni `server.js`, ni `public/`, ni `.github/`. Las carpetas de otras personas **solo** si la persona te pide expresamente colaborar en el proyecto de alguien más: en ese caso, el pull request toca únicamente esa carpeta (`estudiantes/<su-usuario>/`), nada de la propia, y se incorpora cuando la dueña o dueño lo aprueba comentando `/aprobar` en el pull request.
 2. Para empezar, copiá `estudiantes/_plantilla` a `estudiantes/<usuario>` y **reemplazá su contenido por el proyecto de la persona** (podés conservar lo que sirva, pero no subas la plantilla tal cual).
 3. Archivos obligatorios en la carpeta:
    - `index.html`: la página principal del proyecto.

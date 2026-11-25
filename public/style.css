@@ -31,7 +31,6 @@ h2 { font-size: 1rem; margin: 0 0 .5rem; }
 
 /* Mapa */
 .guia { fill: none; stroke: var(--line); stroke-width: 1; stroke-dasharray: 2 6; }
-.camino { fill: none; stroke: var(--line); stroke-width: 1.5; }
 .nodo { cursor: pointer; }
 .nodo .cuerpo { fill: var(--panel); stroke: var(--accent); stroke-width: 2; transition: fill .3s; }
 .nodo.caliente .cuerpo { fill: var(--accent); }
@@ -68,3 +67,12 @@ h2 { font-size: 1rem; margin: 0 0 .5rem; }
 }
 
 [hidden] { display: none !important; }
+.rama { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+.rama.pend { stroke-dasharray: 4 4; opacity: .8; animation: marcha 1.2s linear infinite; }
+.brote .bcuerpo { fill: var(--panel); stroke: var(--accent); stroke-width: 2; }
+.brote.pend .bcuerpo { stroke-dasharray: 3 2; }
+.brote.pend { cursor: pointer; }
+.brote:hover .bcuerpo { fill: var(--accent); }
+.betq { font: 600 11px system-ui, sans-serif; fill: var(--muted); text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: var(--panel); stroke-width: 3px; }
+@keyframes marcha { to { stroke-dashoffset: -16; } }
+@media (prefers-reduced-motion: reduce) { .rama.pend { animation: none; } }

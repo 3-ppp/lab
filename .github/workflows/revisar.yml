@@ -1,46 +1,82 @@
-# Revisa los pull requests de estudiantes y, si solo tocan su carpeta, los incorpora.
-# IMPORTANTE: usa pull_request_target (corre con el workflow de main, no con el del pull request) y
-# NO descarga ni ejecuta el código del pull request: solo lee la lista de archivos por la API.
+# Revisa los pull requests de estudiantes y, si cumplen las reglas, los incorpora.
+#  - PR que solo toca TU carpeta (estudiantes/<tu-usuario>/): se incorpora solo.
+#  - PR que solo toca la carpeta de OTRA persona: se incorpora cuando esa persona lo aprueba
+#    comentando "/aprobar" en el pull request (y solo si no hubo cambios después de que lo leyó).
+# IMPORTANTE: usa pull_request_target e issue_comment (corren con el workflow de main, no con el del
+# pull request) y NO descarga ni ejecuta el código del pull request: solo lee la lista de archivos por la API.
 name: Revisar proyecto
 on:
   pull_request_target:
     types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
 permissions:
   contents: write
   pull-requests: write
-concurrency:
-  group: revisar-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
 jobs:
   revisar:
+    if: github.event_name == 'pull_request_target' || (github.event.issue.pull_request && startsWith(github.event.comment.body, '/aprobar'))
     runs-on: ubuntu-latest
+    concurrency:
+      group: revisar-${{ github.event.pull_request.number || github.event.issue.number }}
+      cancel-in-progress: false
     steps:
       - name: Revisar archivos
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
-          AUTOR: ${{ github.event.pull_request.user.login }}
+          PR: ${{ github.event.pull_request.number || github.event.issue.number }}
+          EVENTO: ${{ github.event_name }}
+          COMENTA: ${{ github.event.comment.user.login }}
+          CUERPO: ${{ github.event.comment.body }}
           DUENO: ${{ github.repository_owner }}
         run: |
           set -u
+          read -r AUTOR SHA ESTADO < <(gh api "repos/$REPO/pulls/$PR" --jq '[.user.login, .head.sha, .state] | join(" ")')
+          [ "$ESTADO" = "open" ] || { echo "El pull request no está abierto."; exit 0; }
           if [ "${AUTOR,,}" = "${DUENO,,}" ]; then echo "PR del docente: se revisa a mano."; exit 0; fi
-          carpeta="estudiantes/${AUTOR,,}/"
+
+          propia="estudiantes/${AUTOR,,}/"
           ext='html|css|js|json|svg|png|jpg|gif|webp|ico|txt|md|woff|woff2'
           mapfile -t archivos < <(gh api --paginate "repos/$REPO/pulls/$PR/files" --jq '.[] | .filename, (.previous_filename // empty)')
           errores=()
           [ "${#archivos[@]}" -eq 0 ] && errores+=("El pull request no cambia ningún archivo.")
           [ "${#archivos[@]}" -gt 60 ] && errores+=("Son demasiados archivos (${#archivos[@]}): el máximo es 60.")
+          declare -A carpetas=()
           for f in "${archivos[@]}"; do
-            if [[ "$f" != "$carpeta"* ]]; then
-              errores+=("\`$f\` está fuera de tu carpeta (\`$carpeta\`).")
-            elif [[ "$f" == *..* || "$f" == *//* ]]; then
+            if [[ "$f" != estudiantes/*/* ]]; then
+              errores+=("\`$f\` está fuera de las carpetas de \`estudiantes/\`.")
+              continue
+            fi
+            resto="${f#estudiantes/}"; carpetas["${resto%%/*}"]=1
+            if [[ "$f" == *..* || "$f" == *//* ]]; then
               errores+=("\`$f\` tiene un nombre de ruta no permitido.")
             elif ! [[ "${f,,}" =~ \.($ext)$ ]]; then
               errores+=("\`$f\` no es un tipo de archivo permitido.")
             fi
           done
+
+          # ¿De quién es la carpeta que se toca?
+          modo=""; otra=""
+          if [ "${#errores[@]}" -eq 0 ]; then
+            if [ "${#carpetas[@]}" -ne 1 ]; then
+              errores+=("Tocás más de una carpeta (${!carpetas[*]}). Cada pull request debe tocar solo una.")
+            else
+              destino="${!carpetas[*]}"
+              if [ "${destino,,}" = "${AUTOR,,}" ]; then
+                modo="propio"
+              elif ! [[ "$destino" =~ ^[a-z0-9][a-z0-9-]{0,38}$ ]]; then
+                errores+=("\`estudiantes/$destino/\` no es una carpeta de estudiante válida.")
+              elif ! gh api "repos/$REPO/contents/estudiantes/$destino?ref=main" >/dev/null 2>&1; then
+                errores+=("La carpeta \`estudiantes/$destino/\` todavía no existe. Solo podés proponer cambios en carpetas que ya están en el repositorio, o en la tuya (\`$propia\`).")
+              else
+                modo="ajeno"; otra="$destino"
+              fi
+            fi
+          fi
+
           if [ "${#errores[@]}" -gt 0 ]; then
+            [ "$EVENTO" = "issue_comment" ] && exit 0   # los errores ya se avisaron al abrir el PR
             {
               echo "Hola @$AUTOR. Este pull request no se puede incorporar todavía:"
               echo
@@ -51,5 +87,40 @@ jobs:
             gh pr comment "$PR" --repo "$REPO" --body-file /tmp/msg.md
             exit 1
           fi
-          gh pr merge "$PR" --repo "$REPO" --squash --subject "Proyecto de $AUTOR" --body "Incorporado automáticamente: solo toca $carpeta"
+
+          if [ "$modo" = "propio" ]; then
+            [ "$EVENTO" = "pull_request_target" ] || exit 0
+            gh pr merge "$PR" --repo "$REPO" --squash --match-head-commit "$SHA" --subject "Proyecto de $AUTOR" --body "Incorporado automáticamente: solo toca $propia"
+            echo "Incorporado."
+            exit 0
+          fi
+
+          # Cambio en la carpeta de otra persona: lo tiene que aprobar su dueña o dueño.
+          if [ "$EVENTO" = "pull_request_target" ]; then
+            {
+              echo "Hola @$AUTOR. Tu pull request cambia la carpeta de @$otra (\`estudiantes/$otra/\`)."
+              echo
+              echo "@$otra: mirá los cambios en la pestaña **Files changed**. Si te parecen bien, comentá acá \`/aprobar\` y se incorporan solos. Si no, simplemente no lo apruebes."
+              echo
+              echo "Si @$AUTOR sube cambios nuevos, hay que volver a aprobar."
+              echo "<!-- sha:$SHA -->"
+            } > /tmp/msg.md
+            gh pr comment "$PR" --repo "$REPO" --body-file /tmp/msg.md
+            exit 0
+          fi
+
+          # Llegó un comentario "/aprobar"
+          cuerpo="$(printf '%s' "$CUERPO" | tr -d '[:space:]')"
+          [ "${cuerpo,,}" = "/aprobar" ] || exit 0
+          if [ "${COMENTA,,}" != "$otra" ]; then
+            gh pr comment "$PR" --repo "$REPO" --body "@$COMENTA: solo @$otra puede aprobar cambios en \`estudiantes/$otra/\`."
+            exit 0
+          fi
+          visto="$(gh api --paginate "repos/$REPO/issues/$PR/comments" --jq '.[] | select(.user.login=="github-actions[bot]") | .body' | grep -o 'sha:[0-9a-f]\{40\}' | tail -n1 | cut -d: -f2)"
+          if [ "$visto" != "$SHA" ]; then
+            gh pr comment "$PR" --repo "$REPO" --body "@$otra: hubo cambios nuevos en este pull request desde que el robot lo revisó. Mirá **Files changed** otra vez y volvé a comentar \`/aprobar\`.
+          <!-- sha:$SHA -->"
+            exit 0
+          fi
+          gh pr merge "$PR" --repo "$REPO" --squash --match-head-commit "$SHA" --subject "Mejora de $AUTOR en el proyecto de $otra" --body "Aprobado por @$otra. Cambia solo estudiantes/$otra/"
           echo "Incorporado."

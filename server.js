@@ -68,6 +68,59 @@ async function history() {
   return info;
 }
 
+// Colaboraciones ya aprobadas: el robot deja el mensaje "Mejora de <autor> en el proyecto de <dueño>" al incorporarlas
+async function aprobadas() {
+  const out = [];
+  try {
+    const log = await git("log", "--format=%ct%x09%s", "--grep=^Mejora de ", "-n", "300");
+    for (const line of log.split("\n")) {
+      const m = line.match(/^(\d+)\t(?:Mejora de ([A-Za-z0-9-]{1,39}) en el proyecto de ([A-Za-z0-9-]{1,39}))/);
+      if (m) out.push({ de: m[2].toLowerCase(), a: m[3].toLowerCase(), estado: "aprobada", ts: Number(m[1]) });
+    }
+  } catch {}
+  return out;
+}
+
+// Colaboraciones pendientes: pull requests abiertos que tocan la carpeta de otra persona (API pública de GitHub, solo lectura)
+const GH = REPO_URL.match(/^https:\/\/github\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)$/)?.[1] || "";
+let pendientes = [], prsEtag = "", archivosPr = new Map();
+async function ghGet(ruta, etag) {
+  const r = await fetch("https://api.github.com/repos/" + GH + ruta, {
+    headers: { Accept: "application/vnd.github+json", "User-Agent": "lab-mapa", ...(etag ? { "If-None-Match": etag } : {}) },
+    signal: AbortSignal.timeout(10000),
+  });
+  return r;
+}
+async function actualizarPendientes() {
+  if (!GH) return false;
+  try {
+    const r = await ghGet("/pulls?state=open&per_page=30", prsEtag);
+    if (r.status === 304) return false;
+    if (!r.ok) return false;
+    prsEtag = r.headers.get("etag") || "";
+    const prs = await r.json();
+    const next = [];
+    for (const pr of prs.slice(0, 30)) {
+      const autor = String(pr.user?.login || "").toLowerCase();
+      const sha = String(pr.head?.sha || "");
+      if (!ID_RE.test(autor) || !/^[0-9a-f]{40}$/.test(sha)) continue;
+      let dueño = archivosPr.get(sha);
+      if (dueño === undefined) {
+        const fr = await ghGet("/pulls/" + pr.number + "/files?per_page=100");
+        if (!fr.ok) continue;
+        const dirs = new Set((await fr.json()).map((f) => String(f.filename).match(/^estudiantes\/([^/]+)\//)?.[1] || "?"));
+        dueño = dirs.size === 1 ? [...dirs][0] : "";
+        archivosPr.set(sha, dueño);
+        if (archivosPr.size > 200) archivosPr.delete(archivosPr.keys().next().value);
+      }
+      if (dueño && ID_RE.test(dueño) && dueño !== autor) next.push({ de: autor, a: dueño, estado: "pendiente", n: Number(pr.number) || 0, titulo: str(pr.title, 80), ts: Math.floor(Date.parse(pr.created_at) / 1000) || 0 });
+    }
+    const cambio = JSON.stringify(next) !== JSON.stringify(pendientes);
+    pendientes = next;
+    return cambio;
+  } catch { return false; }
+}
+
 const str = (v, max) => (typeof v === "string" ? v.trim().slice(0, max) : "");
 
 async function scan() {
@@ -107,7 +160,7 @@ async function scan() {
 }
 
 // ---------- Estado y avisos en vivo ----------
-let state = { projects: [], at: 0 };
+let state = { projects: [], at: 0, colab: [] };
 const signature = (p) => [p.actualizado, p.commits, p.archivos, p.titulo, p.descripcion].join("|");
 const clients = new Set();
 const send = (event, data) => { for (const res of clients) res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`); };
@@ -123,15 +176,29 @@ async function refresh() {
       } catch (e) { console.error("git:", (e.stderr || e.message).toString().trim().slice(0, 300)); }
     }
     const next = await scan();
+    const colab = await aprobadas();
     const before = new Map(state.projects.map((p) => [p.id, signature(p)]));
     const first = state.at === 0;
-    state = { projects: next, at: Date.now() };
+    state = { projects: next, at: Date.now(), colab };
     if (!first) for (const p of next) {
       const prev = before.get(p.id);
       if (prev !== signature(p)) send("cambio", { id: p.id, titulo: p.titulo, nombre: p.nombre, nuevo: prev === undefined });
     }
   })().catch((e) => console.error("refresh:", e.message)).finally(() => { refreshing = null; });
   return refreshing;
+}
+
+// Una rama por pareja (autor → proyecto): si hay un pull request pendiente se muestra ese; si no, la mejora ya aprobada
+function colaboraciones() {
+  const ids = new Set(state.projects.map((p) => p.id));
+  const por = new Map();
+  for (const c of [...state.colab, ...pendientes]) {
+    if (!ids.has(c.a) || c.de === c.a) continue;
+    const k = c.de + ">" + c.a, prev = por.get(k);
+    if (!prev || c.estado === "pendiente" || (prev.estado === "aprobada" && c.ts > prev.ts)) por.set(k, { ...c, veces: (prev?.veces || 0) + (c.estado === "aprobada" ? 1 : 0) });
+    else prev.veces += c.estado === "aprobada" ? 1 : 0;
+  }
+  return [...por.values()].slice(0, 100);
 }
 
 // ---------- HTTP ----------
@@ -219,7 +286,7 @@ const server = http.createServer(async (req, res) => {
     if (req.method !== "GET" && req.method !== "HEAD") return json(res, 405, { error: "método no permitido" });
     if (url.pathname === "/healthz") return json(res, 200, { ok: true, proyectos: state.projects.length });
     if (url.pathname === "/api/proyectos")
-      return json(res, 200, { proyectos: state.projects, repo: REPO_URL, ahora: Math.floor(Date.now() / 1000) });
+      return json(res, 200, { proyectos: state.projects, colaboraciones: colaboraciones(), repo: REPO_URL, ahora: Math.floor(Date.now() / 1000) });
     if (url.pathname === "/api/eventos") {
       if (clients.size >= 500) return json(res, 503, { error: "muchas conexiones" });
       res.writeHead(200, { ...SEC, "Content-Type": "text/event-stream", "Cache-Control": "no-cache", Connection: "keep-alive", "X-Accel-Buffering": "no" });
@@ -248,6 +315,11 @@ async function start() {
   }
   await refresh();
   setInterval(refresh, POLL_MS).unref();
+  if (GH) {
+    const ciclo = async () => { if (await actualizarPendientes()) send("ramas", {}); };
+    ciclo();
+    setInterval(ciclo, 60000).unref();
+  }
   setInterval(() => { for (const res of clients) res.write(": ping\n\n"); }, 25000).unref();
   server.listen(PORT, () => console.log(`Lab escuchando en :${PORT} (${state.projects.length} proyectos)`));
 }

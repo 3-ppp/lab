@@ -59,7 +59,7 @@ Si tu proyecto maneja datos, pedile a tu agente que los guarde en `datos.json` (
 
 ## Reglas
 
-1. **Solo tocás tu carpeta.** Un pull request que modifique cualquier otra cosa se rechaza solo.
+1. **Tu carpeta es tuya.** Un pull request que toque tu carpeta se incorpora solo. Si querés mejorar el proyecto de otra persona, podés proponer cambios en *su* carpeta (un solo proyecto por pull request), pero solo se incorporan cuando esa persona los aprueba. Cualquier otra cosa se rechaza.
 2. **Todo es público.** Cualquiera en internet puede ver, copiar y reutilizar lo que subas (licencia MIT). No subas datos personales tuyos ni de otras personas, contraseñas, claves de API, fotos ajenas ni nada que no quieras que se vea.
 3. **Tu proyecto corre aislado.** Tu página se muestra dentro de una "caja" sin acceso a nada del sitio ni a datos del navegador. No puede guardar datos entre visitas.
 4. **Convivencia.** Nada ofensivo ni engañoso. Si algo no corresponde, se saca.
@@ -67,6 +67,14 @@ Si tu proyecto maneja datos, pedile a tu agente que los guarde en `datos.json` (
 ## Qué pasa cuando abrís el pull request
 
 Un robot revisa que solo hayas tocado `estudiantes/<tu-usuario>/` y que los tipos de archivo sean los permitidos. Si todo está bien, **se incorpora solo en un minuto** y tu cuadrado aparece (o late) en el mapa. Si algo está mal, el robot te deja un comentario explicando qué cambiar.
+
+### Colaborar en el proyecto de otra persona
+
+1. Hacé tu cambio **solo dentro de `estudiantes/<su-usuario>/`** y abrí el pull request como siempre.
+2. El robot avisa a la dueña o dueño del proyecto. Esa persona mira **Files changed** y, si le gusta, comenta `/aprobar` en el pull request: se incorpora solo.
+3. Si subís cambios nuevos después de que lo vio, tiene que volver a aprobar.
+
+Si preferís no pedir permiso, copiá el proyecto a tu carpeta y mejoralo ahí.
 
 ## Para el docente
 
