@@ -1,0 +1,57 @@
+﻿{
+    "argentina":  {
+                      "width":  1024,
+                      "height":  2304,
+                      "south":  -55.776573,
+                      "nombre":  "República Argentina",
+                      "north":  -16.636192,
+                      "west":  -73.125,
+                      "z":  6,
+                      "east":  -50.625,
+                      "file":  "mapas/argentina.jpg"
+                  },
+    "amba":  {
+                 "width":  1280,
+                 "height":  768,
+                 "south":  -34.885931,
+                 "nombre":  "Buenos Aires y Conurbano",
+                 "north":  -34.452218,
+                 "west":  -58.886719,
+                 "z":  11,
+                 "east":  -58.007812,
+                 "file":  "mapas/amba.jpg"
+             },
+    "norte":  {
+                  "width":  1792,
+                  "height":  2048,
+                  "south":  -30.751278,
+                  "nombre":  "Norte Argentino (NOA y NEA)",
+                  "north":  -20.632784,
+                  "west":  -67.5,
+                  "z":  8,
+                  "east":  -57.65625,
+                  "file":  "mapas/norte.jpg"
+              },
+    "malvinas":  {
+                     "width":  1536,
+                     "height":  1024,
+                     "south":  -52.48278,
+                     "nombre":  "Islas Malvinas",
+                     "north":  -50.736455,
+                     "west":  -61.171875,
+                     "z":  9,
+                     "east":  -56.953125,
+                     "file":  "mapas/malvinas.jpg"
+                 },
+    "litoral":  {
+                    "width":  1792,
+                    "height":  1792,
+                    "south":  -36.597889,
+                    "nombre":  "Litoral, Córdoba y Pampa",
+                    "north":  -28.304381,
+                    "west":  -66.09375,
+                    "z":  8,
+                    "east":  -56.25,
+                    "file":  "mapas/litoral.jpg"
+                }
+}
