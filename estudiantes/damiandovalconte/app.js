@@ -1,40 +1,47 @@
-/* Batallas de Argentina (1806-2001) - Lógica del mapa interactivo y mapa de calor */
+/* Atlas Histórico de Batallas de Argentina (1806-2001)
+   Cartografía local georreferenciada + capas IGN Argenmap / Esri + mapa de calor dinámico */
 
 const PERIODOS = [
-  { id: "invasiones", nombre: "Invasiones Inglesas", color: "#38bdf8" },
-  { id: "independencia", nombre: "Independencia", color: "#22c55e" },
-  { id: "civiles", nombre: "Unitarios y Federales", color: "#f97316" },
-  { id: "consolidacion", nombre: "Consolidación y Territorio", color: "#eab308" },
-  { id: "estado_pueblo", nombre: "Estado y Pueblo", color: "#ef4444" },
-  { id: "guerrilla_militares", nombre: "Guerrilla y Militares", color: "#a855f7" },
-  { id: "malvinas", nombre: "Guerra de Malvinas", color: "#14b8a6" }
+  { id: "invasiones", nombre: "Invasiones Inglesas", color: "#2b5b84" },
+  { id: "independencia", nombre: "Independencia", color: "#2d6a4f" },
+  { id: "civiles", nombre: "Unitarios y Federales", color: "#a44a2a" },
+  { id: "consolidacion", nombre: "Consolidación y Territorio", color: "#8c6d1f" },
+  { id: "estado_pueblo", nombre: "Estado y Pueblo", color: "#8b2635" },
+  { id: "guerrilla_militares", nombre: "Guerrilla y Militares", color: "#5c4673" },
+  { id: "malvinas", nombre: "Guerra de Malvinas", color: "#1f6f78" }
 ];
 
 const PERIODO_MAP = new Map(PERIODOS.map((p) => [p.id, p]));
 
 const ZONAS_ZOOM = {
-  argentina: { center: [-38.5, -63.5], zoom: 4 },
-  amba: { center: [-34.63, -58.44], zoom: 11 },
-  litoral: { center: [-32.2, -60.8], zoom: 7 },
-  norte: { center: [-26.1, -63.5], zoom: 6 },
-  malvinas: { center: [-51.72, -58.55], zoom: 8 }
+  argentina: { center: [-38.2, -63.4], zoom: 4 },
+  amba: { center: [-34.64, -58.45], zoom: 11 },
+  litoral: { center: [-32.3, -61.0], zoom: 7 },
+  norte: { center: [-26.0, -63.4], zoom: 6 },
+  malvinas: { center: [-51.72, -58.75], zoom: 8 }
 };
 
-// Estado de la aplicación (en memoria, compatible con el sandbox del lab)
+// Estado en memoria (compatible con sandbox del lab)
 let batallas = [];
 let filtradas = [];
+let mapBounds = null;
 let periodoActivo = "todos";
 let seleccionadaId = null;
 let heatVisible = true;
 let markersVisible = true;
 let heatMode = "cantidad"; // "cantidad" | "bajas"
-let map, heatLayer, markerGroup, activeBaseLayer, fallbackLayer;
-let tileErrors = 0;
 
-const baseLayers = {};
+let map, heatLayer, markerGroup, localBaseGroup, liveBaseLayer;
+const liveLayers = {};
 const markerById = new Map();
 
-// ---------- Capa personalizada de Mapa de Calor (Canvas sobre Leaflet) ----------
+// Proyección Web Mercator (EPSG:3857) para ubicar el pin con precisión en los mapas guardados
+function latToMercY(lat) {
+  const rad = (lat * Math.PI) / 180;
+  return Math.log(Math.tan(Math.PI / 4 + rad / 2));
+}
+
+// ---------- Capa de Mapa de Calor (paleta cartográfica sobria) ----------
 const CanvasHeatLayer = L.Layer.extend({
   initialize: function (points) {
     this._points = points || [];
@@ -68,18 +75,17 @@ const CanvasHeatLayer = L.Layer.extend({
   },
 
   _buildPalette: function () {
+    // Rampa térmica sobria y académica: azul pizarra -> ocre -> terracota -> carmesí profundo
     const c = document.createElement("canvas");
     c.width = 256;
     c.height = 1;
     const ctx = c.getContext("2d");
     const g = ctx.createLinearGradient(0, 0, 256, 0);
-    g.addColorStop(0.0, "rgba(29, 78, 216, 0)");
-    g.addColorStop(0.18, "rgba(29, 78, 216, 0.55)");
-    g.addColorStop(0.38, "rgba(6, 182, 212, 0.72)");
-    g.addColorStop(0.58, "rgba(34, 197, 94, 0.80)");
-    g.addColorStop(0.75, "rgba(250, 204, 21, 0.88)");
-    g.addColorStop(0.89, "rgba(249, 115, 22, 0.94)");
-    g.addColorStop(1.0, "rgba(239, 68, 68, 0.98)");
+    g.addColorStop(0.0, "rgba(46, 86, 128, 0)");
+    g.addColorStop(0.22, "rgba(46, 86, 128, 0.42)");
+    g.addColorStop(0.48, "rgba(201, 151, 62, 0.64)");
+    g.addColorStop(0.74, "rgba(184, 83, 42, 0.78)");
+    g.addColorStop(1.0, "rgba(139, 30, 36, 0.88)");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, 256, 1);
     return ctx.getImageData(0, 0, 256, 1).data;
@@ -98,16 +104,13 @@ const CanvasHeatLayer = L.Layer.extend({
     if (!this._points.length || size.x === 0 || size.y === 0) return;
 
     const zoom = this._map.getZoom();
-    // Radio adaptable al zoom para que se vea claro tanto a escala país como ciudad
-    const radius = Math.max(24, Math.min(68, 22 + zoom * 3.8));
+    const radius = Math.max(24, Math.min(64, 20 + zoom * 3.6));
 
-    // Pasada 1: acumular densidad en escala de opacidad
     const off = document.createElement("canvas");
     off.width = size.x;
     off.height = size.y;
     const octx = off.getContext("2d");
 
-    // Calcular peso máximo para normalizar
     let maxWeight = 1;
     for (const p of this._points) {
       if (p.weight > maxWeight) maxWeight = p.weight;
@@ -117,7 +120,7 @@ const CanvasHeatLayer = L.Layer.extend({
       const pt = this._map.latLngToContainerPoint([p.lat, p.lng]);
       if (pt.x < -radius || pt.y < -radius || pt.x > size.x + radius || pt.y > size.y + radius) continue;
 
-      const alpha = Math.max(0.18, Math.min(0.65, (p.weight / maxWeight) * 0.42 + 0.14));
+      const alpha = Math.max(0.16, Math.min(0.62, (p.weight / maxWeight) * 0.4 + 0.14));
       const grad = octx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, radius);
       grad.addColorStop(0, `rgba(0, 0, 0, ${alpha})`);
       grad.addColorStop(0.55, `rgba(0, 0, 0, ${alpha * 0.42})`);
@@ -128,7 +131,6 @@ const CanvasHeatLayer = L.Layer.extend({
       octx.fill();
     }
 
-    // Pasada 2: colorear según la densidad acumulada
     const img = octx.getImageData(0, 0, size.x, size.y);
     const data = img.data;
 
@@ -148,14 +150,14 @@ const CanvasHeatLayer = L.Layer.extend({
       data[i] = pal[idx];
       data[i + 1] = pal[idx + 1];
       data[i + 2] = pal[idx + 2];
-      data[i + 3] = Math.min(225, pal[idx + 3]);
+      data[i + 3] = Math.min(210, pal[idx + 3]);
     }
 
     ctx.putImageData(img, 0, 0);
   }
 });
 
-// ---------- Inicialización del mapa ----------
+// ---------- Inicialización del mapa con respaldo cartográfico local garantizado ----------
 function initMap() {
   map = L.map("map", {
     center: ZONAS_ZOOM.argentina.center,
@@ -165,72 +167,131 @@ function initMap() {
     zoomControl: true
   });
 
-  baseLayers.argenmap = L.tileLayer(
+  // Panel dedicado para la cartografía guardada localmente (siempre debajo de los mosaicos en vivo y del calor)
+  map.createPane("localMapsPane");
+  map.getPane("localMapsPane").style.zIndex = "180";
+
+  localBaseGroup = L.layerGroup().addTo(map);
+
+  // Capas en vivo (sin API key) que aportan detalle calle por calle al acercar el zoom
+  liveLayers.argenmap = L.tileLayer(
     "https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{y}.png",
     {
       tms: true,
       maxZoom: 18,
-      attribution: "&copy; Instituto Geográfico Nacional (Argenmap) &amp; OpenStreetMap"
+      attribution: "&copy; Instituto Geográfico Nacional (Argenmap)"
     }
   );
 
-  baseLayers.streets = L.tileLayer(
+  liveLayers.streets = L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
     {
       maxZoom: 18,
-      attribution: "Tiles &copy; Esri &mdash; OpenStreetMap contributors"
+      attribution: "Cartografía &copy; Esri &amp; OpenStreetMap"
     }
   );
 
-  const darkBase = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}",
-    {
-      maxZoom: 16,
-      attribution: "Tiles &copy; Esri"
-    }
-  );
-  const darkRef = L.tileLayer(
-    "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}",
-    {
-      maxZoom: 16,
-      pane: "overlayPane"
-    }
-  );
-  baseLayers.dark = L.layerGroup([darkBase, darkRef]);
-
-  // Escuchar fallos de mosaicos por si el usuario está sin conexión
-  [baseLayers.argenmap, baseLayers.streets, darkBase].forEach((layer) => {
-    layer.on("tileerror", () => {
-      tileErrors++;
-      if (tileErrors >= 8 && !fallbackLayer) {
-        activarMapaRespaldo();
-      }
-    });
-  });
-
-  activeBaseLayer = baseLayers.argenmap.addTo(map);
+  liveBaseLayer = liveLayers.argenmap.addTo(map);
   heatLayer = new CanvasHeatLayer([]).addTo(map);
   markerGroup = L.layerGroup().addTo(map);
 }
 
-// Silueta geográfica de respaldo si no hay conexión a internet para mosaicos
-function activarMapaRespaldo() {
-  const contornoArgentina = [
-    [-21.8, -66.2], [-22.1, -62.7], [-25.3, -57.6], [-25.6, -54.5], [-27.5, -55.9],
-    [-30.2, -57.6], [-33.0, -58.2], [-34.6, -58.3], [-36.3, -56.7], [-38.1, -57.5],
-    [-39.0, -62.0], [-41.0, -63.0], [-42.8, -64.9], [-45.9, -67.5], [-47.8, -65.9],
-    [-51.6, -69.1], [-54.8, -68.3], [-54.9, -65.2], [-52.4, -68.4], [-51.8, -72.2],
-    [-46.5, -71.8], [-41.1, -71.6], [-36.5, -71.0], [-32.9, -70.0], [-27.8, -69.0],
-    [-23.0, -67.0], [-21.8, -66.2]
-  ];
-  const malvinas = [
-    [-51.3, -60.8], [-51.3, -57.7], [-52.3, -57.7], [-52.3, -60.8]
-  ];
-  fallbackLayer = L.layerGroup([
-    L.polygon(contornoArgentina, { color: "#38bdf8", weight: 2, fillColor: "#162640", fillOpacity: 0.65 }),
-    L.polygon(malvinas, { color: "#14b8a6", weight: 2, fillColor: "#162640", fillOpacity: 0.7 })
-  ]).addTo(map);
-  document.getElementById("tile-fallback-banner").hidden = false;
+// Carga los mapas políticos y de rutas guardados localmente en mapas/*.jpg
+function montarMapasLocales(boundsData) {
+  mapBounds = boundsData;
+  localBaseGroup.clearLayers();
+
+  // Orden de menor a mayor detalle: país completo primero, luego regiones y AMBA encima
+  const orden = ["argentina", "norte", "litoral", "malvinas", "amba"];
+  for (const key of orden) {
+    const info = boundsData[key];
+    if (!info) continue;
+    L.imageOverlay(
+      info.file,
+      [[info.south, info.west], [info.north, info.east]],
+      { pane: "localMapsPane", opacity: 1, interactive: false }
+    ).addTo(localBaseGroup);
+  }
+}
+
+// Elige el mapa local guardado con mejor resolución para la ubicación de una batalla
+function elegirMapaLocalPara(lat, lng) {
+  if (!mapBounds) return null;
+  const candidatos = ["amba", "malvinas", "litoral", "norte", "argentina"];
+  const margen = 0.04;
+  for (const key of candidatos) {
+    const m = mapBounds[key];
+    if (!m) continue;
+    const padLat = (m.north - m.south) * margen;
+    const padLng = (m.east - m.west) * margen;
+    if (
+      lat <= m.north - padLat &&
+      lat >= m.south + padLat &&
+      lng >= m.west + padLng &&
+      lng <= m.east - padLng
+    ) {
+      return m;
+    }
+  }
+  return mapBounds.argentina || null;
+}
+
+// Dibuja el encuadre cartográfico guardado dentro de la ficha de cada batalla
+function actualizarMiniMapaFicha(b) {
+  const img = document.getElementById("ficha-mapa-img");
+  const pie = document.getElementById("ficha-mapa-pie");
+  const viewport = img.parentElement;
+  const m = elegirMapaLocalPara(b.lat, b.lng);
+
+  if (!m) {
+    viewport.parentElement.hidden = true;
+    return;
+  }
+  viewport.parentElement.hidden = false;
+
+  // Posición exacta en proyección Web Mercator (0..1)
+  const fx = Math.max(0.02, Math.min(0.98, (b.lng - m.west) / (m.east - m.west)));
+  const myN = latToMercY(m.north);
+  const myS = latToMercY(m.south);
+  const myP = latToMercY(b.lat);
+  const fy = Math.max(0.02, Math.min(0.98, (myN - myP) / (myN - myS)));
+
+  const vw = viewport.clientWidth || 365;
+  const vh = viewport.clientHeight || 165;
+
+  // Escala natural recortada alrededor del punto para que se lean ciudades, rutas y límites
+  const scale = m.file.includes("argentina") ? 0.72 : 0.65;
+  const renderW = Math.max(vw * 1.15, m.width * scale);
+  const renderH = (m.height / m.width) * renderW;
+
+  let left = vw / 2 - fx * renderW;
+  let top = vh / 2 - fy * renderH;
+
+  // Mantener la imagen cubriendo todo el recuadro sin bordes vacíos
+  left = Math.min(0, Math.max(vw - renderW, left));
+  top = Math.min(0, Math.max(vh - renderH, top));
+
+  // Ajustar posición del pin si el punto quedó cerca de un borde del mapa
+  const pinX = left + fx * renderW;
+  const pinY = top + fy * renderH;
+
+  img.src = m.file;
+  img.style.width = `${renderW}px`;
+  img.style.height = `${renderH}px`;
+  img.style.left = `${left}px`;
+  img.style.top = `${top}px`;
+
+  const pin = document.getElementById("ficha-mapa-pin");
+  pin.style.left = `${pinX}px`;
+  pin.style.top = `${pinY}px`;
+  pin.style.background = PERIODO_MAP.get(b.periodoId)?.color || "#8b2635";
+
+  pie.replaceChildren();
+  const izq = document.createElement("span");
+  izq.textContent = `Mapa guardado · ${m.nombre}`;
+  const der = document.createElement("span");
+  der.textContent = `${b.lat.toFixed(2)}°, ${b.lng.toFixed(2)}°`;
+  pie.append(izq, der);
 }
 
 // ---------- Filtros y renderizado ----------
@@ -288,7 +349,6 @@ function obtenerFiltradas() {
   if (desde > hasta) [desde, hasta] = [hasta, desde];
 
   document.getElementById("rango-label").textContent = `${desde} – ${hasta}`;
-
   const orden = document.getElementById("ordenar").value;
 
   const res = batallas.filter((b) => {
@@ -392,7 +452,7 @@ function renderLista() {
   if (!filtradas.length) {
     const li = document.createElement("li");
     li.className = "muted";
-    li.textContent = "No hay batallas que coincidan con tu búsqueda o rango de años.";
+    li.textContent = "No se encontraron enfrentamientos con esos criterios.";
     ul.append(li);
     return;
   }
@@ -402,7 +462,7 @@ function renderLista() {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "battle-item" + (b.id === seleccionadaId ? " selected" : "");
-    const color = PERIODO_MAP.get(b.periodoId)?.color || "#38bdf8";
+    const color = PERIODO_MAP.get(b.periodoId)?.color || "#1d3a5c";
     btn.style.borderLeftColor = color;
 
     const top = document.createElement("div");
@@ -429,7 +489,6 @@ function renderLista() {
   }
 }
 
-// Micro-desplazamiento para que batallas en el mismo punto (ej. Plaza de Mayo) sean todas clicables
 function calcularCoordenadasVisuales(lista) {
   const conteo = new Map();
   return lista.map((b) => {
@@ -437,7 +496,7 @@ function calcularCoordenadasVisuales(lista) {
     const idx = conteo.get(key) || 0;
     conteo.set(key, idx + 1);
     if (idx === 0) return { b, lat: b.lat, lng: b.lng };
-    const ang = (idx * 2.39996); // ángulo áureo
+    const ang = idx * 2.39996;
     const r = 0.008 * Math.sqrt(idx);
     return {
       b,
@@ -465,17 +524,17 @@ function renderMapa() {
 
   const conCoords = calcularCoordenadasVisuales(filtradas);
   for (const { b, lat, lng } of conCoords) {
-    const color = PERIODO_MAP.get(b.periodoId)?.color || "#38bdf8";
+    const color = PERIODO_MAP.get(b.periodoId)?.color || "#1d3a5c";
     const isSel = b.id === seleccionadaId;
-    const radius = isSel ? 10 : 7;
+    const radius = isSel ? 9.5 : 6.5;
 
     const m = L.circleMarker([lat, lng], {
       radius,
       fillColor: color,
-      color: isSel ? "#ffffff" : "#0b1220",
+      color: isSel ? "#162436" : "#fbf9f4",
       weight: isSel ? 3 : 2,
       opacity: 1,
-      fillOpacity: 0.92
+      fillOpacity: 0.94
     });
 
     const tip = document.createElement("div");
@@ -483,7 +542,7 @@ function renderMapa() {
     strong.textContent = `${b.anio} · ${b.titulo}`;
     const sub = document.createElement("div");
     sub.textContent = b.provincia;
-    sub.style.color = "#94a3b8";
+    sub.style.color = "#d6b67d";
     tip.append(strong, sub);
 
     m.bindTooltip(tip, { direction: "top", offset: [0, -8], className: "battle-tooltip" });
@@ -498,7 +557,7 @@ function seleccionarBatalla(id, centrar) {
   if (!b) return;
   seleccionadaId = id;
 
-  const pInfo = PERIODO_MAP.get(b.periodoId) || { nombre: b.periodo, color: "#38bdf8" };
+  const pInfo = PERIODO_MAP.get(b.periodoId) || { nombre: b.periodo, color: "#1d3a5c" };
   const pill = document.getElementById("ficha-periodo");
   pill.textContent = pInfo.nombre;
   pill.style.background = pInfo.color;
@@ -513,7 +572,7 @@ function seleccionarBatalla(id, centrar) {
   document.getElementById("ficha-muertos2").textContent = b.muertos.bando2;
   document.getElementById("ficha-total-muertos").textContent =
     b.muertos.totalEstimado != null
-      ? `Estimación de referencia para el mapa de calor: ~${b.muertos.totalEstimado.toLocaleString("es-AR")} víctimas fatales.`
+      ? `Estimación de referencia (mapa de calor): ~${b.muertos.totalEstimado.toLocaleString("es-AR")} víctimas fatales.`
       : "";
   document.getElementById("ficha-razones").textContent = b.razones;
   document.getElementById("ficha-consecuencias").textContent = b.consecuencias;
@@ -527,6 +586,9 @@ function seleccionarBatalla(id, centrar) {
 
   const estabaOculta = document.getElementById("ficha").hidden;
   document.getElementById("ficha").hidden = false;
+
+  // Actualizar mini-mapa local guardado dentro de la ficha
+  requestAnimationFrame(() => actualizarMiniMapaFicha(b));
 
   if (estabaOculta && map) {
     setTimeout(() => map.invalidateSize(), 50);
@@ -563,7 +625,6 @@ function actualizarTodo() {
   renderLista();
   renderMapa();
 
-  // Actualizar estado de botones Anterior/Siguiente si hay ficha abierta
   if (seleccionadaId != null) {
     const idx = filtradas.findIndex((x) => x.id === seleccionadaId);
     document.getElementById("btn-prev").disabled = idx <= 0;
@@ -601,18 +662,22 @@ function bindEvents() {
     if (idx >= 0 && idx < filtradas.length - 1) seleccionarBatalla(filtradas[idx + 1].id, true);
   });
 
-  // Cambio de mapa base (Político / OpenStreetMap / Oscuro)
+  // Selector de mapa base: Argenmap (IGN), Calles y Rutas (Esri) o Mapa guardado (100% local)
   document.querySelectorAll("[data-basemap]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const key = btn.dataset.basemap;
-      if (!baseLayers[key]) return;
-      map.removeLayer(activeBaseLayer);
-      activeBaseLayer = baseLayers[key].addTo(map);
+      if (liveBaseLayer) {
+        map.removeLayer(liveBaseLayer);
+        liveBaseLayer = null;
+      }
+      if (key !== "local" && liveLayers[key]) {
+        liveBaseLayer = liveLayers[key].addTo(map);
+      }
       document.querySelectorAll("[data-basemap]").forEach((b) => b.classList.toggle("active", b === btn));
     });
   });
 
-  // Botones de zoom rápido
+  // Encuadres rápidos
   document.querySelectorAll("[data-zoom]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const z = ZONAS_ZOOM[btn.dataset.zoom];
@@ -620,7 +685,7 @@ function bindEvents() {
     });
   });
 
-  // Controles del mapa de calor y marcadores
+  // Mapa de calor y marcadores
   document.getElementById("toggle-calor").addEventListener("change", (e) => {
     heatVisible = e.target.checked;
     renderMapa();
@@ -661,7 +726,7 @@ function bindEvents() {
     });
   });
 
-  // Modal agregar batalla en memoria
+  // Modal agregar en memoria
   const backdrop = document.getElementById("modal-backdrop");
   const abrirModal = () => { backdrop.hidden = false; };
   const cerrarModal = () => { backdrop.hidden = true; };
@@ -704,11 +769,10 @@ function bindEvents() {
       },
       razones: String(fd.get("razones")).trim(),
       consecuencias: String(fd.get("consecuencias")).trim(),
-      resultado: "Agregado en memoria por el usuario",
+      resultado: "Agregado en memoria durante la sesión",
       fuente: "Registro manual (sesión actual)"
     };
 
-    // Ajustar rango si el año queda fuera
     const desdeEl = document.getElementById("anio-desde");
     const hastaEl = document.getElementById("anio-hasta");
     if (anio < Number(desdeEl.min)) desdeEl.min = String(anio);
@@ -724,10 +788,24 @@ function bindEvents() {
   });
 }
 
-// ---------- Carga de datos desde datos.json ----------
+// ---------- Carga de datos y mapas guardados ----------
 async function iniciar() {
   initMap();
   bindEvents();
+
+  // Cargar metadatos de los mapas locales guardados (respaldo 100% garantizado)
+  fetch("mapas/bounds.json")
+    .then((r) => (r.ok ? r.json() : null))
+    .then((bounds) => {
+      if (bounds) {
+        montarMapasLocales(bounds);
+        if (seleccionadaId != null) {
+          const sel = batallas.find((x) => x.id === seleccionadaId);
+          if (sel) actualizarMiniMapaFicha(sel);
+        }
+      }
+    })
+    .catch(() => {});
 
   try {
     const resp = await fetch("datos.json");

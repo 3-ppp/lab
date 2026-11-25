@@ -3,29 +3,33 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Batallas de Argentina (1806–2001) — Mapa interactivo y de calor</title>
+  <title>Atlas Histórico de Batallas de Argentina (1806–2001)</title>
   <link rel="stylesheet" href="lib/leaflet.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="topbar">
     <div class="brand">
-      <div class="flag-bar" aria-hidden="true"><span></span><span></span><span></span></div>
+      <div class="emblem" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </div>
       <div>
-        <h1>Batallas de Argentina <span class="years">1806–2001</span></h1>
-        <p class="subtitle">Mapa interactivo y mapa de calor de conflictos históricos</p>
+        <div class="kicker">Atlas Histórico Cartográfico</div>
+        <h1>Batallas y Enfrentamientos de Argentina <span class="years">1806–2001</span></h1>
       </div>
     </div>
 
-    <div class="stats" aria-label="Resumen de datos filtrados">
+    <div class="stats" aria-label="Resumen cuantitativo">
       <div class="stat">
         <strong id="stat-total">0</strong>
-        <span>Enfrentamientos</span>
+        <span>Registros</span>
       </div>
+      <div class="stat-sep" aria-hidden="true"></div>
       <div class="stat">
         <strong id="stat-provincias">0</strong>
         <span>Jurisdicciones</span>
       </div>
+      <div class="stat-sep" aria-hidden="true"></div>
       <div class="stat">
         <strong id="stat-hotspot">—</strong>
         <span>Mayor concentración</span>
@@ -33,27 +37,27 @@
     </div>
 
     <div class="topbar-actions">
-      <button type="button" id="btn-agregar" class="btn-secondary">+ Agregar en memoria</button>
+      <button type="button" id="btn-agregar" class="btn-outline">+ Agregar registro</button>
     </div>
   </header>
 
   <nav class="mobile-tabs" aria-label="Vista móvil">
     <button type="button" class="mob-tab active" data-view="mapa">Mapa</button>
-    <button type="button" class="mob-tab" data-view="lista">Lista y filtros</button>
+    <button type="button" class="mob-tab" data-view="lista">Catálogo y filtros</button>
     <button type="button" class="mob-tab" data-view="ficha" id="mob-tab-ficha">Ficha</button>
   </nav>
 
   <main class="workspace" data-mobile-view="mapa">
-    <!-- Panel izquierdo: filtros, línea de tiempo y lista -->
-    <aside class="sidebar" aria-label="Filtros y catálogo de batallas">
+    <!-- Panel izquierdo: filtros, línea cronológica y catálogo -->
+    <aside class="sidebar" aria-label="Filtros y catálogo histórico">
       <div class="sidebar-controls">
         <div class="search-wrap">
-          <input id="buscar" type="search" placeholder="Buscar batalla, líder, provincia o bando…" aria-label="Buscar batallas">
+          <input id="buscar" type="search" placeholder="Buscar batalla, comandante, provincia o bando…" aria-label="Buscar enfrentamientos">
         </div>
 
         <div class="year-filter">
           <div class="year-header">
-            <label for="anio-desde">Período cronológico</label>
+            <label for="anio-desde">Recorte cronológico</label>
             <span id="rango-label" class="rango-badge">1806 – 2001</span>
           </div>
           <div class="range-row">
@@ -62,11 +66,11 @@
           </div>
         </div>
 
-        <div class="period-chips" id="periodos" role="group" aria-label="Filtrar por etapa histórica"></div>
+        <div class="period-chips" id="periodos" role="group" aria-label="Filtrar por período histórico"></div>
 
         <div class="sidebar-subtabs">
-          <button type="button" class="subtab active" data-subtab="lista">Lista cronológica</button>
-          <button type="button" class="subtab" data-subtab="regiones">Concentración por zona</button>
+          <button type="button" class="subtab active" data-subtab="lista">Índice cronológico</button>
+          <button type="button" class="subtab" data-subtab="regiones">Densidad por provincia</button>
         </div>
       </div>
 
@@ -74,9 +78,9 @@
 
       <div class="sidebar-content" id="panel-lista">
         <div class="list-toolbar">
-          <span id="contador-lista" class="muted">Cargando datos…</span>
+          <span id="contador-lista" class="muted">Cargando archivo histórico…</span>
           <select id="ordenar" aria-label="Ordenar batallas">
-            <option value="anio-asc">Más antiguas primero</option>
+            <option value="anio-asc">Cronológico (1806 → 2001)</option>
             <option value="anio-desc">Más recientes primero</option>
             <option value="bajas-desc">Mayor cantidad de bajas</option>
           </select>
@@ -85,32 +89,32 @@
       </div>
 
       <div class="sidebar-content" id="panel-regiones" hidden>
-        <p class="panel-note">Cantidad de batallas y enfrentamientos registrados en cada jurisdicción o frente (según los filtros activos).</p>
+        <p class="panel-note">Distribución territorial de los enfrentamientos según los filtros activos. Hacé clic en una jurisdicción para centrar el mapa.</p>
         <ul id="ranking-zonas" class="zone-ranking"></ul>
       </div>
     </aside>
 
-    <!-- Área del mapa interactivo -->
-    <section class="map-stage" aria-label="Mapa interactivo de Argentina">
+    <!-- Escenario del mapa interactivo -->
+    <section class="map-stage" aria-label="Mapa político e histórico de Argentina">
       <div id="map"></div>
 
-      <!-- Controles flotantes del mapa -->
+      <!-- Barra superior de capas y encuadres -->
       <div class="map-hud top-left">
-        <div class="hud-group" role="group" aria-label="Estilo de mapa base">
-          <button type="button" class="hud-btn active" data-basemap="argenmap" title="Mapa oficial del IGN Argentina (Argenmap) con división política, rutas y calles">Argenmap (IGN)</button>
-          <button type="button" class="hud-btn" data-basemap="streets" title="Mapa político de calles, rutas y ciudades (Esri)">Calles y Rutas</button>
-          <button type="button" class="hud-btn" data-basemap="dark" title="Mapa oscuro para resaltar el mapa de calor">Oscuro</button>
+        <div class="hud-group" role="group" aria-label="Cartografía base">
+          <button type="button" class="hud-btn active" data-basemap="argenmap" title="Mapa oficial Argenmap (IGN) con respaldo local garantizado">Argenmap (IGN)</button>
+          <button type="button" class="hud-btn" data-basemap="streets" title="Calles, rutas y división política (Esri + respaldo local)">Calles y Rutas</button>
+          <button type="button" class="hud-btn" data-basemap="local" title="Solo cartografía política guardada localmente (sin conexión)">Mapa guardado</button>
         </div>
-        <div class="hud-group" role="group" aria-label="Zonas rápidas">
+        <div class="hud-group" role="group" aria-label="Encuadres territoriales">
           <button type="button" class="hud-btn" data-zoom="argentina">Argentina</button>
           <button type="button" class="hud-btn" data-zoom="amba">Buenos Aires</button>
-          <button type="button" class="hud-btn" data-zoom="litoral">Litoral / Centro</button>
+          <button type="button" class="hud-btn" data-zoom="litoral">Litoral y Centro</button>
           <button type="button" class="hud-btn" data-zoom="norte">Norte</button>
           <button type="button" class="hud-btn" data-zoom="malvinas">Malvinas</button>
         </div>
       </div>
 
-      <!-- Panel de control del mapa de calor -->
+      <!-- Control flotante de mapa de calor -->
       <div class="map-hud bottom-left heat-card">
         <div class="heat-header">
           <label class="toggle-label">
@@ -124,24 +128,19 @@
         </div>
 
         <div class="heat-mode">
-          <button type="button" class="mode-btn active" data-heatmode="cantidad">Por cantidad de batallas</button>
+          <button type="button" class="mode-btn active" data-heatmode="cantidad">Por enfrentamientos</button>
           <button type="button" class="mode-btn" data-heatmode="bajas">Por víctimas estimadas</button>
         </div>
 
         <div class="heat-legend">
-          <span>Menor</span>
+          <span>Baja</span>
           <div class="heat-gradient" aria-hidden="true"></div>
-          <span>Mayor concentración</span>
+          <span>Alta densidad</span>
         </div>
-      </div>
-
-      <!-- Aviso de respaldo si los mosaicos de mapa no cargan -->
-      <div id="tile-fallback-banner" class="tile-banner" hidden>
-        Sin conexión a mosaicos externos: mostrando silueta geográfica de respaldo.
       </div>
     </section>
 
-    <!-- Ficha detallada de la batalla seleccionada (panel acoplado a la derecha) -->
+    <!-- Ficha histórica académica (panel acoplado a la derecha) -->
     <article id="ficha" class="detail-drawer" hidden aria-live="polite">
       <div class="detail-header">
         <div class="detail-badges">
@@ -154,6 +153,15 @@
       <div class="detail-body">
         <h2 id="ficha-titulo"></h2>
         <p id="ficha-meta" class="detail-meta"></p>
+
+        <!-- Mapa georreferenciado guardado localmente para esta batalla -->
+        <figure class="mini-map-card">
+          <div class="mini-map-viewport">
+            <img id="ficha-mapa-img" alt="Mapa político de la ubicación del enfrentamiento">
+            <div id="ficha-mapa-pin" class="mini-map-pin" aria-hidden="true"></div>
+          </div>
+          <figcaption id="ficha-mapa-pie"></figcaption>
+        </figure>
 
         <div class="detail-card">
           <h3>Fuerzas enfrentadas</h3>
@@ -201,7 +209,7 @@
 
         <div class="detail-footer-meta">
           <div><strong>Resultado:</strong> <span id="ficha-resultado"></span></div>
-          <div><strong>Fuente de referencia:</strong> <span id="ficha-fuente"></span></div>
+          <div><strong>Referencia:</strong> <span id="ficha-fuente"></span></div>
         </div>
       </div>
 
@@ -217,11 +225,11 @@
   <div id="modal-backdrop" class="modal-backdrop" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
       <div class="modal-head">
-        <h2 id="modal-titulo">Agregar enfrentamiento (solo en memoria)</h2>
+        <h2 id="modal-titulo">Agregar registro histórico (en memoria)</h2>
         <button type="button" id="modal-cerrar" class="icon-btn" aria-label="Cerrar ventana">✕</button>
       </div>
       <p class="modal-info">
-        Esta página corre aislada en el navegador: el nuevo registro se suma al mapa y al mapa de calor mientras la página esté abierta. Para guardarlo de forma permanente hay que editar <code>datos.json</code>.
+        Esta aplicación se ejecuta aislada en el navegador: el nuevo registro se incorpora al mapa y al mapa de calor durante esta sesión. Para conservarlo permanentemente, debe editarse el archivo <code>datos.json</code>.
       </p>
       <form id="form-nuevo" class="modal-form">
         <div class="form-grid">
@@ -238,7 +246,7 @@
             <input name="anio" type="number" min="1800" max="2030" required placeholder="1813">
           </label>
           <label>
-            Etapa histórica *
+            Período histórico *
             <select name="periodoId" required>
               <option value="invasiones">Invasiones Inglesas</option>
               <option value="independencia">Independencia</option>
@@ -254,7 +262,7 @@
             <input name="lugar" required placeholder="Ciudad o paraje">
           </label>
           <label>
-            Provincia / Región *
+            Provincia / Jurisdicción *
             <input name="provincia" required placeholder="Ej.: Santa Fe">
           </label>
           <label>
@@ -292,23 +300,23 @@
         </div>
 
         <label>
-          Total estimado de muertos (número, para el mapa de calor)
+          Total estimado de víctimas fatales (número, para el mapa de calor)
           <input name="totalEstimado" type="number" min="0" value="50">
         </label>
 
         <label>
           Razones del enfrentamiento *
-          <textarea name="razones" rows="2" required placeholder="Por qué ocurrió este conflicto"></textarea>
+          <textarea name="razones" rows="2" required placeholder="Causas políticas, económicas o militares"></textarea>
         </label>
 
         <label>
           Consecuencias políticas *
-          <textarea name="consecuencias" rows="2" required placeholder="Qué cambió a partir de este hecho"></textarea>
+          <textarea name="consecuencias" rows="2" required placeholder="Impacto institucional o histórico"></textarea>
         </label>
 
         <div class="modal-actions">
           <button type="button" id="modal-cancelar" class="btn-secondary">Cancelar</button>
-          <button type="submit" class="btn-primary">Sumar al mapa</button>
+          <button type="submit" class="btn-primary">Incorporar al mapa</button>
         </div>
       </form>
     </div>
