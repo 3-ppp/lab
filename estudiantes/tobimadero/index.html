@@ -275,6 +275,12 @@
       stroke: #0f172a;
       stroke-width: 2.5;
     }
+    /* Foco visible para quien navega con teclado (Tab) */
+    #map-container svg path:focus-visible,
+    .caba-inset-circle:focus-visible {
+      outline: 3px solid #0369a1;
+      outline-offset: 2px;
+    }
 
     .map-tooltip {
       position: fixed;
@@ -606,6 +612,10 @@
     .h-col:hover {
       background: #f1f5f9;
     }
+    .h-col:focus-visible {
+      outline: 3px solid #0369a1;
+      outline-offset: 2px;
+    }
     .h-col.active {
       background: #e0f2fe;
     }
@@ -682,6 +692,21 @@
     }
     tbody tr:hover { background: #f8fafc; }
     tbody tr.selected-row { background: #e0f2fe; }
+    .row-btn {
+      background: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+    .row-btn:focus-visible {
+      outline: 3px solid #0369a1;
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
     .winner-pill {
       display: inline-flex;
       align-items: center;
@@ -785,7 +810,7 @@
           <button id="btn-reset-scope" class="btn-ghost" type="button" disabled>Todo el país</button>
         </div>
         <div class="map-stage">
-          <div id="map-container" aria-label="Mapa de Argentina por provincia"></div>
+          <div id="map-container" role="group" aria-label="Mapa de Argentina por provincia. Con Tab recorrés los distritos y con Enter o Espacio elegís uno"></div>
           <div id="map-legend" class="map-legend"></div>
         </div>
       </article>
@@ -911,6 +936,28 @@
 
     const $ = (id) => document.getElementById(id);
 
+    // Teclado: Enter o Espacio activan los elementos que no son <button>
+    function onActivateKey(node, handler) {
+      node.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" || ev.key === " ") {
+          ev.preventDefault();
+          handler(ev);
+        }
+      });
+    }
+
+    // Al redibujar una lista se pierde el foco: lo guardamos y lo devolvemos
+    // al mismo elemento (identificado con data-focus-key).
+    function captureFocus() {
+      const a = document.activeElement;
+      return a && a.dataset ? a.dataset.focusKey || null : null;
+    }
+    function restoreFocus(key) {
+      if (!key) return;
+      const node = document.querySelector(`[data-focus-key="${key}"]`);
+      if (node) node.focus({ preventScroll: true });
+    }
+
     function currentElection() {
       return state.elections.find((e) => e.id === state.selectedElectionId) || state.elections[state.elections.length - 1];
     }
@@ -1005,6 +1052,11 @@
         if (path) {
           path.style.fill = f.color;
           path.classList.toggle("selected", state.selectedDistrict === code);
+          path.setAttribute("tabindex", "0");
+          path.setAttribute("role", "button");
+          path.dataset.focusKey = `map:${code}`;
+          path.setAttribute("aria-label", `${d.nombre}: ganó ${f.sigla}`);
+          path.setAttribute("aria-pressed", String(state.selectedDistrict === code));
         }
       }
 
@@ -1013,6 +1065,11 @@
       if (cabaDot && el.distritos.ARC) {
         const fCaba = getFormulaById(el, el.distritos.ARC.ganador);
         cabaDot.style.fill = fCaba.color;
+        cabaDot.setAttribute("tabindex", "0");
+        cabaDot.setAttribute("role", "button");
+        cabaDot.dataset.focusKey = "map:ARC";
+        cabaDot.setAttribute("aria-label", `${el.distritos.ARC.nombre}: ganó ${fCaba.sigla}`);
+        cabaDot.setAttribute("aria-pressed", String(state.selectedDistrict === "ARC"));
         cabaDot.style.strokeWidth = state.selectedDistrict === "ARC" ? "3.2" : "1.8";
         cabaDot.style.stroke = state.selectedDistrict === "ARC" ? "#0f172a" : "#ffffff";
       }
@@ -1200,6 +1257,7 @@
     function renderHistory() {
       const bars = $("history-bars");
       const labels = $("history-labels");
+      const focusKey = captureFocus();
       bars.replaceChildren();
       labels.replaceChildren();
 
@@ -1221,11 +1279,17 @@
         const col = document.createElement("div");
         col.className = "h-col" + (el.id === state.selectedElectionId ? " active" : "");
         col.title = `${el.titulo}: ${fmtPct(val)}`;
+        col.tabIndex = 0;
+        col.setAttribute("role", "button");
+        col.setAttribute("aria-pressed", String(el.id === state.selectedElectionId));
+        col.setAttribute("aria-label", `${el.titulo}: ${fmtPct(val)}. Abrir esta elección`);
+        col.dataset.focusKey = `hist:${el.id}`;
         col.innerHTML = `
           <div class="h-pct num">${fmtPct(val)}</div>
           <div class="h-bar" style="height:${heightPct}%;background:${barColor};"></div>
         `;
         col.addEventListener("click", () => selectElection(el.id));
+        onActivateKey(col, () => selectElection(el.id));
         bars.append(col);
 
         const lbl = document.createElement("div");
@@ -1235,6 +1299,7 @@
         `;
         labels.append(lbl);
       }
+      restoreFocus(focusKey);
     }
 
     function populateWinnerFilter() {
@@ -1255,6 +1320,7 @@
     function renderTable() {
       const el = currentElection();
       const tbody = $("prov-tbody");
+      const focusKey = captureFocus();
       tbody.replaceChildren();
 
       const q = state.search.trim().toLowerCase();
@@ -1290,7 +1356,7 @@
         const tr = document.createElement("tr");
         if (state.selectedDistrict === r.code) tr.className = "selected-row";
         tr.innerHTML = `
-          <td><strong>${r.d.nombre}</strong></td>
+          <td><strong><button type="button" class="row-btn" data-focus-key="row:${r.code}" aria-pressed="${state.selectedDistrict === r.code}">${r.d.nombre}</button></strong></td>
           <td>
             <span class="winner-pill">
               <span class="winner-dot" style="background:${r.first.color}"></span>
@@ -1309,6 +1375,7 @@
         });
         tbody.append(tr);
       }
+      restoreFocus(focusKey);
     }
 
     function updateDistrictViews() {
@@ -1396,13 +1463,22 @@
 
       const hideTip = () => { tooltip.style.display = "none"; };
 
+      const toggleDist = (code) => {
+        state.selectedDistrict = state.selectedDistrict === code ? null : code;
+        updateDistrictViews();
+      };
+
       const bindDist = (node, code) => {
         node.addEventListener("mousemove", (ev) => showTip(ev, code));
         node.addEventListener("mouseleave", hideTip);
-        node.addEventListener("click", () => {
-          state.selectedDistrict = state.selectedDistrict === code ? null : code;
-          updateDistrictViews();
+        node.addEventListener("click", () => toggleDist(code));
+        // Teclado: el tooltip aparece con el foco y Enter/Espacio eligen el distrito
+        node.addEventListener("focus", () => {
+          const r = node.getBoundingClientRect();
+          showTip({ clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 }, code);
         });
+        node.addEventListener("blur", hideTip);
+        onActivateKey(node, () => toggleDist(code));
       };
 
       const paths = svg.querySelectorAll("#features path[id]");
