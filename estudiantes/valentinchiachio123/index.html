@@ -7,7 +7,7 @@
 <style>
   html, body { margin:0; height:100%; background:#000; overflow:hidden; touch-action:none; }
   #wrap { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
-  canvas { image-rendering:pixelated; image-rendering:crisp-edges; display:block; }
+  canvas { display:block; image-rendering:pixelated; image-rendering:crisp-edges; }
   #touch { position:fixed; left:0; right:0; bottom:0; display:none; justify-content:space-between; align-items:flex-end; padding:14px; pointer-events:none; }
   .grp { display:flex; gap:10px; align-items:flex-end; }
   .tb { pointer-events:auto; width:58px; height:58px; border-radius:50%; background:rgba(255,255,255,.16); border:2px solid rgba(255,255,255,.5);
@@ -36,7 +36,6 @@ const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 cv.width = W; cv.height = H; ctx.imageSmoothingEnabled = false;
 function fit(){ const s = Math.min(innerWidth / W, innerHeight / H); cv.style.width = (W*s)+'px'; cv.style.height = (H*s)+'px'; }
 addEventListener('resize', fit); fit();
-const FONT = "'Press Start 2P', monospace";
 
 // ===================== Sprites =====================
 const PAL = { h:'#3a2414', s:'#e8b48a', e:'#111', n:'#c98d63', w:'#f4f4f4', r:'#c0262d', k:'#23262f', K:'#15171d', b:'#0b0b0b',
@@ -85,20 +84,32 @@ function spr(img, x, y, flip, sc = 1){
 }
 function disc(cx, cy, r, col){ ctx.fillStyle = col; for (let dy = -r; dy <= r; dy++) { const w = Math.floor(Math.sqrt(r*r - dy*dy)); ctx.fillRect(Math.round(cx - w), Math.round(cy + dy), 2*w + 1, 1); } }
 function txt(s, x, y, col = '#fff', align = 'left', size = 8){
-  ctx.font = size + 'px ' + FONT; ctx.textAlign = align; ctx.textBaseline = 'top';
-  ctx.fillStyle = '#000'; ctx.fillText(s, Math.round(x)+1, Math.round(y)+1); ctx.fillStyle = col; ctx.fillText(s, Math.round(x), Math.round(y));
+  ctx.font = 'bold ' + size + 'px monospace'; ctx.textAlign = align; ctx.textBaseline = 'top';
+  ctx.fillStyle = '#000'; ctx.fillText(s, Math.round(x) + 1, Math.round(y) + 1);
+  ctx.fillStyle = col; ctx.fillText(s, Math.round(x), Math.round(y));
 }
 
-// ===================== Sonido =====================
-let AC = null;
-function audio(){ if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {} } if (AC && AC.state === 'suspended') AC.resume(); }
+// ===================== Sonido y música 8-bit =====================
+let AC = null, muted = false, paused = false;
+let bgmBus = null, bgmStep = 0, bgmNext = 0, bgmMode = '';
+function audio(){
+  if (!AC) {
+    try {
+      AC = new (window.AudioContext || window.webkitAudioContext)();
+      bgmBus = AC.createGain();
+      bgmBus.gain.value = muted ? 0 : 1;
+      bgmBus.connect(AC.destination);
+    } catch(e) {}
+  }
+  if (AC && AC.state === 'suspended') AC.resume();
+}
 function beep(f, d = .08, type = 'square', v = .05, f2){
-  if (!AC) return; const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime;
+  if (!AC || muted) return; const o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime;
   o.type = type; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + d);
   g.gain.setValueAtTime(v, t); g.gain.exponentialRampToValueAtTime(.001, t + d); o.connect(g).connect(AC.destination); o.start(t); o.stop(t + d);
 }
 function noise(d = .3, v = .12){
-  if (!AC) return; const n = AC.sampleRate * d, b = AC.createBuffer(1, n, AC.sampleRate), a = b.getChannelData(0);
+  if (!AC || muted) return; const n = AC.sampleRate * d, b = AC.createBuffer(1, n, AC.sampleRate), a = b.getChannelData(0);
   for (let i = 0; i < n; i++) a[i] = (Math.random()*2 - 1) * (1 - i/n);
   const s = AC.createBufferSource(), g = AC.createGain(); s.buffer = b; g.gain.value = v; s.connect(g).connect(AC.destination); s.start();
 }
@@ -109,12 +120,136 @@ const sfx = {
   ouch: () => beep(300, .15, 'square', .06, 100), die: () => beep(400, .5, 'square', .06, 60)
 };
 
+// Secuenciador chiptune 8-bit liviano (tema de barrio + tema de jefes + jingles)
+const MIDI = n => 440 * Math.pow(2, (n - 69) / 12);
+const TRACKS = {
+  level: {
+    step: .115,
+    lead: [64,0,67,69, 71,0,69,67, 64,0,62,64, 67,0,0,0, 71,0,74,71, 69,0,67,64, 62,64,67,69, 64,0,0,0],
+    bass: [40,0,40,47, 43,0,43,47, 45,0,45,52, 43,0,42,0, 40,0,40,47, 45,0,45,43, 38,0,42,45, 40,0,47,0]
+  },
+  boss: {
+    step: .092,
+    lead: [65,68,65,72, 71,0,70,68, 65,68,72,75, 74,0,72,0, 77,0,75,72, 70,0,68,65, 68,67,65,64, 65,0,0,0],
+    bass: [41,41,53,41, 39,39,51,39, 37,37,49,37, 36,36,48,36, 41,41,53,41, 43,43,55,43, 44,44,43,43, 41,0,36,0]
+  }
+};
+function bgmNote(freq, dur, type, vol, t){
+  if (!AC || !bgmBus || muted) return;
+  const o = AC.createOscillator(), g = AC.createGain();
+  o.type = type; o.frequency.setValueAtTime(freq, t);
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0008, t + dur);
+  o.connect(g).connect(bgmBus); o.start(t); o.stop(t + dur);
+}
+function bgmHat(t, strong){
+  if (!AC || !bgmBus || muted) return;
+  const d = strong ? .05 : .022, n = Math.max(1, (AC.sampleRate * d)|0);
+  const b = AC.createBuffer(1, n, AC.sampleRate), a = b.getChannelData(0);
+  for (let i = 0; i < n; i++) a[i] = (Math.random()*2 - 1) * (1 - i/n);
+  const s = AC.createBufferSource(), g = AC.createGain();
+  s.buffer = b; g.gain.value = strong ? .032 : .016;
+  s.connect(g).connect(bgmBus); s.start(t);
+}
+function playJingle(kind){
+  if (!AC || muted) return;
+  const t0 = AC.currentTime + .03;
+  const seq = kind === 'win' ? [[64,.1],[67,.1],[71,.1],[76,.28]] : [[64,.14],[62,.14],[60,.14],[57,.32]];
+  let off = 0;
+  for (const [m, d] of seq) { bgmNote(MIDI(m), d, 'square', .045, t0 + off); bgmNote(MIDI(m - 12), d, 'triangle', .04, t0 + off); off += d + .02; }
+}
+function tickMusic(){
+  if (!AC || AC.state !== 'running' || muted || paused || document.hidden || state !== 'play') return;
+  const mode = bossMode ? 'boss' : 'level';
+  if (mode !== bgmMode) { bgmMode = mode; bgmStep = 0; bgmNext = AC.currentTime + .04; }
+  const tr = TRACKS[mode];
+  if (bgmNext < AC.currentTime - .2) bgmNext = AC.currentTime + .02;
+  while (bgmNext < AC.currentTime + .12) {
+    const i = bgmStep % tr.lead.length;
+    const ld = tr.lead[i], bs = tr.bass[i];
+    if (ld) bgmNote(MIDI(ld), tr.step * .85, 'square', mode === 'boss' ? .026 : .022, bgmNext);
+    if (bs) bgmNote(MIDI(bs), tr.step * .9, 'triangle', .045, bgmNext);
+    if (i % 4 === 0) bgmNote(mode === 'boss' ? 95 : 85, .045, 'sine', .05, bgmNext);
+    if (i % 4 === 2) bgmHat(bgmNext, mode === 'boss');
+    else if (i % 2 === 1) bgmHat(bgmNext, false);
+    bgmNext += tr.step;
+    bgmStep++;
+  }
+}
+
+let hoverBtn = null;
+function hudBtns(){
+  if (state === 'play') return [
+    { id:'pause', x:W/2 - 17, y:4, w:15, h:13 },
+    { id:'mute',  x:W/2 + 2,  y:4, w:15, h:13 }
+  ];
+  if (state === 'over') return [{ id:'mute', x:W/2 - 7, y:4, w:15, h:13 }];
+  return [{ id:'mute', x:6, y:5, w:15, h:13 }];
+}
+function hitHudBtn(e){
+  const r = cv.getBoundingClientRect();
+  const cx = (e.clientX - r.left) * W / r.width, cy = (e.clientY - r.top) * H / r.height;
+  return hudBtns().find(b => cx >= b.x - 2 && cx <= b.x + b.w + 2 && cy >= b.y - 2 && cy <= b.y + b.h + 2) || null;
+}
+function drawHudBtns(){
+  for (const b of hudBtns()) {
+    const { x, y, w, h, id } = b, hov = hoverBtn === id;
+    const active = id === 'pause' && paused, off = id === 'mute' && muted;
+    ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(x + 1, y + 1, w, h);
+    ctx.fillStyle = active ? 'rgba(60,48,10,.85)' : off ? 'rgba(65,18,18,.85)' : hov ? 'rgba(40,48,88,.85)' : 'rgba(12,14,28,.75)';
+    ctx.fillRect(x, y, w, h);
+    ctx.fillStyle = active ? '#ffd23f' : off ? '#ff6b57' : hov ? '#fff' : '#b8c4e0';
+    ctx.fillRect(x, y, w, 1); ctx.fillRect(x, y + h - 1, w, 1); ctx.fillRect(x, y, 1, h); ctx.fillRect(x + w - 1, y, 1, h);
+    if (id === 'pause') {
+      ctx.fillStyle = active ? '#ffd23f' : '#fff';
+      if (active) {
+        ctx.fillRect(x + 5, y + 3, 1, 7); ctx.fillRect(x + 6, y + 4, 2, 5); ctx.fillRect(x + 8, y + 5, 2, 3); ctx.fillRect(x + 10, y + 6, 1, 1);
+      } else {
+        ctx.fillRect(x + 4, y + 3, 2, 7); ctx.fillRect(x + 9, y + 3, 2, 7);
+      }
+    } else {
+      ctx.fillStyle = off ? '#ff8a7a' : '#fff';
+      ctx.fillRect(x + 2, y + 5, 2, 3); ctx.fillRect(x + 4, y + 4, 1, 5); ctx.fillRect(x + 5, y + 3, 2, 7);
+      if (off) {
+        ctx.fillStyle = '#ff5a3a';
+        for (let i = 0; i < 5; i++) { ctx.fillRect(x + 8 + i, y + 4 + i, 1, 1); ctx.fillRect(x + 12 - i, y + 4 + i, 1, 1); }
+      } else {
+        ctx.fillStyle = '#7dff7a';
+        ctx.fillRect(x + 8, y + 5, 1, 3); ctx.fillRect(x + 10, y + 4, 1, 1); ctx.fillRect(x + 11, y + 5, 1, 3); ctx.fillRect(x + 10, y + 8, 1, 1);
+      }
+    }
+    txt(id === 'pause' ? 'P' : 'M', x + w/2, y + h + 2, active ? '#ffd23f' : off ? '#ff8a7a' : '#ccc', 'center', 5);
+  }
+}
+function togglePause(){
+  if (state !== 'play') return;
+  paused = !paused;
+  for (const k in K) K[k] = false;
+  if (!paused && AC) bgmNext = AC.currentTime + .04;
+  if (!muted) beep(paused ? 360 : 540, .06, 'square', .035);
+}
+function toggleMute(){
+  audio();
+  muted = !muted;
+  if (bgmBus && AC) bgmBus.gain.setTargetAtTime(muted ? 0 : 1, AC.currentTime, .02);
+  if (!muted && AC) { bgmNext = AC.currentTime + .04; beep(620, .05, 'square', .03); }
+}
+
 // ===================== Entrada =====================
 const K = {}, P = {};
 const MAP = { ArrowLeft:'L', KeyA:'L', ArrowRight:'R', KeyD:'R', ArrowUp:'U', KeyW:'U', Space:'J', KeyZ:'J', KeyK:'J', KeyX:'F', KeyJ:'F', KeyC:'B', KeyL:'B', Enter:'S' };
-addEventListener('keydown', e => { const k = MAP[e.code]; if (!k) return; e.preventDefault(); if (!K[k]) P[k] = true; K[k] = true; audio(); });
+addEventListener('keydown', e => {
+  if (e.code === 'KeyP' || e.code === 'Escape') { e.preventDefault(); audio(); togglePause(); return; }
+  if (e.code === 'KeyM') { e.preventDefault(); toggleMute(); return; }
+  const k = MAP[e.code]; if (!k) return; e.preventDefault(); if (!K[k]) P[k] = true; K[k] = true; audio();
+});
 addEventListener('keyup', e => { const k = MAP[e.code]; if (k) K[k] = false; });
-cv.addEventListener('pointerdown', () => { audio(); P.S = true; });
+cv.addEventListener('pointerdown', e => {
+  const b = hitHudBtn(e);
+  if (b) { e.preventDefault(); audio(); if (b.id === 'pause') togglePause(); else toggleMute(); return; }
+  audio(); P.S = true;
+});
+cv.addEventListener('pointermove', e => { const b = hitHudBtn(e); hoverBtn = b ? b.id : null; cv.style.cursor = b ? 'pointer' : ''; });
+cv.addEventListener('pointerleave', () => { hoverBtn = null; cv.style.cursor = ''; });
 if (matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window) document.getElementById('touch').style.display = 'flex';
 document.querySelectorAll('.tb').forEach(b => {
   const k = b.dataset.k;
@@ -165,7 +300,7 @@ function terminaLoco(){
 
 function start(){
   if (dataError || !PICK0.length) return;
-  state = 'play'; frame = 0; camX = 0; score = 0; lives = 3; bossMode = false; stage = 0; nextT = 0; endT = 0;
+  state = 'play'; paused = false; bgmMode = ''; frame = 0; camX = 0; score = 0; lives = 3; bossMode = false; stage = 0; nextT = 0; endT = 0;
   p = { x:40, y:G-22, vx:0, vy:0, face:1, onGround:true, anim:0, cool:0, inv:120, moto:false, gun:'P', ammo:0, gren:10, dead:0, hp:5, max:5, up:false, loco:0, contra:null, bajon:false };
   pp = { x:18, y:G-22, vx:0, vy:0, face:1, onGround:true, anim:0, cool:40, enojo:0 };
   cartel = null;
@@ -221,6 +356,7 @@ function hitPlayer(d = 1){
 
 // ===================== Actualización =====================
 function update(){
+  if (state === 'play' && paused) return;
   frame++;
   if (state === 'title') { if (P.S || P.F || P.J) start(); return; }
   if (state === 'over' || state === 'win') { endT++; if (endT > 60 && (P.S || P.F || P.J)) state = 'title'; return; }
@@ -228,7 +364,7 @@ function update(){
   // --- el Tirri ---
   if (p.dead) {
     p.dead--;
-    if (p.dead === 0) { lives--; if (lives < 0) { state = 'over'; endT = 0; saveHi(); return; }
+    if (p.dead === 0) { lives--; if (lives < 0) { state = 'over'; paused = false; endT = 0; saveHi(); playJingle('over'); return; }
       p.inv = 150; p.gun = 'P'; p.ammo = 0; p.hp = p.max; p.bajon = false; p.gren = Math.max(p.gren, 5); p.y = G - 60; p.vy = 0; say('¡DE NUEVO!', 60); }
   } else {
     const spd = p.moto ? 2.2 : 1.3;
@@ -353,7 +489,7 @@ function update(){
         [196, 247, 294, 392].forEach((f, i) => setTimeout(() => beep(f, .18, 'triangle', .06, f*.75), i*120));
       }
       if (k.t === 'moto') { p.moto = true; obj.moto = true; say('¡APARECIÓ LA MOTO!', 120); }
-      if (k.t === 'skull') { obj.skull = true; score += 5000; state = 'win'; endT = 0; msgT = 0; saveHi(); }
+      if (k.t === 'skull') { obj.skull = true; score += 5000; state = 'win'; paused = false; endT = 0; msgT = 0; saveHi(); playJingle('win'); }
     } }
   picks = picks.filter(k => k.on);
 
@@ -563,7 +699,7 @@ function draw(){
   const sh = shake ? (Math.random() - .5)*shake : 0;
   ctx.save(); ctx.translate(Math.round(sh), Math.round(sh*.5));
   drawBG(state === 'play' ? camX : frame*.5);
-  if (state === 'title') { ctx.restore(); drawTitle(); return; }
+  if (state === 'title') { ctx.restore(); drawTitle(); drawHudBtns(); return; }
   drawWorldProps();
   const X = x => x - camX;
   for (const k of picks) { const x = X(k.x), b = k.fall ? 0 : Math.sin(frame*.1)*2;
@@ -603,10 +739,17 @@ function draw(){
   for (const q of parts) { ctx.fillStyle = q.c; ctx.fillRect(X(q.x), q.y, q.sz, q.sz); }
   ctx.restore();
   drawHUD();
-  if (cartel && state === 'play') drawCartel();
+  if (cartel && state === 'play' && !paused) drawCartel();
+  if (state === 'play' && paused) {
+    ctx.fillStyle = 'rgba(0,0,0,.62)'; ctx.fillRect(0, 0, W, H);
+    txt('PAUSA', W/2, 62, '#ffd23f', 'center', 14);
+    txt('P O ESC PARA SEGUIR', W/2, 92, '#fff', 'center', 6);
+    txt(muted ? 'SONIDO: SILENCIADO (M)' : 'SONIDO: ACTIVO (M)', W/2, 108, muted ? '#ff8a7a' : '#7dff7a', 'center', 6);
+  }
   if (state === 'over') { ctx.fillStyle = 'rgba(0,0,0,.6)'; ctx.fillRect(0, 0, W, H); txt('GAME OVER', W/2, 70, '#ff5a3a', 'center', 16);
     txt('PUNTAJE ' + score, W/2, 98, '#fff', 'center'); if (endT > 60 && frame % 40 < 28) txt('ENTER / TOCÁ PARA VOLVER', W/2, 120, '#ffd23f', 'center', 6); }
   if (state === 'win') drawWin();
+  drawHudBtns();
 }
 function drawHUD(){
   if (state === 'win') return;
@@ -641,7 +784,8 @@ function drawTitle(){
   txt('y la calavera de Murnau está en el barrio.', W/2, 132, '#fff', 'center', 6);
   txt('Los puchos le devuelven energía al Tirri.', W/2, 141, '#ffb02e', 'center', 6);
   txt('FLECHAS MOVER Y APUNTAR ARRIBA', W/2, 156, '#ccc', 'center', 6);
-  txt('Z SALTA  X DISPARA  C BOMBA', W/2, 165, '#ccc', 'center', 6);
+  txt('Z SALTA  X DISPARA  C BOMBA', W/2, 162, '#ccc', 'center', 6);
+  txt('P PAUSA  M SILENCIO', W/2, 171, '#9fd8ff', 'center', 5);
   if (hiscore) txt('RÉCORD ' + hiscore, W - 4, 4, '#fff', 'right', 5);
 }
 function drawWin(){
@@ -660,6 +804,7 @@ let last = 0, acc = 0;
 function loop(t){
   acc += Math.min(100, t - last); last = t;
   while (acc >= 1000/60) { update(); for (const k in P) delete P[k]; acc -= 1000/60; }
+  tickMusic();
   draw(); requestAnimationFrame(loop);
 }
 // El bucle arranca enseguida; el nivel se carga desde datos.json (la "base de datos" del juego).
