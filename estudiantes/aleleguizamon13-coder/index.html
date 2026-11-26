@@ -1295,4 +1295,5 @@ $('#tabs').innerHTML=LB.map(([k,n])=>`<button data-k="${k}"${k===cur?' class="on
 $('#tabs').onclick=e=>{const k=e.target.dataset.k;if(!k)return;cur=k;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));beep(580,.035);leg();draw();rank()};
 function sl(){S.pl=$('#pl').value/100;S.pf=$('#pf').value/100;$('#vl').textContent=(S.pl*100).toFixed(1).replace('.',',')+' % anual';$('#vf').textContent=(S.pf*100).toFixed(2).replace('.',',')+' % anual';delete cache.nu;delete VC.nu;RC={};if(cur==='nu')draw();if(sel||cm||LIVE.cmpMode)panel();if(cur==='nu'&&started)rank()}
 $('#pl').oninput=$('#pf').oninput=sl;sl();leg();updateLiveBar();panel();addEventListener('resize',fit);fit();cargarDatos();fetchLiveAPIs();setInterval(fetchLiveAPIs,300000);requestAnimationFrame(animLoop);setTimeout(rank,400);const tk=()=>$('#utc').textContent=new Date().toISOString().slice(11,19);tk();setInterval(tk,1000);
-</script></body></html>
+</script><script src="ajuste.js"></script>
+</body></html>
